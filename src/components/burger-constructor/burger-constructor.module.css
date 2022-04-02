@@ -1,4 +1,39 @@
 .container {
   border: 1px solid greenyellow;
   width: 600px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.innerIngredients {
+  border: 1px solid red;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 450px;
+  overflow: hidden;
+  overflow-y: scroll;
+}
+
+.elementContainer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.bunElement {
+}
+
+.info {
+  border: 1px solid red;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.totalContainer {
+  border: 1px solid green;
+  display: flex;
+  align-items: center;
 }

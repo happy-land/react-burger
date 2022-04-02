@@ -14,7 +14,7 @@
 }
 
 .sectionArea {
-  max-height: 600px;
+  max-height: 720px;
   overflow: hidden;
   overflow-y: scroll;
 }
