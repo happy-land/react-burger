@@ -6,12 +6,10 @@
   margin: 0px auto;
   padding: 40px;
   box-sizing: border-box;
-  /* background-color: red; */
   background-color: #131316;
 }
 
 .container {
-  border: 1px solid red;
   display: flex;
   gap: 40px;
   max-width: 1280px;

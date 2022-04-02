@@ -1,5 +1,5 @@
 import React from 'react';
-import { CurrencyIcon, Tab } from '@ya.praktikum/react-developer-burger-ui-components';
+import { Counter, CurrencyIcon, Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-ingredients.module.css';
 import { data } from '../../utils/data';
 
@@ -20,8 +20,6 @@ export const BurgerIngredients = () => {
   const sauces = getCategory('sauce');
   const mains = getCategory('main');
 
-  console.log(`buns: ${buns[1].name}`);
-
   const renderSection = (section, name) => {
     return (
       <section>
@@ -35,6 +33,7 @@ export const BurgerIngredients = () => {
                 <CurrencyIcon type='primary' />
               </div>
               <p className='text text_type_main-small'>{item.name}</p>
+              <div className={styles.counter}><Counter count={1} size='default'/></div>
             </article>
           ))}
         </div>
