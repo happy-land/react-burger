@@ -8,5 +8,11 @@
   box-sizing: border-box;
   /* background-color: red; */
   background-color: #131316;
+}
 
+.container {
+  border: 1px solid red;
+  display: flex;
+  max-width: 1280px;
+  margin: 0 auto;
 }

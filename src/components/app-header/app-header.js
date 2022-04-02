@@ -12,7 +12,7 @@ export const AppHeader = () => {
     <header className={headerStyles.header}>
       <nav className={`${headerStyles.content} pt-4 pb-4`}>
         <ul className={headerStyles.navLinks}>
-          <li className={`${headerStyles.listItem} p-5 mr-2`}>
+          <li className={`${headerStyles.listItem} pt-5 pr-5 pb-5 mr-2`}>
             <a className={headerStyles.link} href='#'>
               <div className={headerStyles.linkContent}>
                 <BurgerIcon type='primary' />
