@@ -1,0 +1,35 @@
+.container {
+  width: 600px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.innerIngredients {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 450px;
+  overflow: hidden;
+  overflow-y: scroll;
+}
+
+.elementContainer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* .bunElement {
+} */
+
+.info {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.totalContainer {
+  display: flex;
+  align-items: center;
+}
