@@ -26,7 +26,7 @@ export const BurgerIngredients = () => {
         <h2 className={styles.sectionTitle}>{name}</h2>
         <div className={`${styles.cardArea} mt-6 mb-10 pl-4`}>
           {section.map((item, index) => (
-            <article className={styles.card} key={index}>
+            <article className={styles.card} key={item._id}>
               <img className={styles.image} src={item.image} />
               <div className={`${styles.priceContainer} mt-1 mb-1`}>
                 <p className='text text_type_digits-default mr-2'>{item.price}</p>
