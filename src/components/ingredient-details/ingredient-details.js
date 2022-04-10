@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+import { menuItemPropTypes } from '../../utils/constants';
 import styles from './ingredient-details.module.css';
 
 export const IngredientDetails = ({ data }) => {
@@ -26,3 +28,7 @@ export const IngredientDetails = ({ data }) => {
     </div>
   );
 };
+
+IngredientDetails.propTypes = {
+  data: menuItemPropTypes.isRequired,
+}

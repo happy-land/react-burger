@@ -40,7 +40,12 @@ function App() {
     const getIngredients = async () => {
       setIngredients({ ...ingredients, isLoading: true, hasError: false });
       fetch(baseUrl)
-        .then((res) => res.json())
+        .then((res) => {
+          if (res.ok) {
+            return res.json();
+          }
+          return Promise.reject(res.status);
+        })
         .then((result) =>
           setIngredients({
             ...ingredients,

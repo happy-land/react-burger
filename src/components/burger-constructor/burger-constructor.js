@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import styles from './burger-constructor.module.css';
 import {
   Button,
@@ -5,6 +6,7 @@ import {
   CurrencyIcon,
   DragIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
+import { menuItemPropTypes } from '../../utils/constants';
 // import { data } from '../../utils/data';
 
 export const BurgerConstructor = ({ data, setIsOrderDetailsOpened }) => {
@@ -55,3 +57,8 @@ export const BurgerConstructor = ({ data, setIsOrderDetailsOpened }) => {
     </div>
   );
 };
+
+BurgerConstructor.propTypes = {
+  data: PropTypes.arrayOf(menuItemPropTypes),
+  setIsOrderDetailsOpened: PropTypes.func.isRequired
+}

@@ -1,4 +1,6 @@
+import PropTypes from 'prop-types';
 import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import { menuItemPropTypes } from '../../utils/constants';
 import styles from './card.module.css';
 
 export const Card = ({ data, onClick }) => {
@@ -18,3 +20,8 @@ export const Card = ({ data, onClick }) => {
     </article>
   );
 };
+
+Card.propTypes = {
+  data: menuItemPropTypes.isRequired,
+  onClick: PropTypes.func.isRequired
+}

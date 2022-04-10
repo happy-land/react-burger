@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
@@ -31,3 +32,9 @@ export const Modal = ({ title, onOverlayClick, onEscKeydown, children }) => {
     modalsContainer
   );
 };
+
+Modal.propTypes = {
+  title: PropTypes.string.isRequired,
+  onOverlayClick: PropTypes.func.isRequired,
+  onEscKeydown: PropTypes.func.isRequired,
+}
