@@ -1,13 +1,20 @@
 import React from 'react';
-import { Counter, CurrencyIcon, Tab } from '@ya.praktikum/react-developer-burger-ui-components';
+import PropTypes from 'prop-types';
+import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-ingredients.module.css';
-import { data } from '../../utils/data';
+import { Card } from '../card/card';
+import { menuItemPropTypes } from '../../utils/constants';
+// import { data } from '../../utils/data';
 
 const SECTION_BUN = 'Булки';
 const SECTION_SAUCE = 'Соусы';
 const SECTION_MAIN = 'Начинки';
 
-export const BurgerIngredients = () => {
+export const BurgerIngredients = ({
+  data,
+  setIsIngredientDetailsOpened,
+  setCurrentCardData,
+}) => {
   const [current, setCurrent] = React.useState('one');
 
   const getCategory = (itemType) => {
@@ -20,21 +27,18 @@ export const BurgerIngredients = () => {
   const sauces = getCategory('sauce');
   const mains = getCategory('main');
 
+  const onCardClick = (data) => {
+    setIsIngredientDetailsOpened(true);
+    setCurrentCardData(data);
+  };
+
   const renderSection = (section, name) => {
     return (
       <section>
         <h2 className={styles.sectionTitle}>{name}</h2>
         <div className={`${styles.cardArea} mt-6 mb-10 pl-4`}>
           {section.map((item, index) => (
-            <article className={styles.card} key={item._id}>
-              <img className={styles.image} src={item.image} />
-              <div className={`${styles.priceContainer} mt-1 mb-1`}>
-                <p className='text text_type_digits-default mr-2'>{item.price}</p>
-                <CurrencyIcon type='primary' />
-              </div>
-              <p className='text text_type_main-small'>{item.name}</p>
-              <div className={styles.counter}><Counter count={1} size='default'/></div>
-            </article>
+            <Card key={item._id} data={item} onClick={onCardClick} />
           ))}
         </div>
       </section>
@@ -64,4 +68,10 @@ export const BurgerIngredients = () => {
       </div>
     </div>
   );
+};
+
+BurgerIngredients.propTypes = {
+  data: PropTypes.arrayOf(menuItemPropTypes).isRequired,
+  setIsIngredientDetailsOpened: PropTypes.func.isRequired,
+  setCurrentCardData: PropTypes.func.isRequired,
 };
