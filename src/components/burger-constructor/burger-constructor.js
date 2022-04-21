@@ -1,4 +1,5 @@
-import PropTypes from 'prop-types';
+import { useContext, useEffect } from 'react';
+// import PropTypes from 'prop-types';
 import styles from './burger-constructor.module.css';
 import {
   Button,
@@ -6,10 +7,46 @@ import {
   CurrencyIcon,
   DragIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { menuItemPropTypes } from '../../utils/constants';
-// import { data } from '../../utils/data';
+// import { menuItemPropTypes } from '../../utils/constants';
+import { DataContext, TotalPriceContext } from '../../services/appContext';
+import { orderUrl } from '../../utils/constants';
 
-export const BurgerConstructor = ({ data, setIsOrderDetailsOpened }) => {
+export const BurgerConstructor = () => {
+  const { totalPriceState, totalPriceDispatcher } = useContext(TotalPriceContext);
+
+  const { data, order, setOrder, setIsOrderDetailsOpened } = useContext(DataContext);
+
+  const handleOrderClick = () => {
+    saveOrder(data.map((item) => item._id))
+      .then(res => res.ok ? res.json() : Promise.reject('Ошибка!'))
+      .then(res => {
+        setOrder(res.order.number);
+        setIsOrderDetailsOpened(true);
+      });
+  };
+
+  const saveOrder = (data) => {
+    return fetch(orderUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        ingredients: data
+      })
+    });
+  };
+
+  useEffect(() => {
+    // вычислим стоимость всех ингедиентов, находящихся в конструкторе бургера
+    const calculateTotalPrice = () => {
+      data.map((item, index) => {
+        totalPriceDispatcher({ type: 'add', price: item.price });
+      });
+    };
+    calculateTotalPrice();
+  }, []);
+
   return (
     <div className={`${styles.container} pt-25 pr-4 pl-4`}>
       <div>
@@ -49,16 +86,19 @@ export const BurgerConstructor = ({ data, setIsOrderDetailsOpened }) => {
       </div>
       <div className={`${styles.info} mt-10 pr-7`}>
         <div className={`${styles.totalContainer} mr-10`}>
-          <p className='text text_type_digits-medium mr-2'>610</p>
-          <CurrencyIcon type='primary'/>
+          <p className='text text_type_digits-medium mr-2'>
+            {totalPriceState.totalPrice}
+          </p>
+          <CurrencyIcon type='primary' />
         </div>
-        <Button onClick={() => setIsOrderDetailsOpened(true)}>Оформить заказ</Button>
+        {/* <Button onClick={() => setIsOrderDetailsOpened(true)}>Оформить заказ</Button> */}
+        <Button onClick={() => handleOrderClick()}>Оформить заказ</Button>
       </div>
     </div>
   );
 };
 
-BurgerConstructor.propTypes = {
-  data: PropTypes.arrayOf(menuItemPropTypes),
-  setIsOrderDetailsOpened: PropTypes.func.isRequired
-}
+// BurgerConstructor.propTypes = {
+//   data: PropTypes.arrayOf(menuItemPropTypes),
+//   setIsOrderDetailsOpened: PropTypes.func.isRequired
+// }

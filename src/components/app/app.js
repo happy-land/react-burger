@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 
 import { AppHeader } from '../app-header/app-header';
 import { BurgerIngredients } from '../burger-ingredients/burger-ingredients';
@@ -10,8 +10,30 @@ import { OrderDetails } from '../order-details/order-details';
 import { baseUrl } from '../../utils/constants';
 
 import appStyles from './app.module.css';
+import { TotalPriceContext, DataContext } from '../../services/appContext';
+
+const totalPriceInitialState = { totalPrice: 0 };
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case 'add':
+      return { totalPrice: state.totalPrice + action.price };
+    case 'delete':
+      return { totalPrice: state.totalPrice - action.price };
+    case 'reset':
+      return totalPriceInitialState;
+    default:
+      throw new Error(`Wrong type of actoion: ${action.type}`);
+  }
+};
 
 function App() {
+  const [totalPriceState, totalPriceDispatcher] = useReducer(
+    reducer,
+    totalPriceInitialState,
+    undefined
+  );
+
   const [ingredients, setIngredients] = useState({
     isLoading: false,
     hasError: false,
@@ -20,6 +42,8 @@ function App() {
 
   const [isOrderDetailsOpened, setIsOrderDetailsOpened] = useState(false);
   const [isIngredientDetailsOpened, setIsIngredientDetailsOpened] = useState(false);
+
+  const [order, setOrder] = useState({});
 
   // стейт выбранной карточки
   const [currentCardData, setCurrentCardData] = useState({});
@@ -64,12 +88,8 @@ function App() {
   return (
     <>
       {isOrderDetailsOpened && (
-        <Modal
-          title=''
-          onOverlayClick={closeAllModals}
-          onEscKeydown={handleEscKeydown}
-        >
-          <OrderDetails />
+        <Modal title='' onOverlayClick={closeAllModals} onEscKeydown={handleEscKeydown}>
+          <OrderDetails order={order} />
         </Modal>
       )}
       {isIngredientDetailsOpened && (
@@ -89,10 +109,20 @@ function App() {
             setIsIngredientDetailsOpened={setIsIngredientDetailsOpened}
             setCurrentCardData={setCurrentCardData}
           />
-          <BurgerConstructor
-            data={ingredients.data}
-            setIsOrderDetailsOpened={setIsOrderDetailsOpened}
-          />
+          {!ingredients.isLoading && (
+            <DataContext.Provider
+              value={{ data: ingredients.data, order, setOrder, setIsOrderDetailsOpened }}
+            >
+              <TotalPriceContext.Provider
+                value={{ totalPriceState, totalPriceDispatcher }}
+              >
+                <BurgerConstructor
+                // data={ingredients.data}
+                // setIsOrderDetailsOpened={setIsOrderDetailsOpened}
+                />
+              </TotalPriceContext.Provider>
+            </DataContext.Provider>
+          )}
         </main>
       </div>
     </>
