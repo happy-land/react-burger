@@ -97,7 +97,6 @@ function App() {
           <TotalPriceContext.Provider value={{ totalPriceState, totalPriceDispatcher }}>
             <main className={appStyles.container}>
               <BurgerIngredients
-                data={ingredients.data}
                 setIsIngredientDetailsOpened={setIsIngredientDetailsOpened}
                 setCurrentCardData={setCurrentCardData}
               />
