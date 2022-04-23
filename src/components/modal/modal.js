@@ -8,12 +8,18 @@ import styles from './modal.module.css';
 
 const modalsContainer = document.querySelector('#modals');
 
-export const Modal = ({ title, onOverlayClick, onEscKeydown, children }) => {
+export const Modal = ({ title, onClose, children }) => {
   useEffect(() => {
-    document.addEventListener('keydown', onEscKeydown);
+
+    // Обработка нажатия Esc
+    const handleEscKeydown = (event) => {
+      event.key === 'Escape' && onClose();
+    };
+
+    document.addEventListener('keydown', handleEscKeydown);
 
     return () => {
-      document.removeEventListener('keydown', onEscKeydown);
+      document.removeEventListener('keydown', handleEscKeydown);
     };
   }, []);
 
@@ -22,12 +28,12 @@ export const Modal = ({ title, onOverlayClick, onEscKeydown, children }) => {
       <div className={`${styles.container} pt-10 pl-10 pr-10 pb-15`}>
         <div className={styles.header}>
           <h3 className={`${styles.title} text text_type_main-large`}>{title}</h3>
-          <CloseIcon type='primary' onClick={onOverlayClick}/>
+          <CloseIcon type='primary' onClick={onClose} />
         </div>
 
         {children}
       </div>
-      <ModalOverlay onClick={onOverlayClick}/>
+      <ModalOverlay onClick={onClose} />
     </>,
     modalsContainer
   );
@@ -35,7 +41,6 @@ export const Modal = ({ title, onOverlayClick, onEscKeydown, children }) => {
 
 Modal.propTypes = {
   title: PropTypes.string.isRequired,
-  onOverlayClick: PropTypes.func.isRequired,
-  onEscKeydown: PropTypes.func.isRequired,
-  children: PropTypes.element.isRequired
-}
+  onClose: PropTypes.func.isRequired,
+  children: PropTypes.element.isRequired,
+};

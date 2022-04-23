@@ -9,7 +9,8 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 // import { menuItemPropTypes } from '../../utils/constants';
 import { DataContext, TotalPriceContext } from '../../services/appContext';
-import { orderUrl } from '../../utils/constants';
+import { baseUrl } from '../../utils/constants';
+import { checkResponse } from '../../utils/utils';
 
 export const BurgerConstructor = () => {
   const { totalPriceState, totalPriceDispatcher } = useContext(TotalPriceContext);
@@ -18,7 +19,7 @@ export const BurgerConstructor = () => {
 
   const handleOrderClick = () => {
     saveOrder(data.map((item) => item._id))
-      .then(res => res.ok ? res.json() : Promise.reject('Ошибка!'))
+      .then(checkResponse)
       .then(res => {
         setOrder(res.order.number);
         setIsOrderDetailsOpened(true);
@@ -26,7 +27,7 @@ export const BurgerConstructor = () => {
   };
 
   const saveOrder = (data) => {
-    return fetch(orderUrl, {
+    return fetch(`${baseUrl}/orders`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

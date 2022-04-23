@@ -11,6 +11,7 @@ import { baseUrl } from '../../utils/constants';
 
 import appStyles from './app.module.css';
 import { TotalPriceContext, DataContext } from '../../services/appContext';
+import { checkResponse } from '../../utils/utils';
 
 const totalPriceInitialState = { totalPrice: 0 };
 
@@ -54,22 +55,12 @@ function App() {
     setIsIngredientDetailsOpened(false);
   };
 
-  // Обработка нажатия Esc
-  const handleEscKeydown = (event) => {
-    event.key === 'Escape' && closeAllModals();
-  };
-
   // загрузка с сервера данных
   useEffect(() => {
     const getIngredients = async () => {
       setIngredients({ ...ingredients, isLoading: true, hasError: false });
-      fetch(baseUrl)
-        .then((res) => {
-          if (res.ok) {
-            return res.json();
-          }
-          return Promise.reject(res.status);
-        })
+      fetch(`${baseUrl}/ingredients`)
+        .then(checkResponse)
         .then((result) =>
           setIngredients({
             ...ingredients,
@@ -88,42 +79,34 @@ function App() {
   return (
     <>
       {isOrderDetailsOpened && (
-        <Modal title='' onOverlayClick={closeAllModals} onEscKeydown={handleEscKeydown}>
+        <Modal title='' onClose={closeAllModals}>
           <OrderDetails order={order} />
         </Modal>
       )}
       {isIngredientDetailsOpened && (
-        <Modal
-          title='Детали ингредиента'
-          onOverlayClick={closeAllModals}
-          onEscKeydown={handleEscKeydown}
-        >
+        <Modal title='Детали ингредиента' onClose={closeAllModals}>
           <IngredientDetails data={currentCardData} />
         </Modal>
       )}
+
       <div className={appStyles.app}>
         <AppHeader />
-        <main className={appStyles.container}>
-          <BurgerIngredients
-            data={ingredients.data}
-            setIsIngredientDetailsOpened={setIsIngredientDetailsOpened}
-            setCurrentCardData={setCurrentCardData}
-          />
-          {!ingredients.isLoading && (
-            <DataContext.Provider
-              value={{ data: ingredients.data, order, setOrder, setIsOrderDetailsOpened }}
-            >
-              <TotalPriceContext.Provider
-                value={{ totalPriceState, totalPriceDispatcher }}
-              >
-                <BurgerConstructor
-                // data={ingredients.data}
-                // setIsOrderDetailsOpened={setIsOrderDetailsOpened}
-                />
-              </TotalPriceContext.Provider>
-            </DataContext.Provider>
-          )}
-        </main>
+        <DataContext.Provider
+          value={{ data: ingredients.data, order, setOrder, setIsOrderDetailsOpened }}
+        >
+          <TotalPriceContext.Provider value={{ totalPriceState, totalPriceDispatcher }}>
+            <main className={appStyles.container}>
+              <BurgerIngredients
+                data={ingredients.data}
+                setIsIngredientDetailsOpened={setIsIngredientDetailsOpened}
+                setCurrentCardData={setCurrentCardData}
+              />
+              {!ingredients.isLoading && (
+                <BurgerConstructor />
+              )}
+            </main>
+          </TotalPriceContext.Provider>
+        </DataContext.Provider>
       </div>
     </>
   );
