@@ -1,25 +1,23 @@
-import React, { useContext } from 'react';
-import PropTypes from 'prop-types';
+import React, { useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-ingredients.module.css';
 import { Card } from '../card/card';
-import { menuItemPropTypes } from '../../utils/constants';
-import { DataContext } from '../../services/appContext';
+import { getIngredients } from '../../services/actions/ingredients';
+import { addToConstructor } from '../../services/actions/burger';
+import { openIngredientModal } from '../../services/actions/ingredientDetails';
 
 const SECTION_BUN = 'Булки';
 const SECTION_SAUCE = 'Соусы';
 const SECTION_MAIN = 'Начинки';
 
-export const BurgerIngredients = ({
-  setIsIngredientDetailsOpened,
-  setCurrentCardData,
-}) => {
-  const { data } = useContext(DataContext);
-
-  const [current, setCurrent] = React.useState('one');
+export const BurgerIngredients = () => {
+  const dispatch = useDispatch();
+  const { items } = useSelector((store) => store.ingredients);
+  const [current, setCurrent] = React.useState('bun');
 
   const getCategory = (itemType) => {
-    return data.filter((item) => {
+    return items.filter((item) => {
       return item.type === itemType;
     });
   };
@@ -28,29 +26,72 @@ export const BurgerIngredients = ({
   const sauces = getCategory('sauce');
   const mains = getCategory('main');
 
-  const onCardClick = (data) => {
-    setIsIngredientDetailsOpened(true);
-    setCurrentCardData(data);
+  const bunRef = useRef();
+  const sauceRef = useRef();
+  const mainRef = useRef();
+
+  const onCardClick = (item) => {
+    // добавить ингредиент в конструктор бургеров (потом заменить на днд)
+    dispatch(addToConstructor(item));
+    dispatch(openIngredientModal(item));
   };
 
-  const renderSection = (section, name) => {
+  const onIngredientClick = (item) => {
+    console.log(item);
+    dispatch(addToConstructor(item));
+  };
+
+  const renderSection = (section, name, ref) => {
     return (
-      <section>
+      <section ref={ref}>
         <h2 className={styles.sectionTitle}>{name}</h2>
         <div className={`${styles.cardArea} mt-6 mb-10 pl-4`}>
           {section.map((item, index) => (
-            <Card key={item._id} data={item} onClick={onCardClick} />
+            <Card key={item._id} data={item} onClick={() => onCardClick(item)} />
           ))}
         </div>
       </section>
     );
   };
 
+  const toggleTab = () => {
+    const tabElementPosition = (type, ref) => {
+      return {
+        type,
+        y: Math.abs(ref.current.getBoundingClientRect().y - 400),
+      };
+    };
+    const tabs = [];
+    tabs.push(tabElementPosition('bun', bunRef));
+    tabs.push(tabElementPosition('sauce', sauceRef));
+    tabs.push(tabElementPosition('main', mainRef));
+
+    const topType = tabs.reduce((p, c) => {
+      return c.y < p.y ? c : p;
+    });
+
+    if (topType.type !== current) {
+      setCurrent(topType.type);
+    }
+  };
+
+  useEffect(() => {
+    dispatch(getIngredients());
+  }, []);
+
   return (
     <div className={styles.container}>
       <h1 className={`${styles.title} text text_type_main-large mt-10 mb-5`}>
         Соберите бургер
       </h1>
+      <div>
+        {items.map((item) => (
+          <p key={item._id} onClick={() => onIngredientClick(item)}>
+            {item.name}
+          </p>
+        ))}
+      </div>
+
       <div className={styles.tabs}>
         <Tab value='bun' active={current === 'bun'} onClick={setCurrent}>
           {SECTION_BUN}
@@ -62,17 +103,11 @@ export const BurgerIngredients = ({
           {SECTION_MAIN}
         </Tab>
       </div>
-      <div className={`${styles.sectionArea} mt-10`}>
-        {renderSection(buns, SECTION_BUN)}
-        {renderSection(sauces, SECTION_SAUCE)}
-        {renderSection(mains, SECTION_MAIN)}
+      <div className={`${styles.sectionArea} mt-10`} onScroll={toggleTab}>
+        {renderSection(buns, SECTION_BUN, bunRef)}
+        {renderSection(sauces, SECTION_SAUCE, sauceRef)}
+        {renderSection(mains, SECTION_MAIN, mainRef)}
       </div>
     </div>
   );
-};
-
-BurgerIngredients.propTypes = {
-  data: PropTypes.arrayOf(menuItemPropTypes).isRequired,
-  setIsIngredientDetailsOpened: PropTypes.func.isRequired,
-  setCurrentCardData: PropTypes.func.isRequired,
 };
