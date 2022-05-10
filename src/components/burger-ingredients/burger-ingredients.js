@@ -4,7 +4,6 @@ import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-ingredients.module.css';
 import { Card } from '../card/card';
 import { getIngredients } from '../../services/actions/ingredients';
-import { addToConstructor } from '../../services/actions/burger';
 import { openIngredientModal } from '../../services/actions/ingredientDetails';
 
 const SECTION_BUN = 'Булки';
@@ -14,6 +13,11 @@ const SECTION_MAIN = 'Начинки';
 export const BurgerIngredients = () => {
   const dispatch = useDispatch();
   const { items } = useSelector((store) => store.ingredients);
+
+  // burgerItems - передадим в Card
+  // store.burger.items - массив ингедирентов бургера
+
+  const burgerItems = useSelector((store) => store.burger.items);
   const [current, setCurrent] = React.useState('bun');
 
   const getCategory = (itemType) => {
@@ -31,14 +35,7 @@ export const BurgerIngredients = () => {
   const mainRef = useRef();
 
   const onCardClick = (item) => {
-    // добавить ингредиент в конструктор бургеров (потом заменить на днд)
-    dispatch(addToConstructor(item));
     dispatch(openIngredientModal(item));
-  };
-
-  const onIngredientClick = (item) => {
-    console.log(item);
-    dispatch(addToConstructor(item));
   };
 
   const renderSection = (section, name, ref) => {
@@ -47,7 +44,12 @@ export const BurgerIngredients = () => {
         <h2 className={styles.sectionTitle}>{name}</h2>
         <div className={`${styles.cardArea} mt-6 mb-10 pl-4`}>
           {section.map((item, index) => (
-            <Card key={item._id} data={item} onClick={() => onCardClick(item)} />
+            <Card
+              key={item._id}
+              data={item}
+              burgerItems={burgerItems}
+              onClick={() => onCardClick(item)}
+            />
           ))}
         </div>
       </section>
@@ -84,14 +86,6 @@ export const BurgerIngredients = () => {
       <h1 className={`${styles.title} text text_type_main-large mt-10 mb-5`}>
         Соберите бургер
       </h1>
-      <div>
-        {items.map((item) => (
-          <p key={item._id} onClick={() => onIngredientClick(item)}>
-            {item.name}
-          </p>
-        ))}
-      </div>
-
       <div className={styles.tabs}>
         <Tab value='bun' active={current === 'bun'} onClick={setCurrent}>
           {SECTION_BUN}

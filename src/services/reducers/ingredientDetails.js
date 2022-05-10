@@ -9,7 +9,7 @@ const ingredientInitialState = {
   item: null,
 };
 
-export const ingredientReducer = (state = ingredientInitialState, action) => {
+export const ingredientDetailsReducer = (state = ingredientInitialState, action) => {
   switch (action.type) {
     case INGREDIENT_MODAL_OPEN:
       return {

@@ -11,23 +11,15 @@ import appStyles from './app.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { closeIngredientModal } from '../../services/actions/ingredientDetails';
 import { closeOrderModal } from '../../services/actions/order';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 
 function App() {
-  // было:
-  // const [isOrderDetailsOpened, setIsOrderDetailsOpened] = useState(false);
-  // const [isIngredientDetailsOpened, setIsIngredientDetailsOpened] = useState(false);
-
-  // const [order, setOrder] = useState({});
-
-  // стало:
   const dispatch = useDispatch();
-  const { isIngredientDetailsOpened, item } = useSelector((store) => store.ingredient);
+  const { isIngredientDetailsOpened, item } = useSelector((store) => store.ingredientDetails);
   const { isOrderDetailsOpened, orderNumber } = useSelector((store) => store.order);
 
-  // Закрытие всех модалок
   const closeAllModals = () => {
-    // setIsOrderDetailsOpened(false);
-    // setIsIngredientDetailsOpened(false);
     dispatch(closeIngredientModal());
     dispatch(closeOrderModal());
   };
@@ -48,27 +40,12 @@ function App() {
       <div className={appStyles.app}>
         <AppHeader />
         <main className={appStyles.container}>
-          <BurgerIngredients />
-          <BurgerConstructor />
+          <DndProvider backend={HTML5Backend}>
+            <BurgerIngredients />
+            <BurgerConstructor />
+          </DndProvider>
         </main>
       </div>
-
-      {/* <div className={appStyles.app}>
-        <AppHeader />
-        <DataContext.Provider
-          value={{ data: ingredients.data, order, setOrder, setIsOrderDetailsOpened }}
-        >
-          <TotalPriceContext.Provider value={{ totalPriceState, totalPriceDispatcher }}>
-            <main className={appStyles.container}>
-              <BurgerIngredients
-                setIsIngredientDetailsOpened={setIsIngredientDetailsOpened}
-                setCurrentCardData={setCurrentCardData}
-              />
-              {!ingredients.isLoading && <BurgerConstructor />}
-            </main>
-          </TotalPriceContext.Provider>
-        </DataContext.Provider>
-      </div> */}
     </>
   );
 }

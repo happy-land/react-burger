@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import styles from './burger-constructor.module.css';
 import {
   Button,
@@ -9,25 +8,31 @@ import {
 
 import { useDrop } from 'react-dnd';
 import { useDispatch, useSelector } from 'react-redux';
-import { addToConstructor, removeFromConstructor, saveOrder } from '../../services/actions/burger';
+import {
+  addBun,
+  addIngredient,
+  removeIngredient,
+  saveOrder,
+} from '../../services/actions/burger';
 
 export const BurgerConstructor = () => {
-  // Получение списка ингредиентов для конструктора бургера. 
+  // Получение списка ингредиентов для конструктора бургера.
   // Используется в компоненте BurgerConstructor.
   const dispatch = useDispatch();
-  const { items, totalPrice } = useSelector((store) => store.burger);
-  // const {} = useSelector();
+  const { items, totalPrice, bun } = useSelector((store) => store.burger);
 
   // drop
-  // const [{ canDrop, dragItem }, drop] = useDrop(() => ({
-  //   accept: 'NEW_INGREDIENT',
-  //   drop: (item) => dispatch(addToConstructor(item)),
-  //   collect: (monitor) => ({
-  //     canDrop: monitor.canDrop(),
-  //     dragItem: monitor.dragItem(),
-  //     isOver: monitor.isOver()
-  //   })
-  // }));
+  const [{ canDrop, isHover }, dropTarget] = useDrop(() => ({
+    accept: 'NEW_INGREDIENT',
+    drop: (item) =>
+      item.type === 'bun' ? dispatch(addBun(item)) : dispatch(addIngredient(item)),
+    collect: (monitor) => ({
+      canDrop: monitor.canDrop(),
+      // dragItem: monitor.dragItem(),
+      isHover: monitor.isOver(),
+    }),
+  }));
+
 
   const handleOrderClick = () => {
     dispatch(saveOrder(items));
@@ -35,65 +40,63 @@ export const BurgerConstructor = () => {
 
   const handleClose = (item) => {
     console.log(item);
-    dispatch(removeFromConstructor(item));
-  }
+    dispatch(removeIngredient(item));
+  };
 
-  useEffect(() => {
-    // вычислим стоимость всех ингедиентов, находящихся в конструкторе бургера
-    const calculateTotalPrice = () => {
-      items.map((item, index) => {
-        dispatch(addToConstructor(item));
-      });
-    };
-    calculateTotalPrice();
-  }, []);
-
-  return (
-    <div className={`${styles.container} pt-25 pr-4 pl-4`}>
+  const renderBun = (bun, type) => {
+    return (
       <div>
         <ConstructorElement
           className={styles.bunElement}
-          type='top'
+          type={type === 'верх' ? 'top' : 'bottom'}
           isLocked={true}
-          text='Краторная булка N-200i (верх)'
-          price={200}
-          thumbnail='https://code.s3.yandex.net/react/code/bun-02.png'
+          text={`${bun.name} (${type})`}
+          price={bun.price}
+          thumbnail={bun.image}
         />
       </div>
+    );
+  };
+
+  return (
+    <div className={`${styles.container} pt-25 pr-4 pl-4`} ref={dropTarget}>
+      {/* верхняя булка */}
+      {bun && renderBun(bun, 'верх')}
 
       <div className={styles.innerIngredients}>
-        {items
-          .filter((item) => item.type !== 'bun')
-          .map((item, index) => (
-            <div key={index} className={styles.elementContainer}>
-              <DragIcon />
-              <ConstructorElement
-                key={item._id}
-                text={item.name}
-                price={item.price}
-                thumbnail={item.image}
-                handleClose={() => handleClose(item)}
-              />
-            </div>
-          ))}
+        {items.length === 0 ? (
+          <div className={styles.emptyBox}>
+            <p>Перетащите сюда булку и ингредиенты</p>
+          </div>
+        ) : (
+          items
+            // .filter((item) => item.type !== 'bun')
+            .map((item, index) => (
+              <div key={index} className={styles.elementContainer}>
+                <DragIcon />
+                <ConstructorElement
+                  key={item._id}
+                  text={item.name}
+                  price={item.price}
+                  thumbnail={item.image}
+                  handleClose={() => handleClose(item)}
+                />
+              </div>
+            ))
+        )}
       </div>
-      <div>
-        <ConstructorElement
-          type='bottom'
-          isLocked={true}
-          text='Краторная булка N-200i (низ)'
-          price={200}
-          thumbnail='https://code.s3.yandex.net/react/code/bun-02.png'
-        />
-      </div>
+
+      {/* нижняя булка */}
+      {bun && renderBun(bun, 'низ')}
+
       <div className={`${styles.info} mt-10 pr-7`}>
         <div className={`${styles.totalContainer} mr-10`}>
-          <p className='text text_type_digits-medium mr-2'>
-            {totalPrice}
-          </p>
+          <p className='text text_type_digits-medium mr-2'>{totalPrice}</p>
           <CurrencyIcon type='primary' />
         </div>
-        <Button onClick={() => handleOrderClick()}>Оформить заказ</Button>
+        <Button onClick={() => handleOrderClick()} disabled={bun === null ? true : false}>
+          Оформить заказ
+        </Button>
       </div>
     </div>
   );

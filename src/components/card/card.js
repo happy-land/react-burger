@@ -7,23 +7,26 @@ import {
 import { menuItemPropTypes } from '../../utils/constants';
 import styles from './card.module.css';
 
-export const Card = ({ data, onClick }) => {
+export const Card = ({ data, burgerItems, onClick }) => {
   // drag and drop
-  // const [{ isDragging }, drag] = useDrag(() => ({
-  //   type: 'NEW_INGREDIENT',
-  //   item: data,
-  //   collect: (monitor) => ({
-  //     isDragging: monitor.isDragging(),
-  //     handlerId: monitor.getHandlerId(),
-  //   }),
-  // }));
-
-  // const opacity = isDragging ? 0.4 : 1;
+  const [{ opacity, isDragging }, drag] = useDrag(() => ({
+    type: 'NEW_INGREDIENT',
+    item: data,
+    collect: (monitor) => ({
+      opacity: monitor.isDragging ? 0.8 : 1,
+      isDragging: monitor.isDragging(),
+      handlerId: monitor.getHandlerId(),
+    }),
+  }));
+  const updateCounter = () => {
+    console.log(burgerItems.length);
+    // return '1';
+  }
 
   return (
     <article
-      // ref={drag}
-      // style={{ opacity }}
+      ref={drag}
+      style={{ opacity }}
       className={styles.card}
       onClick={() => onClick(data)}
     >
@@ -34,7 +37,7 @@ export const Card = ({ data, onClick }) => {
       </div>
       <p className='text text_type_main-small'>{data.name}</p>
       <div className={styles.counter}>
-        <Counter count={1} size='default' />
+        {/* <Counter count={burgerItems} size='default' /> */}
       </div>
     </article>
   );
