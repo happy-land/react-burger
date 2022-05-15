@@ -1,10 +1,11 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-ingredients.module.css';
 import { Card } from '../card/card';
 import { getIngredients } from '../../services/actions/ingredients';
 import { openIngredientModal } from '../../services/actions/ingredientDetails';
+import { INCREASE_COUNTER } from '../../services/actions/ingredient';
 
 const SECTION_BUN = 'Булки';
 const SECTION_SAUCE = 'Соусы';
@@ -18,7 +19,11 @@ export const BurgerIngredients = () => {
   // store.burger.items - массив ингедирентов бургера
 
   const burgerItems = useSelector((store) => store.burger.items);
+  const bun = useSelector((store) => store.burger.bun);
+
   const [current, setCurrent] = React.useState('bun');
+
+  const [counters, setCounters] = useState([]);
 
   const getCategory = (itemType) => {
     return items.filter((item) => {
@@ -36,6 +41,9 @@ export const BurgerIngredients = () => {
 
   const onCardClick = (item) => {
     dispatch(openIngredientModal(item));
+    dispatch({
+      type: INCREASE_COUNTER
+    })
   };
 
   const renderSection = (section, name, ref) => {
@@ -47,7 +55,7 @@ export const BurgerIngredients = () => {
             <Card
               key={item._id}
               data={item}
-              burgerItems={burgerItems}
+              counter={item.counter}
               onClick={() => onCardClick(item)}
             />
           ))}
@@ -80,6 +88,25 @@ export const BurgerIngredients = () => {
   useEffect(() => {
     dispatch(getIngredients());
   }, []);
+
+  useEffect(() => {
+    const counterArr = [];
+    items.map((item, index) => {
+      if (item.type === 'bun') {
+        if (bun) {
+          bun._id === item._id ? item.counter = 1 : item.counter = 0;
+        } else {
+          item.counter = 0;
+        }
+      } else {
+        const res = burgerItems.filter(resItem => resItem._id === item._id);
+        item.counter = res.length;
+      }
+    });
+
+    setCounters(counterArr);
+
+  }, [items, burgerItems, bun]);
 
   return (
     <div className={styles.container}>

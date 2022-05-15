@@ -3,7 +3,6 @@ import {
   Button,
   ConstructorElement,
   CurrencyIcon,
-  DragIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import { useDrop } from 'react-dnd';
@@ -14,6 +13,7 @@ import {
   removeIngredient,
   saveOrder,
 } from '../../services/actions/burger';
+import { BurgerConstructorElement } from '../burger-constructor-element/burger-constructor-element';
 
 export const BurgerConstructor = () => {
   // Получение списка ингредиентов для конструктора бургера.
@@ -33,13 +33,11 @@ export const BurgerConstructor = () => {
     }),
   }));
 
-
   const handleOrderClick = () => {
     dispatch(saveOrder(items));
   };
 
   const handleClose = (item) => {
-    console.log(item);
     dispatch(removeIngredient(item));
   };
 
@@ -69,20 +67,14 @@ export const BurgerConstructor = () => {
             <p>Перетащите сюда булку и ингредиенты</p>
           </div>
         ) : (
-          items
-            // .filter((item) => item.type !== 'bun')
-            .map((item, index) => (
-              <div key={index} className={styles.elementContainer}>
-                <DragIcon />
-                <ConstructorElement
-                  key={item._id}
-                  text={item.name}
-                  price={item.price}
-                  thumbnail={item.image}
-                  handleClose={() => handleClose(item)}
-                />
-              </div>
-            ))
+          items.map((item, index) => (
+            <BurgerConstructorElement 
+              key={item.id}
+              item={item}
+              index={index}
+              handleClose={handleClose}
+            />
+          ))
         )}
       </div>
 

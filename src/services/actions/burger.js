@@ -9,6 +9,9 @@ export const CONSTRUCTOR_REMOVE_INGREDIENT = 'CONSTRUCTOR_REMOVE_INGREDIENT';
 export const CONSTRUCTOR_ADD_BUN = 'CONSTRUCTOR_ADD_BUN';
 export const CONSTRUCTOR_REMOVE_BUN = 'CONSTRUCTOR_REMOVE_BUN';
 
+export const CONSTRUCTOR_REORDER = 'CONSTRUCTOR_REORDER';
+export const CONSTRUCTOR_RESET = 'CONSTRUCTOR_RESET';
+
 export const ORDER_SAVE_REQUEST = 'ORDER_SAVE_REQUEST';
 export const ORDER_SAVE_SUCCESS = 'ORDER_SAVE_SUCCESS';
 export const ORDER_SAVE_FAIL = 'ORDER_SAVE_FAIL';
@@ -18,7 +21,6 @@ export const addIngredient = (ingredient) => ({
   payload: {
     ...ingredient,
     id: uuid(),
-    // counter: 1
   },
 });
 
@@ -54,17 +56,20 @@ export const saveOrder = (data) => (dispatch) => {
   })
     .then(checkResponse)
     .then((data) => {
-      console.log(data);
       if (data.success) {
         dispatch({
           type: ORDER_SAVE_SUCCESS,
           payload: data,
         });
         dispatch(openOrderModal(data.order.number));
+        dispatch({
+          type: CONSTRUCTOR_RESET
+        })
       } else {
         dispatch({
           type: ORDER_SAVE_FAIL,
         });
       }
-    });
+    })
+    .catch((err) => console.log(err));
 };
