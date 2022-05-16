@@ -1,6 +1,6 @@
 import { v4 as uuid } from 'uuid';
 import { baseUrl } from '../../utils/constants';
-import { checkResponse } from '../../utils/utils';
+import { checkResponse, checkSuccess } from '../../utils/utils';
 import { openOrderModal } from './order';
 
 export const CONSTRUCTOR_ADD_INGREDIENT = 'CONSTRUCTOR_ADD_INGREDIENT';
@@ -55,21 +55,21 @@ export const saveOrder = (data) => (dispatch) => {
     }),
   })
     .then(checkResponse)
-    .then((data) => {
-      if (data.success) {
-        dispatch({
-          type: ORDER_SAVE_SUCCESS,
-          payload: data,
-        });
-        dispatch(openOrderModal(data.order.number));
-        dispatch({
-          type: CONSTRUCTOR_RESET
-        })
-      } else {
-        dispatch({
-          type: ORDER_SAVE_FAIL,
-        });
-      }
+    .then(checkSuccess)
+    .then(() => {
+      dispatch({
+        type: ORDER_SAVE_SUCCESS,
+        payload: data,
+      });
+      console.log(data.order.number);
+      dispatch(openOrderModal(data.order.number));
+      dispatch({
+        type: CONSTRUCTOR_RESET
+      });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      dispatch({
+        type: ORDER_SAVE_FAIL,
+      });
+    });
 };

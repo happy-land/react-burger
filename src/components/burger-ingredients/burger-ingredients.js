@@ -5,7 +5,6 @@ import styles from './burger-ingredients.module.css';
 import { Card } from '../card/card';
 import { getIngredients } from '../../services/actions/ingredients';
 import { openIngredientModal } from '../../services/actions/ingredientDetails';
-import { INCREASE_COUNTER } from '../../services/actions/ingredient';
 
 const SECTION_BUN = 'Булки';
 const SECTION_SAUCE = 'Соусы';
@@ -41,9 +40,6 @@ export const BurgerIngredients = () => {
 
   const onCardClick = (item) => {
     dispatch(openIngredientModal(item));
-    dispatch({
-      type: INCREASE_COUNTER
-    })
   };
 
   const renderSection = (section, name, ref) => {
