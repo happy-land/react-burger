@@ -1,17 +1,31 @@
-import React from 'react';
-import { Counter, CurrencyIcon, Tab } from '@ya.praktikum/react-developer-burger-ui-components';
+import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-ingredients.module.css';
-import { data } from '../../utils/data';
+import { Card } from '../card/card';
+import { getIngredients } from '../../services/actions/ingredients';
+import { openIngredientModal } from '../../services/actions/ingredientDetails';
 
 const SECTION_BUN = 'Булки';
 const SECTION_SAUCE = 'Соусы';
 const SECTION_MAIN = 'Начинки';
 
 export const BurgerIngredients = () => {
-  const [current, setCurrent] = React.useState('one');
+  const dispatch = useDispatch();
+  const { items } = useSelector((store) => store.ingredients);
+
+  // burgerItems - передадим в Card
+  // store.burger.items - массив ингедирентов бургера
+
+  const burgerItems = useSelector((store) => store.burger.items);
+  const bun = useSelector((store) => store.burger.bun);
+
+  const [current, setCurrent] = React.useState('bun');
+
+  const [counters, setCounters] = useState([]);
 
   const getCategory = (itemType) => {
-    return data.filter((item) => {
+    return items.filter((item) => {
       return item.type === itemType;
     });
   };
@@ -20,26 +34,75 @@ export const BurgerIngredients = () => {
   const sauces = getCategory('sauce');
   const mains = getCategory('main');
 
-  const renderSection = (section, name) => {
+  const bunRef = useRef();
+  const sauceRef = useRef();
+  const mainRef = useRef();
+
+  const onCardClick = (item) => {
+    dispatch(openIngredientModal(item));
+  };
+
+  const renderSection = (section, name, ref) => {
     return (
-      <section>
+      <section ref={ref}>
         <h2 className={styles.sectionTitle}>{name}</h2>
         <div className={`${styles.cardArea} mt-6 mb-10 pl-4`}>
           {section.map((item, index) => (
-            <article className={styles.card} key={item._id}>
-              <img className={styles.image} src={item.image} />
-              <div className={`${styles.priceContainer} mt-1 mb-1`}>
-                <p className='text text_type_digits-default mr-2'>{item.price}</p>
-                <CurrencyIcon type='primary' />
-              </div>
-              <p className='text text_type_main-small'>{item.name}</p>
-              <div className={styles.counter}><Counter count={1} size='default'/></div>
-            </article>
+            <Card
+              key={item._id}
+              data={item}
+              counter={item.counter}
+              onClick={() => onCardClick(item)}
+            />
           ))}
         </div>
       </section>
     );
   };
+
+  const toggleTab = () => {
+    const tabElementPosition = (type, ref) => {
+      return {
+        type,
+        y: Math.abs(ref.current.getBoundingClientRect().y - 400),
+      };
+    };
+    const tabs = [];
+    tabs.push(tabElementPosition('bun', bunRef));
+    tabs.push(tabElementPosition('sauce', sauceRef));
+    tabs.push(tabElementPosition('main', mainRef));
+
+    const topType = tabs.reduce((p, c) => {
+      return c.y < p.y ? c : p;
+    });
+
+    if (topType.type !== current) {
+      setCurrent(topType.type);
+    }
+  };
+
+  useEffect(() => {
+    dispatch(getIngredients());
+  }, []);
+
+  useEffect(() => {
+    const counterArr = [];
+    items.map((item, index) => {
+      if (item.type === 'bun') {
+        if (bun) {
+          bun._id === item._id ? item.counter = 1 : item.counter = 0;
+        } else {
+          item.counter = 0;
+        }
+      } else {
+        const res = burgerItems.filter(resItem => resItem._id === item._id);
+        item.counter = res.length;
+      }
+    });
+
+    setCounters(counterArr);
+
+  }, [items, burgerItems, bun]);
 
   return (
     <div className={styles.container}>
@@ -57,10 +120,10 @@ export const BurgerIngredients = () => {
           {SECTION_MAIN}
         </Tab>
       </div>
-      <div className={`${styles.sectionArea} mt-10`}>
-        {renderSection(buns, SECTION_BUN)}
-        {renderSection(sauces, SECTION_SAUCE)}
-        {renderSection(mains, SECTION_MAIN)}
+      <div className={`${styles.sectionArea} mt-10`} onScroll={toggleTab}>
+        {renderSection(buns, SECTION_BUN, bunRef)}
+        {renderSection(sauces, SECTION_SAUCE, sauceRef)}
+        {renderSection(mains, SECTION_MAIN, mainRef)}
       </div>
     </div>
   );
