@@ -28,7 +28,6 @@ export const BurgerConstructor = () => {
       item.type === 'bun' ? dispatch(addBun(item)) : dispatch(addIngredient(item)),
     collect: (monitor) => ({
       canDrop: monitor.canDrop(),
-      // dragItem: monitor.dragItem(),
       isHover: monitor.isOver(),
     }),
   }));
@@ -86,7 +85,7 @@ export const BurgerConstructor = () => {
           <p className='text text_type_digits-medium mr-2'>{totalPrice}</p>
           <CurrencyIcon type='primary' />
         </div>
-        <Button onClick={() => handleOrderClick()} disabled={bun === null ? true : false}>
+        <Button onClick={() => handleOrderClick()} disabled={bun === null || items.length === 0}>
           Оформить заказ
         </Button>
       </div>

@@ -3,5 +3,5 @@ export const checkResponse = (res) => {
 };
 
 export const checkSuccess = (data) => {
-  return data.success ? data.data : Promise.reject('Error data');
+  return data.success ? data : Promise.reject('Error data');
 }

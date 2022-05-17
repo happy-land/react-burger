@@ -9,7 +9,6 @@ const orderInitialState = {
 export const orderReducer = (state = orderInitialState, action) => {
   switch (action.type) {
     case ORDER_MODAL_OPEN:
-      console.log('open!');
       return {
         ...state,
         isOrderDetailsOpened: true,

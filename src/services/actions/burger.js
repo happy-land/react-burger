@@ -56,12 +56,11 @@ export const saveOrder = (data) => (dispatch) => {
   })
     .then(checkResponse)
     .then(checkSuccess)
-    .then(() => {
+    .then((data) => {
       dispatch({
         type: ORDER_SAVE_SUCCESS,
         payload: data,
       });
-      console.log(data.order.number);
       dispatch(openOrderModal(data.order.number));
       dispatch({
         type: CONSTRUCTOR_RESET

@@ -10,7 +10,6 @@ const ingredientsInitialState = {
   isLoading: false,
   hasError: false,
   itemsInBurger: []  
-  // [{id: 09090, count: 0}, {id: 9829849328, count: 2}]
 };
 
 export const ingredientsReducer = (state = ingredientsInitialState, action) => {
@@ -22,12 +21,9 @@ export const ingredientsReducer = (state = ingredientsInitialState, action) => {
       };
     }
     case GET_INGREDIENTS_SUCCESS: {
-      // console.log(GET_INGREDIENTS_SUCCESS);
-      // console.log(action);
       return {
         ...state,
         items: action.payload,
-        // items: [...state.items, action.payload],
         isLoading: false,
         hasError: false,
       };

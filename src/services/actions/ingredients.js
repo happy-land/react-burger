@@ -22,7 +22,7 @@ export const getIngredients = () => (dispatch) => {
     .then((ingredients) => {
       dispatch({
         type: GET_INGREDIENTS_SUCCESS,
-        payload: ingredients,
+        payload: ingredients.data,
         isLoading: false,
         hasError: false,
       });

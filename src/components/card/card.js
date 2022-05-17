@@ -18,7 +18,6 @@ export const Card = ({ data, counter, onClick }) => {
       handlerId: monitor.getHandlerId(),
     }),
   }));
-  
 
   return (
     <article
@@ -34,7 +33,9 @@ export const Card = ({ data, counter, onClick }) => {
       </div>
       <p className='text text_type_main-small'>{data.name}</p>
       <div className={styles.counter}>
-        <Counter count={counter} size='default' />
+        {counter > 0 && 
+          <Counter count={counter} size='default' />
+        }
       </div>
     </article>
   );
