@@ -1,13 +1,12 @@
-@font-face {
-  font-family: 'JetBrains Mono';
-  font-style: normal;
-  font-weight: 400;
-  src: url("./fonts/JetBrainsMono-Regular.woff2") format("woff2");
-}
+@import url(./fonts/fonts.css);
 
-@font-face {
-  font-family: 'JetBrains Mono';
-  font-style: normal;
-  font-weight: 700;
-  src: url("./fonts/JetBrainsMono-Bold.woff2") format("woff2");
+body {
+  font-family: 'JetBrains Mono', Arial, sans-serif;
+  width: calc(100% - 40px);
+  height: 400px;
+  text-align: center;
+  margin: 0px auto;
+  padding: 40px;
+  box-sizing: border-box;
+  background-color: #131316;
 }

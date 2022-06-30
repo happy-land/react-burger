@@ -48,7 +48,7 @@
 
 .link {
   display: flex;
-  margin: 0;
+  margin: 0 0 0 8px;
   padding: 0;
   text-decoration: none;
   cursor: pointer;
