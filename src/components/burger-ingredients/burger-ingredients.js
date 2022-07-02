@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-ingredients.module.css';
@@ -48,12 +49,14 @@ export const BurgerIngredients = () => {
         <h2 className={styles.sectionTitle}>{name}</h2>
         <div className={`${styles.cardArea} mt-6 mb-10 pl-4`}>
           {section.map((item, index) => (
+            // <Link to={`/ingredients/${item._id}`} key={item._id}>
             <Card
               key={item._id}
               data={item}
               counter={item.counter}
               onClick={() => onCardClick(item)}
             />
+            // </Link>
           ))}
         </div>
       </section>
@@ -90,18 +93,17 @@ export const BurgerIngredients = () => {
     items.map((item, index) => {
       if (item.type === 'bun') {
         if (bun) {
-          bun._id === item._id ? item.counter = 1 : item.counter = 0;
+          bun._id === item._id ? (item.counter = 1) : (item.counter = 0);
         } else {
           item.counter = 0;
         }
       } else {
-        const res = burgerItems.filter(resItem => resItem._id === item._id);
+        const res = burgerItems.filter((resItem) => resItem._id === item._id);
         item.counter = res.length;
       }
     });
 
     setCounters(counterArr);
-
   }, [items, burgerItems, bun]);
 
   return (

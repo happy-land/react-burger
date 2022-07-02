@@ -10,7 +10,7 @@ export const ProtectedRoute = ({ children, ...rest }) => {
   const [isUserLoaded, setUserLoaded] = useState(false);
 
   const init = async () => {
-    console.log('ProtectedRoute init()');
+    // console.log('ProtectedRoute init()');
     await dispatch(getUserData());
     setUserLoaded(true);
     
@@ -18,9 +18,9 @@ export const ProtectedRoute = ({ children, ...rest }) => {
 
   useEffect(() => {
     init();
-    console.log(user);
-    console.log('isUserLoaded ' + isUserLoaded);
-    console.log('isAuth: ' + isAuth);
+    // console.log(user);
+    // console.log('isUserLoaded ' + isUserLoaded);
+    // console.log('isAuth: ' + isAuth);
   }, []);
 
   if (!isUserLoaded) {

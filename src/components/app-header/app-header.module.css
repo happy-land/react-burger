@@ -52,11 +52,16 @@
   padding: 0;
   text-decoration: none;
   cursor: pointer;
-  color: #F2F2F3;
+  color: #8585AD;
   font-size: 16px;
   line-height: 24px;
   /* display: flex; */
 }
+
+.linkActive {
+  color: #F2F2F3;
+}
+
 .link_disabled {
   /* color: #8585AD; */
 }

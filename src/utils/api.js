@@ -105,6 +105,7 @@ export const refreshToken = () => {
 const fetchWithRefresh = async (url, options) => {
   try {
     const res = await fetch(url, options);
+    // console.log(res);
     return await checkResponse(res);
   } catch (err) {
     console.log('ERROR  ' + err);
