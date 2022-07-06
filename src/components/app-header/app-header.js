@@ -1,4 +1,4 @@
-import { NavLink, useRouteMatch } from 'react-router-dom';
+import { NavLink, useLocation, useRouteMatch } from 'react-router-dom';
 import {
   BurgerIcon,
   ListIcon,
@@ -8,13 +8,15 @@ import {
 import styles from './app-header.module.css';
 
 export const AppHeader = () => {
+  let location = useLocation();
+
   const { url } = useRouteMatch();
   let isRoot;
   let isOrders;
   let isProfile;
 
   url === '/' ? (isRoot = true) : (isRoot = false);
-  url === '/orders' ? (isOrders = true) : (isOrders = false);
+  url === '/orders/123' ? (isOrders = true) : (isOrders = false);
   url === '/profile' ? (isProfile = true) : (isProfile = false);
 
   return (
@@ -34,14 +36,18 @@ export const AppHeader = () => {
             </NavLink>
           </li>
           <li className={`${styles.listItem} p-5`}>
-            <a className={`${styles.link} ${styles.link_disabled}`} href='#'>
+            <NavLink
+              to='/orders'
+              className={`${styles.link} ${styles.link_disabled}`}
+              activeClassName={isOrders ? styles.linkActive : styles.link}
+            >
               <div className={styles.linkContent}>
-                <ListIcon type='secondary' />
-                <span className={`text text_type_main-default text_color_inactive ml-2`}>
+                <ListIcon type={isOrders ? 'primary' : 'secondary'} />
+                <span className={`text text_type_main-default ml-2`}>
                   Лента заказов
                 </span>
               </div>
-            </a>
+            </NavLink>
           </li>
         </ul>
         <Logo className={styles.logo} />

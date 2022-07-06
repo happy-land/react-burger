@@ -11,3 +11,4 @@ export const openIngredientModal = (ingredient) => ({
 export const closeIngredientModal = () => ({
   type: INGREDIENT_MODAL_CLOSE,
 })
+

@@ -13,5 +13,5 @@ export {
   ForgotPasswordPage,
   ResetPasswordPage,
   ProfilePage,
-  IngredientPage
+  IngredientPage,
 };

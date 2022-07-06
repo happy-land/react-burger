@@ -3,6 +3,8 @@ import { menuItemPropTypes } from '../../utils/constants';
 import styles from './ingredient-details.module.css';
 
 export const IngredientDetails = ({ data }) => {
+  console.log('IngredientDetails data: ');
+  console.log(data);
   return (
     <div className={styles.container}>
       <img src={data.image_large} />

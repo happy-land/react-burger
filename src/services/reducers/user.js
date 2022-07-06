@@ -61,6 +61,7 @@ export const userReducer = (state = userInitialState, action) => {
         ...state,
         accessToken: authToken,
         refreshToken: res.refreshToken,
+        isAuth: true,
         user: res.user,
         response: action.payload,
         isLoading: false,

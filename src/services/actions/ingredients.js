@@ -5,6 +5,10 @@ export const GET_INGREDIENTS_REQUEST = 'GET_INGREDIENTS_REQUEST';
 export const GET_INGREDIENTS_SUCCESS = 'GET_INGREDIENTS_SUCCESS';
 export const GET_INGREDIENTS_FAIL = 'GET_INGREDIENTS_FAIL';
 
+export const GET_INGREDIENT_REQUEST = 'GET_INGREDIENT_REQUEST';
+export const GET_INGREDIENT_SUCCESS = 'GET_INGREDIENT_SUCCESS';
+export const GET_INGREDIENT_FAIL = 'GET_INGREDIENT_FAIL';
+
 // set
 export const SET_INGREDIENT_COUNTER = 'SET_INGREDIENT_COUNTER';
 
@@ -47,3 +51,33 @@ export const addToBurger = (id, count) => (dispatch) => {
     }
   })
 };
+
+export const getIngredient = (id) => (dispatch) => {
+  console.log('Найдем ингредиент ' + id);
+  dispatch({
+    type: GET_INGREDIENT_REQUEST,
+    isLoading: true,
+  });
+  return fetch(`${baseUrl}/ingredients`)
+    .then(checkResponse)
+    .then(checkSuccess)
+    .then((ingredients) => {
+      // console.log(ingredients);
+      const ingredient = ingredients.data.filter((ingr) => ingr._id === id);
+      console.log(ingredient);
+      dispatch({
+        type: GET_INGREDIENT_SUCCESS,
+        payload: ingredient[0],
+        isLoading: false,
+        hasError: false,
+      });
+    })
+    .catch((err) => {
+      dispatch({
+        type: GET_INGREDIENT_FAIL,
+        payload: err,
+        isLoading: false,
+        hasError: true
+      })
+    })
+}

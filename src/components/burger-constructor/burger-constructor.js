@@ -7,6 +7,7 @@ import {
 
 import { useDrop } from 'react-dnd';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import {
   addBun,
   addIngredient,
@@ -16,10 +17,12 @@ import {
 import { BurgerConstructorElement } from '../burger-constructor-element/burger-constructor-element';
 
 export const BurgerConstructor = () => {
+  const history = useHistory();
   // Получение списка ингредиентов для конструктора бургера.
   // Используется в компоненте BurgerConstructor.
   const dispatch = useDispatch();
-  const { items, totalPrice, bun } = useSelector((store) => store.burger);
+  const { items, totalPrice, bun, isLoading } = useSelector((store) => store.burger);
+  const { isAuth } = useSelector((store) => store.user);
 
   // drop
   const [{ canDrop, isHover }, dropTarget] = useDrop(() => ({
@@ -33,11 +36,19 @@ export const BurgerConstructor = () => {
   }));
 
   const handleOrderClick = () => {
-    dispatch(saveOrder(items));
+    if (isAuth) {
+      dispatch(saveOrder(items));
+    } else {
+      history.replace({ pathname: '/login' });
+    }
   };
 
   const handleClose = (item) => {
     dispatch(removeIngredient(item));
+  };
+
+  const renderButtonState = () => {
+    if (bun === null || items.length === 0 || isLoading) return true;
   };
 
   const renderBun = (bun, type) => {
@@ -67,7 +78,7 @@ export const BurgerConstructor = () => {
           </div>
         ) : (
           items.map((item, index) => (
-            <BurgerConstructorElement 
+            <BurgerConstructorElement
               key={item.id}
               item={item}
               index={index}
@@ -85,8 +96,9 @@ export const BurgerConstructor = () => {
           <p className='text text_type_digits-medium mr-2'>{totalPrice}</p>
           <CurrencyIcon type='primary' />
         </div>
-        <Button onClick={() => handleOrderClick()} disabled={bun === null || items.length === 0}>
-          Оформить заказ
+        <Button onClick={() => handleOrderClick()} disabled={renderButtonState()}>
+          {!isLoading && `Оформить заказ`}
+          {isLoading && `Подождите...`}
         </Button>
       </div>
     </div>

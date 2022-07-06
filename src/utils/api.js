@@ -78,6 +78,20 @@ export const updateUserRequest = async (form) => {
   });
 };
 
+export const saveOrderRequest = async (data) => {
+  return await fetchWithRefresh(`${baseUrl}/orders`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + getCookie('accessToken'),
+    },
+    body: JSON.stringify({
+      ingredients: data,
+    }),
+  })
+    
+};
+
 export const refreshToken = () => {
   return fetch(`${baseUrl}/auth/token`, {
     method: 'POST',
@@ -110,7 +124,7 @@ const fetchWithRefresh = async (url, options) => {
   } catch (err) {
     console.log('ERROR  ' + err);
     if (err.message === 'jwt expired') {
-    // if (err === 403) {
+      // if (err === 403) {
       console.log('jwt expired');
       const refreshData = await refreshToken();
       options.headers.authorization = refreshData.accessToken;

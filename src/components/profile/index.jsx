@@ -18,7 +18,7 @@ export const Profile = () => {
   });
 
   useEffect(() => {
-    dispatch(getUserData(/*accessToken*/)); // используем refreshToken из куков
+    dispatch(getUserData());
   }, []);
 
   useEffect(() => {
