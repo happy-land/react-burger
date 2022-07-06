@@ -1,12 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  // BrowserRouter as Router,
-  Switch,
-  Route,
-  useLocation,
-  useHistory,
-} from 'react-router-dom';
+import { Switch, Route, useLocation, useHistory } from 'react-router-dom';
 import {
   HomePage,
   LoginPage,
@@ -15,7 +9,6 @@ import {
   ResetPasswordPage,
   ProfilePage,
   IngredientPage,
-  OrderPage,
 } from '../../pages';
 import { Modal } from '../modal/modal';
 import { getUserData } from '../../services/actions/user';
@@ -29,7 +22,6 @@ function App() {
   const dispatch = useDispatch();
   const history = useHistory();
   let location = useLocation();
-  const [isUserLoaded, setUserLoaded] = useState(false);
 
   const { isIngredientDetailsOpened, item } = useSelector(
     (store) => store.ingredientDetails
@@ -37,19 +29,16 @@ function App() {
 
   // проверим, есть ли accessToken
   const init = async () => {
-    console.log('App init()');
     if (getCookie('accessToken')) {
       await dispatch(getUserData());
     }
   };
 
   useEffect(() => {
-    console.log('useEffect');
     init();
   }, []);
 
-  const closeAllModals = (evt) => {
-    console.log('closeAllModals()');
+  const closeAllModals = () => {
     dispatch(closeIngredientModal());
     dispatch(closeOrderModal());
     history.replace({ pathname: '/' });

@@ -86,7 +86,7 @@ export const Profile = () => {
           </li>
         </ul>
         <p className={styles.text}>
-          В этом разделе вы можете изменить свои персональные данные {user.name}
+          В этом разделе вы можете изменить свои персональные данные
         </p>
       </div>
       <div className={styles.formBox}>

@@ -1,5 +1,4 @@
 .container {
-  border: 1px solid red;
   width: 100%;
   display: flex;
 }
@@ -11,7 +10,6 @@
 }
 
 .linkList {
-  border: 1px solid blue;
   display: flex;
   flex-direction: column;
   list-style: none;
@@ -21,7 +19,6 @@
 
 .listItem {
   display: flex;
-  border: 1px solid red;
   text-align: left;
   margin: 0;
   padding: 0;
@@ -29,7 +26,6 @@
 
 .link {
   display: flex;
-  border: 1px solid magenta;
   min-height: 64px;
   text-decoration: none;
   align-items: center;
