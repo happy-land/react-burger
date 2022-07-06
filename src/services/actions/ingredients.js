@@ -53,7 +53,6 @@ export const addToBurger = (id, count) => (dispatch) => {
 };
 
 export const getIngredient = (id) => (dispatch) => {
-  console.log('Найдем ингредиент ' + id);
   dispatch({
     type: GET_INGREDIENT_REQUEST,
     isLoading: true,
@@ -62,9 +61,7 @@ export const getIngredient = (id) => (dispatch) => {
     .then(checkResponse)
     .then(checkSuccess)
     .then((ingredients) => {
-      // console.log(ingredients);
       const ingredient = ingredients.data.filter((ingr) => ingr._id === id);
-      console.log(ingredient);
       dispatch({
         type: GET_INGREDIENT_SUCCESS,
         payload: ingredient[0],

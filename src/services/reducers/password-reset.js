@@ -19,7 +19,6 @@ export const passwordResetReducer = (state = passwordResetInitialState, action) 
       }
     };
     case PASSWORD_RESET_SUCCESS: {
-      console.log('Пароль успешно сброшен!');
       return {
         ...state,
         response: action.payload,

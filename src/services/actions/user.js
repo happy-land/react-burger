@@ -33,20 +33,17 @@ export const registerUser = (form) => (dispatch) => {
   dispatch({
     type: USER_REGISTER_REQUEST,
   });
-  console.log(form);
 
   registerRequest(form)
     .then(checkResponse)
     .then(checkSuccess)
     .then((res) => {
-      console.log(USER_REGISTER_REQUEST);
       dispatch({
         type: USER_REGISTER_SUCCESS,
         payload: res,
       });
     })
     .catch((err) => {
-      console.log(err);
       dispatch({
         type: USER_REGISTER_FAIL,
         payload: err,
@@ -61,20 +58,16 @@ export const authUser = (form) => (dispatch) => {
     type: USER_AUTH_REQUEST,
   });
 
-  console.log(form);
-
   loginRequest(form)
     .then(checkResponse)
     .then(checkSuccess)
     .then((res) => {
-      console.log(USER_AUTH_SUCCESS);
       dispatch({
         type: USER_AUTH_SUCCESS,
         payload: res,
       });
     })
     .catch((err) => {
-      console.log(err);
       dispatch({
         type: USER_AUTH_FAIL,
         payload: err,
@@ -93,8 +86,6 @@ export const getUserData = () => async (dispatch) => {
     // .then(checkResponse)
     .then(checkSuccess)
     .then((res) => {
-      // console.log(GET_USER_SUCCESS);
-      // console.log(res);
       dispatch({
         type: GET_USER_SUCCESS,
         payload: res,
@@ -103,7 +94,6 @@ export const getUserData = () => async (dispatch) => {
       });
     })
     .catch((err) => {
-      console.log(err);
       dispatch({
         type: GET_USER_FAIL,
         payload: err,
@@ -121,8 +111,6 @@ export const updateUserData = (form) => async (dispatch) => {
     // .then(checkResponse)
     .then(checkSuccess)
     .then((res) => {
-      console.log(UPDATE_USER_SUCCESS);
-      console.log(res);
       dispatch({
         type: UPDATE_USER_SUCCESS,
         payload: res,
@@ -149,8 +137,6 @@ export const logout = () => async (dispatch) => {
     .then(checkResponse)
     .then(checkSuccess)
     .then((res) => {
-      console.log(LOGOUT_USER_SUCCESS);
-      console.log(res);
       dispatch({
         type: LOGOUT_USER_SUCCESS,
         payload: res,

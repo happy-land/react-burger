@@ -12,7 +12,6 @@ export const IngredientPage = () => {
   const params = useParams();
 
   const init = async () => {
-    console.log('App init()');
     await dispatch(getIngredient(params.id));
   };
 

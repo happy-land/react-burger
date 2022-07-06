@@ -41,8 +41,6 @@ export const userReducer = (state = userInitialState, action) => {
     case USER_REGISTER_SUCCESS: {
       let authToken;
       const res = action.payload;
-      console.log('USER_REGISTER_SUCCESS');
-      console.log(res);
 
       authToken = res.accessToken.split('Bearer ')[1];
       // сохраняем accessToken в куке
@@ -54,8 +52,6 @@ export const userReducer = (state = userInitialState, action) => {
       if (res.refreshToken) {
         localStorage.setItem('refreshToken', res.refreshToken);
       }
-      console.log('user:');
-      console.log(res.user);
 
       return {
         ...state,
@@ -84,9 +80,6 @@ export const userReducer = (state = userInitialState, action) => {
     case USER_AUTH_SUCCESS: {
       let authToken;
       const res = action.payload;
-      console.log(USER_AUTH_SUCCESS);
-      console.log(res);
-
       authToken = res.accessToken.split('Bearer ')[1];
 
       // сохраняем accessToken в куке
@@ -110,7 +103,6 @@ export const userReducer = (state = userInitialState, action) => {
       };
     }
     case USER_AUTH_FAIL: {
-      console.log(USER_AUTH_FAIL);
       return {
         ...state,
         isAuth: false,
@@ -126,8 +118,6 @@ export const userReducer = (state = userInitialState, action) => {
     }
     case GET_USER_SUCCESS: {
       const res = action.payload;
-      // console.log(GET_USER_SUCCESS);
-
       return {
         ...state,
         isAuth: true,

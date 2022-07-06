@@ -26,14 +26,12 @@ export const restorePassword = () => (dispatch) => {
     .then(checkResponse)
     .then(checkSuccess)
     .then((response) => {
-      console.log(response);
       dispatch({
         type: PASSWORD_RESTORE_SUCCESS,
         payload: response,
       });
     })
     .catch((err) => {
-      console.log(err);
       dispatch({
         type: PASSWORD_RESTORE_FAIL,
         payload: err,

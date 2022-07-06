@@ -23,14 +23,12 @@ export const resetPassword = (form) => (dispatch) => {
     .then(checkResponse)
     .then(checkSuccess)
     .then((response) => {
-      console.log(response);
       dispatch({
         type: PASSWORD_RESET_SUCCESS,
         payload: response,
       });
     })
     .catch((err) => {
-      console.log(err);
       dispatch({
         type: PASSWORD_RESET_FAIL,
         payload: err,

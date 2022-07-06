@@ -34,7 +34,6 @@ export const burgerReducer = (state = burgerInitialState, action) => {
         totalPrice: state.totalPrice - action.payload.price,
       };
     case CONSTRUCTOR_ADD_BUN:
-      // console.log(action.payload);
       return {
         ...state,
         bun: action.payload,
