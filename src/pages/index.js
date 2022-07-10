@@ -4,7 +4,7 @@ import { RegisterPage } from './register';
 import { ForgotPasswordPage } from './forgot-password';
 import { ResetPasswordPage } from './reset-password';
 import { ProfilePage } from './profile';
-import { IngredientPage } from './ingredient';
+import { NotFound404Page } from './notfound404';
 
 export {
   HomePage,
@@ -13,5 +13,5 @@ export {
   ForgotPasswordPage,
   ResetPasswordPage,
   ProfilePage,
-  IngredientPage,
+  NotFound404Page
 };

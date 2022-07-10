@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-ingredients.module.css';
@@ -39,9 +39,6 @@ export const BurgerIngredients = () => {
   const sauceRef = useRef();
   const mainRef = useRef();
 
-  const location = useLocation();
-  // const background = location.state?.background; // ?
-
   const onCardClick = (item) => {
     dispatch(openIngredientModal(item));
   };
@@ -52,22 +49,12 @@ export const BurgerIngredients = () => {
         <h2 className={styles.sectionTitle}>{name}</h2>
         <div className={`${styles.cardArea} mt-6 mb-10 pl-4`}>
           {section.map((item, index) => (
-            <Link
+            <Card
               key={item._id}
-              to={{
-                pathname: `/ingredients/${item._id}`,
-                state: { background: location }
-              }}
-              className={styles.link}
-              // to={`/ingredients/${item._id}`}
-              // state={{ background: location }}
-            >
-              <Card
-                data={item}
-                counter={item.counter}
-                onClick={() => onCardClick(item)}
-              />
-            </Link>
+              data={item}
+              counter={item.counter}
+              onClick={() => onCardClick(item)}
+            />
           ))}
         </div>
       </section>

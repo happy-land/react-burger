@@ -1,4 +1,3 @@
-// import { Navigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,17 +9,12 @@ export const ProtectedRoute = ({ children, ...rest }) => {
   const [isUserLoaded, setUserLoaded] = useState(false);
 
   const init = async () => {
-    // console.log('ProtectedRoute init()');
     await dispatch(getUserData());
     setUserLoaded(true);
-    
   };
 
   useEffect(() => {
     init();
-    // console.log(user);
-    // console.log('isUserLoaded ' + isUserLoaded);
-    // console.log('isAuth: ' + isAuth);
   }, []);
 
   if (!isUserLoaded) {
@@ -45,14 +39,3 @@ export const ProtectedRoute = ({ children, ...rest }) => {
     />
   );
 };
-
-// export const ProtectedRoute = ({ anonymous = false, isAuth, children }) => {
-//   if (anonymous && isAuth) {
-//     return <Navigate to='/' />;
-//   }
-//   if (!anonymous && !isAuth) {
-//     return <Navigate to='/login' />;
-//   }
-
-//   return <>{children}</>;
-// };

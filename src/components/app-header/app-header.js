@@ -1,4 +1,4 @@
-import { NavLink, useLocation, useRouteMatch } from 'react-router-dom';
+import { NavLink, useRouteMatch } from 'react-router-dom';
 import {
   BurgerIcon,
   ListIcon,
@@ -8,16 +8,11 @@ import {
 import styles from './app-header.module.css';
 
 export const AppHeader = () => {
-  let location = useLocation();
 
-  const { url } = useRouteMatch();
-  let isRoot;
-  let isOrders;
-  let isProfile;
+  const isRoot = !!useRouteMatch({ path: '/', exact: true });
+  const isOrders = !!useRouteMatch('/orders');
+  const isProfile = !!useRouteMatch('/profile');
 
-  url === '/' ? (isRoot = true) : (isRoot = false);
-  url === '/orders/123' ? (isOrders = true) : (isOrders = false);
-  url === '/profile' ? (isProfile = true) : (isProfile = false);
 
   return (
     <header className={styles.header}>

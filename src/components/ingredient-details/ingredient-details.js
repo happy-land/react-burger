@@ -1,34 +1,74 @@
-import PropTypes from 'prop-types';
-import { menuItemPropTypes } from '../../utils/constants';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { getIngredient } from '../../services/actions/ingredients';
+
 import styles from './ingredient-details.module.css';
 
-export const IngredientDetails = ({ data }) => {
+export const IngredientDetails = () => {
+  const dispatch = useDispatch();
+  const { ingredient } = useSelector((store) => store.ingredients);
+
+  const params = useParams();
+
+  const init = async () => {
+    await dispatch(getIngredient(params.id));
+  };
+
+  useEffect(() => {
+    init();
+  }, []);
+
+  if (!ingredient) {
+    return <p>Загрузка...</p>;
+  }
+
   return (
-    <div className={styles.container}>
-      <img src={data.image_large} />
-      <p className='text text_type_main-medium mt-4 mb-8'>{data.name}</p>
-      <ul className={styles.info}>
-        <li className={styles.listItem}>
-          <p className={`${styles.propHeader} text_color_inactive`}>Калории, ккал</p>
-          <p className={`${styles.propValue} text text_type_digits-default text_color_inactive`}>{data.calories}</p>
-        </li>
-        <li className={styles.listItem}>
-          <p className={`${styles.propHeader} text_color_inactive`}>Белки, г</p>
-          <p className={`${styles.propValue} text text_type_digits-default text_color_inactive`}>{data.proteins}</p>
-        </li>
-        <li className={styles.listItem}>
-          <p className={`${styles.propHeader} text_color_inactive`}>Жиры, г</p>
-          <p className={`${styles.propValue} text text_type_digits-default text_color_inactive`}>{data.fat}</p>
-        </li>
-        <li className={styles.listItem}>
-          <p className={`${styles.propHeader} text_color_inactive`}>Углеводы, г</p>
-          <p className={`${styles.propValue} text text_type_digits-default text_color_inactive`}>{data.carbohydrates}</p>
-        </li>
-      </ul>
-    </div>
+    <>
+      {ingredient && (
+        <>
+          <div className={styles.container}>
+            <img src={ingredient.image_large} />
+            <p className='text text_type_main-medium mt-4 mb-8'>{ingredient.name}</p>
+            <ul className={styles.info}>
+              <li className={styles.listItem}>
+                <p className={`${styles.propHeader} text_color_inactive`}>
+                  Калории, ккал
+                </p>
+                <p
+                  className={`${styles.propValue} text text_type_digits-default text_color_inactive`}
+                >
+                  {ingredient.calories}
+                </p>
+              </li>
+              <li className={styles.listItem}>
+                <p className={`${styles.propHeader} text_color_inactive`}>Белки, г</p>
+                <p
+                  className={`${styles.propValue} text text_type_digits-default text_color_inactive`}
+                >
+                  {ingredient.proteins}
+                </p>
+              </li>
+              <li className={styles.listItem}>
+                <p className={`${styles.propHeader} text_color_inactive`}>Жиры, г</p>
+                <p
+                  className={`${styles.propValue} text text_type_digits-default text_color_inactive`}
+                >
+                  {ingredient.fat}
+                </p>
+              </li>
+              <li className={styles.listItem}>
+                <p className={`${styles.propHeader} text_color_inactive`}>Углеводы, г</p>
+                <p
+                  className={`${styles.propValue} text text_type_digits-default text_color_inactive`}
+                >
+                  {ingredient.carbohydrates}
+                </p>
+              </li>
+            </ul>
+          </div>
+        </>
+      )}
+    </>
   );
 };
-
-IngredientDetails.propTypes = {
-  data: menuItemPropTypes.isRequired,
-}
