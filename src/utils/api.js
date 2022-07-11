@@ -45,8 +45,6 @@ export const logoutRequest = async () => {
 };
 
 export const getUserRequest = async () => {
-  // console.log('getUserRequest ' + getCookie('accessToken'));
-  // return fetch(`${baseUrl}/auth/user`, {
   return await fetchWithRefresh(`${baseUrl}/auth/user`, {
     method: 'GET',
     mode: 'cors',
@@ -54,7 +52,6 @@ export const getUserRequest = async () => {
     credentials: 'same-origin',
     headers: {
       'Content-Type': 'application/json',
-      // Authorization: 'Bearer ' + token,
       Authorization: 'Bearer ' + getCookie('accessToken'),
     },
     redirect: 'follow',
@@ -119,16 +116,11 @@ export const refreshToken = () => {
 const fetchWithRefresh = async (url, options) => {
   try {
     const res = await fetch(url, options);
-    // console.log(res);
     return await checkResponse(res);
   } catch (err) {
-    console.log('ERROR  ' + err);
     if (err.message === 'jwt expired') {
-      // if (err === 403) {
-      console.log('jwt expired');
       const refreshData = await refreshToken();
       options.headers.authorization = refreshData.accessToken;
-
       const res = await fetch(url, options);
       // в заголовках будет новый accessToken
       return await checkResponse(res);
