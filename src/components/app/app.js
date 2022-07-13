@@ -81,7 +81,7 @@ function App() {
           <NotFound404Page />
         </Route>
       </Switch>
-      {background && isIngredientDetailsOpened && (
+      {background && (
         <Route path='/ingredients/:id' exact>
           <Modal title='Детали ингредиента' onClose={closeAllModals}>
             <IngredientDetails />
