@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Switch, Route, useLocation, useHistory } from 'react-router-dom';
 import {
   HomePage,
@@ -9,11 +9,12 @@ import {
   ResetPasswordPage,
   ProfilePage,
   NotFound404Page,
+  FeedPage,
 } from '../../pages';
 import { Modal } from '../modal/modal';
 import { getUserData } from '../../services/actions/user';
-import { closeIngredientModal } from '../../services/actions/ingredientDetails';
-import { closeOrderModal } from '../../services/actions/order';
+// import { closeIngredientModal } from '../../services/actions/ingredientDetails';
+// import { closeOrderModal } from '../../services/actions/order';
 import { getCookie } from '../../utils/utils';
 import { ProtectedRoute } from '../protected-route';
 import { IngredientDetails } from '../ingredient-details/ingredient-details';
@@ -26,9 +27,9 @@ function App() {
   const history = useHistory();
   const location = useLocation();
 
-  const { isIngredientDetailsOpened, item } = useSelector(
-    (store) => store.ingredientDetails
-  );
+  // const { isIngredientDetailsOpened, item } = useSelector(
+  //   (store) => store.ingredientDetails
+  // );
 
   // проверим, есть ли accessToken
   const init = async () => {
@@ -64,6 +65,9 @@ function App() {
         </Route>
         <Route path='/reset-password' exact>
           <ResetPasswordPage />
+        </Route>
+        <Route path='/feed' exact>
+          <FeedPage />
         </Route>
         <ProtectedRoute path='/profile' exact>
           <ProfilePage />

@@ -10,7 +10,7 @@ import styles from './app-header.module.css';
 export const AppHeader = () => {
 
   const isRoot = !!useRouteMatch({ path: '/', exact: true });
-  const isOrders = !!useRouteMatch('/orders');
+  const isFeed = !!useRouteMatch('/feed');
   const isProfile = !!useRouteMatch('/profile');
 
 
@@ -32,12 +32,12 @@ export const AppHeader = () => {
           </li>
           <li className={`${styles.listItem} p-5`}>
             <NavLink
-              to='/orders'
+              to='/feed'
               className={`${styles.link} ${styles.link_disabled}`}
-              activeClassName={isOrders ? styles.linkActive : styles.link}
+              activeClassName={isFeed ? styles.linkActive : styles.link}
             >
               <div className={styles.linkContent}>
-                <ListIcon type={isOrders ? 'primary' : 'secondary'} />
+                <ListIcon type={isFeed ? 'primary' : 'secondary'} />
                 <span className={`text text_type_main-default ml-2`}>Лента заказов</span>
               </div>
             </NavLink>
