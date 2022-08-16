@@ -85,8 +85,7 @@ export const saveOrderRequest = async (data) => {
     body: JSON.stringify({
       ingredients: data,
     }),
-  })
-    
+  });
 };
 
 export const refreshToken = () => {

@@ -7,6 +7,7 @@ import { orderReducer } from './order';
 import { passwordRestoreReducer } from './password-restore';
 import { passwordResetReducer } from './password-reset';
 import { userReducer } from './user';
+import { feedReducer } from './feed';
 
 
 
@@ -18,4 +19,5 @@ export const rootReducer = combineReducers({
   passwordRestore: passwordRestoreReducer,
   passwordReset: passwordResetReducer,
   user: userReducer,
+  feed: feedReducer,
 });

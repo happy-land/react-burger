@@ -37,7 +37,7 @@ export const BurgerConstructor = () => {
 
   const handleOrderClick = () => {
     if (isAuth) {
-      dispatch(saveOrder(items));
+      dispatch(saveOrder(items, bun));
     } else {
       history.replace({ pathname: '/login' });
     }
