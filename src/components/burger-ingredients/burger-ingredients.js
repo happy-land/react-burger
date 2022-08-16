@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-ingredients.module.css';
 import { Card } from '../card/card';
-import { getIngredients } from '../../services/actions/ingredients';
 import { openIngredientModal } from '../../services/actions/ingredientDetails';
 
 const SECTION_BUN = 'Булки';
@@ -81,10 +80,10 @@ export const BurgerIngredients = () => {
       setCurrent(topType.type);
     }
   };
-
-  useEffect(() => {
-    dispatch(getIngredients());
-  }, []);
+  // достаточно 1 раз сделать в App, чтобы все страницы получили ингредиенты при загрузке сайта. 
+  // useEffect(() => {
+  //   dispatch(getIngredients());
+  // }, []); 
 
   useEffect(() => {
     const counterArr = [];

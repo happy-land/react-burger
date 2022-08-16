@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import { Link, Redirect, useLocation } from 'react-router-dom';
 import {
   Button,
@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { authUser } from '../../services/actions/user';
 
 import styles from './login-form.module.css';
+import { useForm } from '../../hooks/useForm';
 
 export const LoginForm = () => {
   const dispatch = useDispatch();
@@ -16,21 +17,17 @@ export const LoginForm = () => {
 
   const location = useLocation();
 
-  const [form, setValue] = useState({
+  const { values, handleChange } = useForm({
     email: '',
     password: '',
   });
 
-  const onChange = (e) => {
-    setValue({ ...form, [e.target.name]: e.target.value });
-  };
-
-  let login = useCallback(
+  const login = useCallback(
     (e) => {
       e.preventDefault();
-      dispatch(authUser(form));
+      dispatch(authUser(values));
     },
-    [form]
+    [values, dispatch]
   );
 
   if (isAuth) {
@@ -50,8 +47,8 @@ export const LoginForm = () => {
           <Input
             type={'email'}
             placeholder={'E-mail'}
-            onChange={onChange}
-            value={form.email}
+            onChange={handleChange}
+            value={values.email}
             name={'email'}
             size={'default'}
           />
@@ -59,8 +56,8 @@ export const LoginForm = () => {
 
         <div className={styles.input}>
           <PasswordInput
-            onChange={onChange}
-            value={form.password}
+            onChange={handleChange}
+            value={values.password}
             name={'password'}
             size={'default'}
           />
