@@ -12,12 +12,11 @@ import {
 } from '../../pages';
 import { Modal } from '../modal/modal';
 import { getUserData } from '../../services/actions/user';
-import { closeIngredientModal } from '../../services/actions/ingredientDetails';
-import { closeOrderModal } from '../../services/actions/order';
 import { getCookie } from '../../utils/utils';
 import { ProtectedRoute } from '../protected-route';
 import { IngredientDetails } from '../ingredient-details/ingredient-details';
 import { AppHeader } from '../app-header/app-header';
+import { getIngredients } from '../../services/actions/ingredients';
 
 import styles from './app.module.css';
 
@@ -39,11 +38,12 @@ function App() {
 
   useEffect(() => {
     init();
+    dispatch(getIngredients());
   }, [dispatch]);
 
+  
+
   const closeAllModals = () => {
-    // dispatch(closeIngredientModal());
-    // dispatch(closeOrderModal());
     history.goBack();
   };
 
