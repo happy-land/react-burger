@@ -27,12 +27,6 @@ export const RestorePasswordForm = () => {
     [isAuth, history]
   );
 
-  // const onSubmit = (e) => {
-  //   e.preventDefault();
-  //   console.log('onSubmit');
-  //   dispatch(restorePassword());
-  // };
-
   if (isAuth) {
     return <Redirect to={{ pathname: '/' }} />;
   }

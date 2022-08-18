@@ -1,35 +1,32 @@
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { getIngredient } from '../../services/actions/ingredients';
 
 import styles from './ingredient-details.module.css';
 
 export const IngredientDetails = () => {
-  const dispatch = useDispatch();
-  const { ingredient } = useSelector((store) => store.ingredients);
-
+  const { items } = useSelector((store) => store.ingredients);
+  const [ingredientToShow, setIngredientToShow] = useState(null);
   const params = useParams();
 
-  const init = async () => {
-    await dispatch(getIngredient(params.id));
-  };
-
   useEffect(() => {
-    init();
-  }, []);
+    if (items.length > 0) {
+      const ingredient = items.find((ingr) => ingr._id === params.id);
+      setIngredientToShow(ingredient);
+    }
+  }, [items, params.id]);
 
-  if (!ingredient) {
+  if (!ingredientToShow) {
     return <p>Загрузка...</p>;
   }
 
   return (
     <>
-      {ingredient && (
+      {ingredientToShow && (
         <>
           <div className={styles.container}>
-            <img src={ingredient.image_large} />
-            <p className='text text_type_main-medium mt-4 mb-8'>{ingredient.name}</p>
+            <img src={ingredientToShow.image_large} alt={ingredientToShow.name} />
+            <p className='text text_type_main-medium mt-4 mb-8'>{ingredientToShow.name}</p>
             <ul className={styles.info}>
               <li className={styles.listItem}>
                 <p className={`${styles.propHeader} text_color_inactive`}>
@@ -38,7 +35,7 @@ export const IngredientDetails = () => {
                 <p
                   className={`${styles.propValue} text text_type_digits-default text_color_inactive`}
                 >
-                  {ingredient.calories}
+                  {ingredientToShow.calories}
                 </p>
               </li>
               <li className={styles.listItem}>
@@ -46,7 +43,7 @@ export const IngredientDetails = () => {
                 <p
                   className={`${styles.propValue} text text_type_digits-default text_color_inactive`}
                 >
-                  {ingredient.proteins}
+                  {ingredientToShow.proteins}
                 </p>
               </li>
               <li className={styles.listItem}>
@@ -54,7 +51,7 @@ export const IngredientDetails = () => {
                 <p
                   className={`${styles.propValue} text text_type_digits-default text_color_inactive`}
                 >
-                  {ingredient.fat}
+                  {ingredientToShow.fat}
                 </p>
               </li>
               <li className={styles.listItem}>
@@ -62,7 +59,7 @@ export const IngredientDetails = () => {
                 <p
                   className={`${styles.propValue} text text_type_digits-default text_color_inactive`}
                 >
-                  {ingredient.carbohydrates}
+                  {ingredientToShow.carbohydrates}
                 </p>
               </li>
             </ul>

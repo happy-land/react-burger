@@ -9,27 +9,24 @@ import {
 import styles from './register-form.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { registerUser } from '../../services/actions/user';
+import { useForm } from '../../hooks/useForm';
 
 export const RegisterForm = () => {
   const dispatch = useDispatch();
   const { isAuth } = useSelector((store) => store.user);
 
-  const [form, setValue] = useState({
+  const { values, handleChange } = useForm({
     email: '',
     password: '',
     name: '',
   });
 
-  const onChange = (e) => {
-    setValue({ ...form, [e.target.name]: e.target.value });
-  };
-
-  let register = useCallback(
+  const register = useCallback(
     (e) => {
       e.preventDefault();
-      dispatch(registerUser(form));
+      dispatch(registerUser(values));
     },
-    [form]
+    [values, dispatch]
   );
 
   if (isAuth) {
@@ -44,8 +41,8 @@ export const RegisterForm = () => {
           <Input
             type={'text'}
             placeholder={'Имя'}
-            onChange={onChange}
-            value={form.name}
+            onChange={handleChange}
+            value={values.name}
             name={'name'}
             size={'default'}
           />
@@ -54,8 +51,8 @@ export const RegisterForm = () => {
           <Input
             type={'email'}
             placeholder={'E-mail'}
-            onChange={onChange}
-            value={form.email}
+            onChange={handleChange}
+            value={values.email}
             name={'email'}
             size={'default'}
           />
@@ -63,10 +60,10 @@ export const RegisterForm = () => {
 
         <div className={styles.input}>
           <PasswordInput
-            value={form.password}
+            value={values.password}
             name={'password'}
             size={'default'}
-            onChange={onChange}
+            onChange={handleChange}
           />
         </div>
 

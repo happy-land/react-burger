@@ -5,23 +5,20 @@ import { resetPassword } from '../../services/actions/password-reset';
 
 import styles from './reset-password-form.module.css';
 import { useDispatch, useSelector } from 'react-redux';
+import { useForm } from '../../hooks/useForm';
 
 export const ResetPasswordForm = () => {
   const dispatch = useDispatch();
   const { isAuth } = useSelector((store) => store.user);
   const { isPswdRestoreRequestSent } = useSelector((store) => store.passwordRestore);
 
-  const [form, setValue] = useState({
-    password: '',
-    token: '',
-  });
-
   const [icon, setIcon] = useState('ShowIcon');
   const [inputType, setInputType] = useState('password');
 
-  const onChange = (e) => {
-    setValue({ ...form, [e.target.name]: e.target.value });
-  };
+  const { values, handleChange } = useForm({
+    password: '',
+    token: '',
+  });
 
   const onIconClick = () => {
     toggleInputMode();
@@ -34,8 +31,7 @@ export const ResetPasswordForm = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    console.log('onSubmit');
-    dispatch(resetPassword(form));
+    dispatch(resetPassword(values));
   };
 
   if (isAuth) {
@@ -54,10 +50,10 @@ export const ResetPasswordForm = () => {
           <Input
             type={'password'}
             placeholder={'Введите новый пароль'}
-            onChange={onChange}
+            onChange={handleChange}
             icon={icon}
             onIconClick={onIconClick}
-            value={form.password}
+            value={values.password}
             name={'password'}
             size={'default'}
           />
@@ -66,8 +62,8 @@ export const ResetPasswordForm = () => {
           <Input
             type={'text'}
             placeholder={'Введите код из письма'}
-            onChange={onChange}
-            value={form.token}
+            onChange={handleChange}
+            value={values.token}
             name={'token'}
             size={'default'}
           />
