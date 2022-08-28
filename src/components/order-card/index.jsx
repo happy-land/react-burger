@@ -1,108 +1,97 @@
+import { useMemo } from 'react';
+import { useSelector } from 'react-redux';
+import { Link, useLocation } from 'react-router-dom';
+import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+
 import styles from './order-card.module.css';
 
-import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useEffect, useState } from 'react';
-
-// const getIngredientImage = (ingredientImage) => {
-//   return {
-//     backgroundImage: `url( ${ingredientImage} )`,
-//   };
-// };
-
-const getIngredientImage = (ingredientImage) => {
-  return `url( ${ingredientImage} )`;
-};
-
-export const OrderCard = ({ order, ingredients }) => {
-  const [orderTotalPrice, setOrderTotalPrice] = useState(0);
-  const [images, setImages] = useState([]);
-  const [imagesToShow, setImagesToShow] = useState([]);
-  const [remainCounter, setRemainCounter] = useState(null);
-
+export const OrderCard = ({ order }) => {
+  const { items } = useSelector((store) => store.ingredients);
+  const location = useLocation();
   const maxIngredients = 6;
 
-  const getPrice = (id) => {
-    const ingredient = ingredients.find((ingredient) => ingredient._id === id);
+  const orderObject = useMemo(() => {
+    if (!items.length) return null;
+    // console.log(order.ingredients);
+    const ingredientsInfo = order.ingredients.reduce((acc, item) => {
+      const ingredient = items.find((ingredient) => ingredient._id === item);
+      if (ingredient) acc.push(ingredient);
+      return acc;
+    }, []);
 
-    if (!ingredient) {
-      return 0;
-    }
-    // console.log(ingredients);
-    if (ingredient.type === 'bun') {
-      return ingredient.price * 2;
-    }
-    return ingredient.price;
-  };
+    const totalPrice = ingredientsInfo.reduce((acc, item) => {
+      return item.type === 'bun' ? acc + item.price * 2 : acc + item.price;
+    }, 0);
 
-  const getImage = (id) => {
-    const ingredient = ingredients.find((ingredient) => ingredient._id === id);
+    const ingredientsVisible = ingredientsInfo.slice(0, maxIngredients);
 
-    if (!ingredient) {
-      return 0;
+    let remainCount;
+    if (ingredientsInfo.length > maxIngredients) {
+      remainCount = ingredientsInfo.length - maxIngredients;
+    } else {
+      remainCount = null;
     }
-    return ingredient.image_mobile;
-  };
 
-  useEffect(() => {
-    if (ingredients.length !== 0) {
-      let sum = 0;
-      setImages([]);
-      let imagesArr = [];
-      order.ingredients.forEach((id) => {
-        sum += getPrice(id);
-        imagesArr.push(getImage(id));
-      });
-      // console.log(`#${order.number} ${order.ingredients} sum=${sum}`);
-      setOrderTotalPrice(sum);
-      setImages(imagesArr);
-      setImagesToShow(imagesArr.slice(0, maxIngredients));
-      if (imagesArr.length > maxIngredients) {
-        setRemainCounter(imagesArr.length - maxIngredients);
-      } else {
-        setRemainCounter(null);
-      }
-    }
-  }, [ingredients]);
+    return {
+      ...order,
+      ingredientsInfo,
+      ingredientsVisible,
+      totalPrice,
+      remainCount,
+    };
+  }, [order, items]);
+
+  // console.log('orderObject:: ');
+  // console.log(orderObject);
 
   return (
-    <article className={styles.card}>
-      <div className={styles.orderId}>
-        <p className={`text text_type_digits-default`}>{order.number}</p>
-        <p className={styles.timestamp}>{order.createdAt}</p>
-      </div>
-      <h2 className={styles.title}>{order.name}</h2>
-      <div className={styles.components}>
-        <div className={styles.imagesWrapper}>
-          {imagesToShow.map((image, index) => {
-            return (
-              <div
-                key={index}
-                className={`${styles.imageWrapper} ${styles.imageWrapper1}`}
-              >
-                {/* <div
-                  className={styles.image}
+    <Link
+      to={{
+        pathname: `${location.pathname}/${order.number}`,
+        state: { background: location },
+      }}
+      className={styles.link}
+    >
+      <article className={styles.card}>
+        <div className={styles.orderId}>
+          <p className={`text text_type_digits-default`}>#{order.number}</p>
+          <p className={styles.timestamp}>{order.createdAt}</p>
+        </div>
+        <h2 className={styles.title}>{order.name}</h2>
+        <div className={styles.components}>
+          <ul className={styles.imagesWrapper}>
+            {orderObject.ingredientsVisible.map((item, index) => {
+              let zInd = maxIngredients - index;
+              return (
+                <li
+                  key={index}
+                  className={styles.imageWrapper}
                   style={{
-                    opacity: maxIngredients === index + 1 ? 0.6 : 1,
-                    backgroundImage: getIngredientImage(image),
+                    zIndex: zInd,
                   }}
                 >
-                </div> */}
-                <img 
-                className={styles.image}
-                src={image}
-                alt='123'/>
-                {maxIngredients === index + 1 ? (
-                    <span className={styles.counter}>+{remainCounter}</span>
+                  <img 
+                  style={{
+                    opacity: orderObject.remainCount && maxIngredients === index + 1
+                    ? '0.6'
+                    : 1,
+                  }}
+                  className={styles.image} 
+                  src={item.image_mobile} 
+                  alt={item.name} />
+                  {maxIngredients === index + 1 ? (
+                    <span className={styles.counter}>+{orderObject.remainCount}</span>
                   ) : null}
-              </div>
-            );
-          })}
+                </li>
+              );
+            })}
+          </ul>
+          <div className={styles.priceWrapper}>
+            <p className='text text_type_digits-default'>{orderObject.totalPrice}</p>
+            <CurrencyIcon type='primary' />
+          </div>
         </div>
-        <div className={styles.priceWrapper}>
-          <p className='text text_type_digits-default'>{orderTotalPrice}</p>
-          <CurrencyIcon type='primary' />
-        </div>
-      </div>
-    </article>
+      </article>
+    </Link>
   );
 };

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { Switch, Route, useLocation, useHistory } from 'react-router-dom';
+import { Switch, Route, useLocation, useHistory, useRouteMatch } from 'react-router-dom';
 import {
   HomePage,
   LoginPage,
@@ -17,9 +17,11 @@ import { getCookie } from '../../utils/utils';
 import { ProtectedRoute } from '../protected-route';
 import { IngredientDetails } from '../ingredient-details/ingredient-details';
 import { AppHeader } from '../app-header/app-header';
+import { OrderInfo } from '../order-info';
 import { getIngredients } from '../../services/actions/ingredients';
 
 import styles from './app.module.css';
+import { getFormattedOrderNumber } from '../../utils/order-number-format';
 
 function App() {
   const dispatch = useDispatch();
@@ -44,6 +46,13 @@ function App() {
 
   const background = location.state && location.state.background;
 
+  const orderNumber = useRouteMatch([
+    '/feed/:id',
+    '/profile/orders/:id',
+  ])?.params?.id;
+
+  // console.log(orderNumber.params);
+
   return (
     <>
       <AppHeader />
@@ -63,6 +72,9 @@ function App() {
         <Route path='/feed' exact>
           <FeedPage />
         </Route>
+        <Route path='/feed/:id' exact>
+          <OrderInfo />
+        </Route>
         <ProtectedRoute path='/profile' exact>
           <ProfilePage />
         </ProtectedRoute>
@@ -80,11 +92,18 @@ function App() {
         </Route>
       </Switch>
       {background && (
-        <Route path='/ingredients/:id' exact>
-          <Modal title='Детали ингредиента' onClose={closeAllModals}>
-            <IngredientDetails />
-          </Modal>
-        </Route>
+        <>
+          <Route path='/ingredients/:id' exact>
+            <Modal title='Детали ингредиента' onClose={closeAllModals}>
+              <IngredientDetails />
+            </Modal>
+          </Route>
+          <Route path='/feed/:id' exact>
+            <Modal title={`#${getFormattedOrderNumber(orderNumber)}`} onClose={closeAllModals}>
+              <OrderInfo />
+            </Modal>
+          </Route>
+        </>
       )}
     </>
   );
