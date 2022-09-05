@@ -29,7 +29,12 @@
 
 
 .orderList {
+  width: 272px;
+  height: 167px;
   list-style-type: none;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
 }
 
 .listItem {

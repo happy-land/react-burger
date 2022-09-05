@@ -1,3 +1,9 @@
 .detailsContainer {
   padding-top: 120px;
 }
+
+.orderInfoContainer {
+  margin: 0 auto;
+  padding-top: 120px;
+  width: 640px;
+}

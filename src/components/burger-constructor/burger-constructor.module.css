@@ -9,8 +9,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 200px;
-  box-sizing: border-box;
+  min-height: 100px;
   overflow-y: hidden;
 }
 
@@ -21,6 +20,15 @@
   max-height: 450px;
   overflow: hidden;
   overflow-y: scroll;
+}
+
+.innerIngredients::-webkit-scrollbar {
+  background-color: #2F2F37;
+  width: 8px;
+}
+
+.innerIngredients::-webkit-scrollbar-thumb {
+  background-color: #8585AD;
 }
 
 .info {

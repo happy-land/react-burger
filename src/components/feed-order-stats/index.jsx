@@ -1,11 +1,15 @@
+import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { getFormattedOrderNumber } from '../../utils/order-number-format';
 import styles from './feed-order-stats.module.css';
 
 export const FeedOrderStats = () => {
   const { orders, total, totalToday } = useSelector((store) => store.feed);
-  const ordersInColumn = 10;
-  let currentIndex = 1;
+
+  const ordersToShow = useMemo(() => {
+    if (!orders.length) return null;
+    return orders.slice(0, 10);
+  }, [orders]);
 
   return (
     orders && (
@@ -16,10 +20,7 @@ export const FeedOrderStats = () => {
             <div className={styles.listWrapper}>
               <div className={styles.ordersListColumn}>
                 <ul className={`${styles.orderList} text text_type_digits-default`}>
-                  {/* <div className={styles.orderColumn}>
-
-                  </div> */}
-                  {orders.map((order, index) => {
+                  {ordersToShow.map((order, index) => {
                     if (order.status === 'done') {
                       return (
                         <li
@@ -40,7 +41,7 @@ export const FeedOrderStats = () => {
             <div className={styles.listWrapper}>
               <div className={styles.ordersListColumn}>
                 <ul className={`${styles.orderList} text text_type_digits-default`}>
-                  {orders.map((order) => {
+                  {ordersToShow.map((order) => {
                     if (order.status === 'pending') {
                       return (
                         <li key={order._id} className={`${styles.listItem}`}>
@@ -49,10 +50,6 @@ export const FeedOrderStats = () => {
                       );
                     }
                   })}
-
-                  {/* <li className={styles.listItem}>034538</li>
-                  <li className={styles.listItem}>034541</li>
-                  <li className={styles.listItem}>034542</li> */}
                 </ul>
               </div>
             </div>

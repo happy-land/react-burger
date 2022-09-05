@@ -1,4 +1,130 @@
 .container {
-  border: 1px solid red;
-  margin-top: 122px;
+  /* margin-top: 122px; */
+}
+
+.title {
+  margin: 20px 0 12px;
+  padding: 0;
+  text-align: left;
+  font-size: 24px;
+  line-height: 30px;
+  color: #f2f2f3;
+}
+
+.status {
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  font-size: 16px;
+  line-height: 24px;
+  color: #00cccc;
+}
+
+.ingredientsHeader {
+  margin: 60px 0 0;
+  padding: 0;
+  text-align: left;
+  font-size: 24px;
+  line-height: 30px;
+  color: #f2f2f3;
+}
+
+.ingredientsWrapper {
+  list-style-type: none;
+  margin: 24px 0 0;
+  padding: 0;
+  max-height: 312px;
+  overflow: hidden;
+  overflow-y: scroll;
+}
+
+.ingredientsWrapper::-webkit-scrollbar {
+  background-color: #2f2f37;
+  width: 8px;
+}
+
+.ingredientsWrapper::-webkit-scrollbar-thumb {
+  background-color: #8585ad;
+}
+
+.listItem {
+  margin: 0 0 16px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.itemWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+}
+
+.image {
+  margin-left: -26px;
+  width: 112px;
+  position: relative;
+  z-index: 1;
+}
+
+.borderBox {
+  position: absolute;
+  left: 43px;
+  border-radius: 50px;
+  width: 56px;
+  height: 56px;
+  background: #131316;
+}
+.borderBox::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  bottom: -2px;
+  right: -2px;
+  left: -2px;
+  background: linear-gradient(45deg, rgba(128, 26, 178, 1), rgba(76, 76, 255, 1));
+  border-radius: 50px;
+  z-index: -1;
+}
+
+.name {
+  margin-left: -10px;
+}
+
+.priceWrapper {
+  display: flex;
+  margin-right: 25px;
+}
+
+.price {
+  margin: 0 9px 0 0;
+  padding: 0;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 52px;
+}
+
+.timestamp {
+  margin: 0;
+  padding: 0;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  display: flex;
+  align-items: center;
+  text-align: right;
+  color: #8585ad;
+}
+
+.totalPriceWrapper {
+  display: flex;
+}
+
+.totalPrice {
+  margin: 0 9px 0 0;
+  padding: 0;
 }
