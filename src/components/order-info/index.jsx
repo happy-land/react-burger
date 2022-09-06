@@ -50,8 +50,7 @@ export const OrderInfo = () => {
   const orderObject = useMemo(() => {
     if (!items.length || !orderToShow) return null;
 
-    console.log('orderToShow');
-    console.log(orderToShow);
+    
 
     const ingredientsInfo = orderToShow.ingredients.reduce((acc, item) => {
       const ingredient = items.find((ingredient) => ingredient._id === item);
@@ -62,6 +61,9 @@ export const OrderInfo = () => {
     const totalPrice = ingredientsInfo.reduce((acc, item) => {
       return item.type === 'bun' ? acc + item.price * 2 : acc + item.price;
     }, 0);
+
+    console.log('ingredientsInfo');
+    console.log(ingredientsInfo);
 
     return {
       ...orderToShow,
@@ -91,12 +93,19 @@ export const OrderInfo = () => {
             {orderObject.ingredientsInfo.map((item, index) => (
               <li className={styles.listItem} key={index}>
                 <div className={styles.itemWrapper}>
-                  <img className={styles.image} src={item.image_mobile} alt={item.name} />
-                  <div className={styles.borderBox}></div>
+                  <div className={styles.borderBox}>
+                    <img
+                      className={styles.image}
+                      src={item.image_mobile}
+                      alt={item.name}
+                    />
+                  </div>
                   <p className={styles.name}>{item.name}</p>
                 </div>
                 <div className={styles.priceWrapper}>
-                  <p className={`${styles.price} text text_type_digits-default`}>1 x {item.price}</p>
+                  <p className={`${styles.price} text text_type_digits-default`}>
+                    {item.type === 'bun' ? '2' : '1'} x {item.price}
+                  </p>
                   <CurrencyIcon type='primary' />
                 </div>
               </li>
@@ -105,7 +114,9 @@ export const OrderInfo = () => {
           <div className={styles.footer}>
             <p className={styles.timestamp}>{orderToShow.createdAt}</p>
             <div className={styles.totalPriceWrapper}>
-              <p className={`${styles.totalPrice} text text_type_digits-default`}>{orderObject.totalPrice}</p>
+              <p className={`${styles.totalPrice} text text_type_digits-default`}>
+                {orderObject.totalPrice}
+              </p>
               <CurrencyIcon type='primary' />
             </div>
           </div>

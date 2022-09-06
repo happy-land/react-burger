@@ -62,26 +62,31 @@ export const OrderCard = ({ order }) => {
           <ul className={styles.imagesWrapper}>
             {orderObject.ingredientsVisible.map((item, index) => {
               let zInd = maxIngredients - index;
+
               return (
                 <li
                   key={index}
-                  className={styles.imageWrapper}
+                  className={styles.listItem}
                   style={{
                     zIndex: zInd,
                   }}
                 >
-                  <img 
-                  style={{
-                    opacity: orderObject.remainCount && maxIngredients === index + 1
-                    ? '0.6'
-                    : 1,
-                  }}
-                  className={styles.image} 
-                  src={item.image_mobile} 
-                  alt={item.name} />
-                  {maxIngredients === index + 1 ? (
-                    <span className={styles.counter}>+{orderObject.remainCount}</span>
-                  ) : null}
+                  <div className={styles.borderBox}>
+                    <img
+                      style={{
+                        opacity:
+                          orderObject.remainCount && maxIngredients === index + 1
+                            ? '0.6'
+                            : 1,
+                      }}
+                      className={styles.image}
+                      src={item.image_mobile}
+                      alt={item.name}
+                    />
+                    {maxIngredients === index + 1 ? (
+                      <span className={styles.counter}>+{orderObject.remainCount}</span>
+                    ) : null}
+                  </div>
                 </li>
               );
             })}
