@@ -33,7 +33,9 @@ export const FeedPage = () => {
     <main className={styles.container}>
       <h1 className={styles.title}>Лента заказов</h1>
       <div className={styles.feedWrapper}>
-        <FeedOrderList orders={orders} />
+        <div className={styles.orderListWrapper}>
+          <FeedOrderList orders={orders} />
+        </div>
         <FeedOrderStats />
       </div>
     </main>

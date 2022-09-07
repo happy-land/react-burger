@@ -3,52 +3,6 @@
   display: flex;
 }
 
-.linkBox {
-  padding-top: 120px;
-  margin-right: 60px;
-  width: 320px;
-}
-
-.linkList {
-  display: flex;
-  flex-direction: column;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.listItem {
-  display: flex;
-  text-align: left;
-  margin: 0;
-  padding: 0;
-}
-
-.link {
-  display: flex;
-  min-height: 64px;
-  text-decoration: none;
-  align-items: center;
-  font-size: 24px;
-  line-height: 30px;
-  display: flex;
-  align-items: center;
-  color: #8585ad;
-}
-
-.linkActive {
-  color: #F2F2F3;
-}
-
-.text {
-  margin: 80px 0 0;
-  padding: 0;
-  text-align: left;
-  font-size: 16px;
-  line-height: 24px;
-  color: #8585ad;
-}
-
 .formBox {
   padding-top: 120px;
 }

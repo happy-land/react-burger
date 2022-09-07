@@ -1,0 +1,10 @@
+.container {
+  border: 3px solid tomato;
+  width: 100%;
+}
+
+.ordersWrapper {
+  margin-top: 40px;
+  display: flex;
+  gap: 60px;
+}

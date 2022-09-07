@@ -2,7 +2,7 @@
   border: 1px solid green;
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 20px;
   max-width: 1280px;
   margin: 40px auto 0;
 }
@@ -14,5 +14,9 @@
 
 .feedWrapper {
   display: flex;
-  gap: 60px;
+  /* gap: 60px; */
+}
+
+.orderListWrapper {
+  width: 584px;
 }

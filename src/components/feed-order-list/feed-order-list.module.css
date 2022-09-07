@@ -1,5 +1,7 @@
 .container {
-  width: 600px;
+  border: 1px solid red;
+  width: 100%;
+  padding-right: 16px;
   max-height: 852px;
   overflow: hidden;
   overflow-y: scroll;

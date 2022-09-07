@@ -75,9 +75,10 @@ function App() {
             <OrderInfo />
           </div>
         </Route>
-        <ProtectedRoute path='/profile' exact>
+        <ProtectedRoute path='/profile/'>
           <ProfilePage />
         </ProtectedRoute>
+        
         <Route path='/ingredients/:id' exact>
           <div className={styles.detailsContainer}>
             <p className={`text text_type_main-large`}>Детали ингредиента</p>

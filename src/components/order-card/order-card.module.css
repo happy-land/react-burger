@@ -40,12 +40,18 @@
 }
 
 .title {
-  text-align: left;
-  margin: 0 0 24px;
+  margin: 0;
   padding: 0;
+  text-align: left;
+}
+
+.status {
+  margin: 8px 0 0;
+  text-align: left;
 }
 
 .components {
+  margin: 24px 0 0;
   display: flex;
   justify-content: space-between;
 }

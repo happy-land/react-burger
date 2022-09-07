@@ -1,18 +1,20 @@
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useHistory } from 'react-router-dom';
+import { getFormattedOrderNumber } from '../../utils/order-number-format';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import { formatDistance, subDays } from 'date-fns';
 
 import styles from './order-card.module.css';
 
 export const OrderCard = ({ order }) => {
+  const history = useHistory();
   const { items } = useSelector((store) => store.ingredients);
   const location = useLocation();
   const maxIngredients = 6;
 
   const orderObject = useMemo(() => {
     if (!items.length) return null;
-    // console.log(order.ingredients);
     const ingredientsInfo = order.ingredients.reduce((acc, item) => {
       const ingredient = items.find((ingredient) => ingredient._id === item);
       if (ingredient) acc.push(ingredient);
@@ -41,8 +43,13 @@ export const OrderCard = ({ order }) => {
     };
   }, [order, items]);
 
-  // console.log('orderObject:: ');
-  // console.log(orderObject);
+  const renderStatus = (status) => {
+    if (history.location.pathname !== '/profile/orders') return null;
+    if (status === 'created') return 'Создан';
+    if (status === 'pending') return 'Готовится';
+    if (status === 'done') return 'Выполнен';
+  };
+
 
   return (
     <Link
@@ -54,10 +61,22 @@ export const OrderCard = ({ order }) => {
     >
       <article className={styles.card}>
         <div className={styles.orderId}>
-          <p className={`text text_type_digits-default`}>#{order.number}</p>
+          <p className={`text text_type_digits-default`}>
+            #{getFormattedOrderNumber(order.number)}
+          </p>
+          {/* <p className={styles.timestamp}>{formatDistance(subDays(new Date(), 1))}</p> */}
+
           <p className={styles.timestamp}>{order.createdAt}</p>
         </div>
         <h2 className={styles.title}>{order.name}</h2>
+        {history.location.pathname === '/profile/orders' ? (
+          <p
+            className={styles.status}
+            style={order.status === 'done' ? { color: '#00CCCC' } : { color: '#F2F2F3' }}
+          >
+            {renderStatus(order.status)}
+          </p>
+        ) : null}
         <div className={styles.components}>
           <ul className={styles.imagesWrapper}>
             {orderObject.ingredientsVisible.map((item, index) => {

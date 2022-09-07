@@ -9,7 +9,7 @@ import {
   FEED_CONNECTION_SUCCESS,
   FEED_GET_MESSAGE,
 } from './actions/feed';
-import { ORDERS_CONNECTON_CLOSE, ORDERS_CONNECTON_CLOSED, ORDERS_CONNECTON_ERROR, ORDERS_CONNECTON_INIT, ORDERS_CONNECTON_SUCCESS, ORDERS_GET_MESSAGE } from './actions/orders';
+import { ORDERS_CONNECTION_CLOSE, ORDERS_CONNECTION_CLOSED, ORDERS_CONNECTION_ERROR, ORDERS_CONNECTION_INIT, ORDERS_CONNECTION_SUCCESS, ORDERS_GET_MESSAGE } from './actions/orders';
 import { socketMiddleware } from './middleware/socket-middleware';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
@@ -21,11 +21,11 @@ const composeEnhancers =
 const enhancer = composeEnhancers(applyMiddleware(thunk));
 
 const ordersWsActions = {
-  wsInit: ORDERS_CONNECTON_INIT,
-  wsClose: ORDERS_CONNECTON_CLOSE,
-  onOpen: ORDERS_CONNECTON_SUCCESS,
-  onClose: ORDERS_CONNECTON_CLOSED,
-  onError: ORDERS_CONNECTON_ERROR,
+  wsInit: ORDERS_CONNECTION_INIT,
+  wsClose: ORDERS_CONNECTION_CLOSE,
+  onOpen: ORDERS_CONNECTION_SUCCESS,
+  onClose: ORDERS_CONNECTION_CLOSED,
+  onError: ORDERS_CONNECTION_ERROR,
   onMessage: ORDERS_GET_MESSAGE,
 };
 
