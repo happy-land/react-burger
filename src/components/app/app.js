@@ -107,6 +107,14 @@ function App() {
               <OrderInfo />
             </Modal>
           </Route>
+          <Route path='/profile/orders/:id' exact>
+            <Modal
+              title={`#${getFormattedOrderNumber(orderNumber)}`}
+              onClose={closeAllModals}
+            >
+              <OrderInfo />
+            </Modal>
+          </Route>
         </>
       )}
     </>

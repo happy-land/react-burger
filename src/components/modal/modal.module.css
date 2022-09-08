@@ -11,11 +11,11 @@
   /* display: flex; */
   position: fixed;
   left: calc(50% - 720px / 2);
-  top: calc(50% - 538px / 2);
+  top: calc(50% - 720px / 2);
   width: 720px;
   /* height: 538px; */
   background-color: #1C1C21;
-  z-index: 2;
+  z-index: 100;
 }
 
 .header {

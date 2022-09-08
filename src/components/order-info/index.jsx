@@ -5,27 +5,49 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 
 import { FEED_CONNECTION_CLOSE, FEED_CONNECTION_INIT } from '../../services/actions/feed';
-import { baseWsFeedUrl } from '../../utils/constants';
+import {
+  ORDERS_CONNECTION_CLOSE,
+  ORDERS_CONNECTION_INIT,
+} from '../../services/actions/orders';
+import { baseWsFeedUrl, baseWsOrdersUrl } from '../../utils/constants';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import styles from './order-info.module.css';
 
 export const OrderInfo = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
+
+  console.log(history);
+
+  const orders = useSelector((store) => {
+    if (history.location.state.background.pathname === '/feed') {
+      return store.feed.orders;
+    }
+    if (history.location.state.background.pathname === '/profile/orders') {
+      return store.orders.orders;
+    }
+  });
+
   // подключимся к web socket
   useEffect(() => {
-    console.log('orders::');
+    console.log('orders:: > > >');
     console.log(orders);
-    if (orders.length === 0) {
+    if (!orders && history.location.pathname === '/feed') {
       dispatch({
         type: FEED_CONNECTION_INIT,
         payload: baseWsFeedUrl,
       });
-    } else {
-      return;
+    } 
+    if (!orders || history.location.pathname === '/profile/orders') {
+      dispatch({
+        type: ORDERS_CONNECTION_INIT,
+        payload: baseWsOrdersUrl,
+      });
+      //return;
     }
 
     return () => {
@@ -33,24 +55,23 @@ export const OrderInfo = () => {
     };
   }, [dispatch]);
 
-  const { orders } = useSelector((store) => store.feed);
+  
+
   const { items } = useSelector((store) => store.ingredients);
   const [orderToShow, setOrderToShow] = useState(null);
   const params = useParams();
 
   useEffect(() => {
-    if (orders.length > 0) {
+    if (orders) {
       const order = orders.find((ord) => ord.number.toString() === params.id);
       setOrderToShow(order);
-      // console.log('inside useEffect:');
-      // console.log(orderToShow);
+      console.log('inside useEffect:');
+      console.log(orderToShow);
     }
   }, [orders, orderToShow, params.id]);
 
   const orderObject = useMemo(() => {
     if (!items.length || !orderToShow) return null;
-
-    
 
     const ingredientsInfo = orderToShow.ingredients.reduce((acc, item) => {
       const ingredient = items.find((ingredient) => ingredient._id === item);
