@@ -48,8 +48,6 @@ function App() {
 
   const orderNumber = useRouteMatch(['/feed/:id', '/profile/orders/:id'])?.params?.id;
 
-  // console.log(orderNumber.params);
-
   return (
     <>
       <AppHeader />
@@ -71,14 +69,16 @@ function App() {
         </Route>
         <Route path='/feed/:id' exact>
           <div className={styles.orderInfoContainer}>
-            <p className={`text text_type_digits-default`}>{`#${getFormattedOrderNumber(orderNumber)}`}</p>
+            <p className={`text text_type_digits-default`}>{`#${getFormattedOrderNumber(
+              orderNumber
+            )}`}</p>
             <OrderInfo />
           </div>
         </Route>
         <ProtectedRoute path='/profile/'>
           <ProfilePage />
         </ProtectedRoute>
-        
+
         <Route path='/ingredients/:id' exact>
           <div className={styles.detailsContainer}>
             <p className={`text text_type_main-large`}>Детали ингредиента</p>
@@ -107,14 +107,14 @@ function App() {
               <OrderInfo />
             </Modal>
           </Route>
-          <Route path='/profile/orders/:id' exact>
+          <ProtectedRoute path='/profile/orders/:id' exact>
             <Modal
               title={`#${getFormattedOrderNumber(orderNumber)}`}
               onClose={closeAllModals}
             >
               <OrderInfo />
             </Modal>
-          </Route>
+          </ProtectedRoute>
         </>
       )}
     </>

@@ -1,5 +1,4 @@
 .container {
-  border: 1px solid green;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -14,7 +13,6 @@
 
 .feedWrapper {
   display: flex;
-  /* gap: 60px; */
 }
 
 .orderListWrapper {

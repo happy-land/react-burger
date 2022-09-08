@@ -1,21 +1,19 @@
-import { useCallback, useEffect, useState } from 'react';
-import {
-  Switch,
-  Route,
-  Link,
-  useLocation,
-  useHistory,
-  useRouteMatch,
-} from 'react-router-dom';
+import { useCallback } from 'react';
+import { Switch, Route, NavLink, useHistory, useRouteMatch } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Profile } from '../components/profile';
 import { Orders } from '../components/orders';
 import { logout } from '../services/actions/user';
+import { getFormattedOrderNumber } from '../utils/order-number-format';
 
 import styles from './profile.module.css';
+import { OrderInfo } from '../components/order-info';
 
 export const ProfilePage = () => {
+  const isOrders = !!useRouteMatch({ path: '/profile/orders', exact: true });
+  const isProfile = !!useRouteMatch({ path: '/profile', exact: true });
+
   const history = useHistory();
   const dispatch = useDispatch();
   const { user, isAuth } = useSelector((store) => store.user);
@@ -31,37 +29,59 @@ export const ProfilePage = () => {
     [isAuth, history]
   );
 
+  const orderNumber = useRouteMatch(['/feed/:id', '/profile/orders/:id'])?.params?.id;
+
   return (
     <main className={styles.container}>
-      <nav className={styles.linkBox}>
-        <ul className={styles.linkList}>
-          <li className={styles.listItem}>
-            <Link to='/profile' className={`${styles.link} ${styles.linkActive}`}>
-              Профиль
-            </Link>
-          </li>
-          <li className={styles.listItem}>
-            <Link to='/profile/orders' className={styles.link}>
-              История заказов
-            </Link>
-          </li>
-          <li className={styles.listItem}>
-            <Link to='#' onClick={onLogout} className={styles.link}>
-              Выход
-            </Link>
-          </li>
-        </ul>
-        <p className={styles.text}>
-          {history.location.pathname === '/profile'
-            ? 'В этом разделе вы можете изменить свои персональные данные'
-            : 'В этом разделе вы можете просмотреть свою историю заказов'}
-        </p>
-      </nav>
+      {(history.action !== 'POP' || history.location.pathname === '/profile/orders') && (
+        <nav className={styles.linkBox}>
+          <ul className={styles.linkList}>
+            <li className={styles.listItem}>
+              <NavLink
+                to='/profile'
+                className={styles.link}
+                activeClassName={isProfile ? styles.linkActive : styles.link}
+              >
+                Профиль
+              </NavLink>
+            </li>
+            <li className={styles.listItem}>
+              <NavLink
+                to='/profile/orders'
+                className={styles.link}
+                activeClassName={isOrders ? styles.linkActive : styles.link}
+              >
+                История заказов
+              </NavLink>
+            </li>
+            <li className={styles.listItem}>
+              <NavLink to='#' onClick={onLogout} className={styles.link}>
+                Выход
+              </NavLink>
+            </li>
+          </ul>
+          <p className={styles.text}>
+            {history.location.pathname === '/profile'
+              ? 'В этом разделе вы можете изменить свои персональные данные'
+              : 'В этом разделе вы можете просмотреть свою историю заказов'}
+          </p>
+        </nav>
+      )}
+
       <Switch>
-        <Route path='/profile/orders'>
+      <Route path='/profile/orders/:id' exact>
+          <div className={styles.orderInfoContainer}>
+            <p className={`text text_type_digits-default`}>{`#${getFormattedOrderNumber(
+              orderNumber
+            )}`}</p>
+            <OrderInfo />
+          </div>
+        </Route>
+        <Route path='/profile/orders' exact>
           <Orders />
         </Route>
-        <Route path='/profile'>
+        
+        <Route path='/profile' exact>
           <Profile />
         </Route>
       </Switch>

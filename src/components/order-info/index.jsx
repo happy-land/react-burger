@@ -5,7 +5,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams, useHistory, useRouteMatch } from 'react-router-dom';
 
 import { FEED_CONNECTION_CLOSE, FEED_CONNECTION_INIT } from '../../services/actions/feed';
 import {
@@ -13,49 +13,47 @@ import {
   ORDERS_CONNECTION_INIT,
 } from '../../services/actions/orders';
 import { baseWsFeedUrl, baseWsOrdersUrl } from '../../utils/constants';
+import { getCookie } from '../../utils/utils';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import styles from './order-info.module.css';
+import { formatDate } from '../../utils/date-format';
 
 export const OrderInfo = () => {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  console.log(history);
+  const path = useRouteMatch().path;
 
   const orders = useSelector((store) => {
-    if (history.location.state.background.pathname === '/feed') {
+    if (path === '/feed/:id') {
       return store.feed.orders;
     }
-    if (history.location.state.background.pathname === '/profile/orders') {
+    if (path === '/profile/orders/:id') {
       return store.orders.orders;
     }
   });
 
   // подключимся к web socket
   useEffect(() => {
-    console.log('orders:: > > >');
-    console.log(orders);
-    if (!orders && history.location.pathname === '/feed') {
+    if (orders.length === 0 && path === '/feed/:id') {
       dispatch({
         type: FEED_CONNECTION_INIT,
         payload: baseWsFeedUrl,
       });
-    } 
-    if (!orders || history.location.pathname === '/profile/orders') {
+    }
+    if (orders.length === 0 && path === '/profile/orders/:id') {
+      const accessToken = getCookie('accessToken');
       dispatch({
         type: ORDERS_CONNECTION_INIT,
-        payload: baseWsOrdersUrl,
+        payload: `${baseWsOrdersUrl}?token=${accessToken}`,
       });
-      //return;
     }
 
     return () => {
       dispatch({ type: FEED_CONNECTION_CLOSE });
     };
   }, [dispatch]);
-
-  
 
   const { items } = useSelector((store) => store.ingredients);
   const [orderToShow, setOrderToShow] = useState(null);
@@ -65,13 +63,11 @@ export const OrderInfo = () => {
     if (orders) {
       const order = orders.find((ord) => ord.number.toString() === params.id);
       setOrderToShow(order);
-      console.log('inside useEffect:');
-      console.log(orderToShow);
     }
   }, [orders, orderToShow, params.id]);
 
   const orderObject = useMemo(() => {
-    if (!items.length || !orderToShow) return null;
+    if (!items || !orderToShow) return null;
 
     const ingredientsInfo = orderToShow.ingredients.reduce((acc, item) => {
       const ingredient = items.find((ingredient) => ingredient._id === item);
@@ -82,9 +78,6 @@ export const OrderInfo = () => {
     const totalPrice = ingredientsInfo.reduce((acc, item) => {
       return item.type === 'bun' ? acc + item.price * 2 : acc + item.price;
     }, 0);
-
-    console.log('ingredientsInfo');
-    console.log(ingredientsInfo);
 
     return {
       ...orderToShow,
@@ -133,7 +126,7 @@ export const OrderInfo = () => {
             ))}
           </ul>
           <div className={styles.footer}>
-            <p className={styles.timestamp}>{orderToShow.createdAt}</p>
+            <p className={styles.timestamp}>{formatDate(orderToShow.createdAt)}</p>
             <div className={styles.totalPriceWrapper}>
               <p className={`${styles.totalPrice} text text_type_digits-default`}>
                 {orderObject.totalPrice}

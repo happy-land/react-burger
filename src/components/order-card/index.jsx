@@ -3,9 +3,9 @@ import { useSelector } from 'react-redux';
 import { Link, useLocation, useHistory } from 'react-router-dom';
 import { getFormattedOrderNumber } from '../../utils/order-number-format';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import { formatDistance, subDays } from 'date-fns';
 
 import styles from './order-card.module.css';
+import { formatDate } from '../../utils/date-format';
 
 export const OrderCard = ({ order }) => {
   const history = useHistory();
@@ -64,9 +64,7 @@ export const OrderCard = ({ order }) => {
           <p className={`text text_type_digits-default`}>
             #{getFormattedOrderNumber(order.number)}
           </p>
-          {/* <p className={styles.timestamp}>{formatDistance(subDays(new Date(), 1))}</p> */}
-
-          <p className={styles.timestamp}>{order.createdAt}</p>
+          <p className={styles.timestamp}>{formatDate(order.createdAt)}</p>
         </div>
         <h2 className={styles.title}>{order.name}</h2>
         {history.location.pathname === '/profile/orders' ? (
