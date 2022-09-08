@@ -69,19 +69,30 @@ export const OrderInfo = () => {
   const orderObject = useMemo(() => {
     if (!items || !orderToShow) return null;
 
-    const ingredientsInfo = orderToShow.ingredients.reduce((acc, item) => {
-      const ingredient = items.find((ingredient) => ingredient._id === item);
-      if (ingredient) acc.push(ingredient);
+    const ingredientsUniqueObj = orderToShow.ingredients.reduce((acc, el) => {
+      acc[el] = (acc[el] || 0) + 1;
       return acc;
     }, []);
 
-    const totalPrice = ingredientsInfo.reduce((acc, item) => {
-      return item.type === 'bun' ? acc + item.price * 2 : acc + item.price;
+    const ingredientsUniqueIds = Object.keys(ingredientsUniqueObj);
+    const ingredientsUniqueQty = Object.values(ingredientsUniqueObj);
+
+    const ingredientsInfo = ingredientsUniqueIds.reduce((acc, item, index) => {
+      const ingredient = items.find((ingredient) => ingredient._id === item);
+      if (ingredient) {
+        acc.push(ingredient);
+      }
+      return acc;
+    }, []);
+
+    const totalPrice = ingredientsInfo.reduce((acc, item, index) => {
+      return item.type === 'bun' ? acc + item.price * 2 : acc + item.price * ingredientsUniqueQty[index];
     }, 0);
 
     return {
       ...orderToShow,
       ingredientsInfo,
+      ingredientsUniqueQty,
       totalPrice,
     };
   }, [orderToShow, items]);
@@ -118,7 +129,7 @@ export const OrderInfo = () => {
                 </div>
                 <div className={styles.priceWrapper}>
                   <p className={`${styles.price} text text_type_digits-default`}>
-                    {item.type === 'bun' ? '2' : '1'} x {item.price}
+                    {item.type === 'bun' ? '2' : orderObject.ingredientsUniqueQty[index]} x {item.price}
                   </p>
                   <CurrencyIcon type='primary' />
                 </div>

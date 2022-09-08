@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { Switch, Route, NavLink, useHistory, useRouteMatch } from 'react-router-dom';
+import { Switch, Route, NavLink, useHistory, useRouteMatch, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Profile } from '../components/profile';
@@ -28,12 +28,15 @@ export const ProfilePage = () => {
     },
     [isAuth, history]
   );
-
-  const orderNumber = useRouteMatch(['/feed/:id', '/profile/orders/:id'])?.params?.id;
+  
+  const orderNumber = useParams().id;
 
   return (
     <main className={styles.container}>
-      {(history.action !== 'POP' || history.location.pathname === '/profile/orders') && (
+      {(history.location.pathname === '/profile/orders/' ||
+        history.location.pathname === '/profile/orders' ||
+        history.location.pathname === '/profile/' ||
+        history.location.pathname === '/profile') && (
         <nav className={styles.linkBox}>
           <ul className={styles.linkList}>
             <li className={styles.listItem}>
@@ -69,7 +72,7 @@ export const ProfilePage = () => {
       )}
 
       <Switch>
-      <Route path='/profile/orders/:id' exact>
+        <Route path='/profile/orders/:id' exact>
           <div className={styles.orderInfoContainer}>
             <p className={`text text_type_digits-default`}>{`#${getFormattedOrderNumber(
               orderNumber
@@ -80,7 +83,7 @@ export const ProfilePage = () => {
         <Route path='/profile/orders' exact>
           <Orders />
         </Route>
-        
+
         <Route path='/profile' exact>
           <Profile />
         </Route>
