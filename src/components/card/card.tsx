@@ -1,22 +1,27 @@
+import { FC } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useDrag } from 'react-dnd';
-import PropTypes from 'prop-types';
 import {
   Counter,
   CurrencyIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { menuItemPropTypes } from '../../utils/constants';
 import styles from './card.module.css';
 
-export const Card = ({ data, counter, onClick }) => {
-  const location = useLocation();
+interface ICard {
+  data: { _id: number; image: string; price: number; name: string };
+  counter: number;
+  onClick: (data: { _id: number; image: string; price: number; name: string }) => void;
+}
+
+export const Card: FC<ICard> = ({ data, counter, onClick }) => {
+  const location = useLocation<{ background: Location }>();
 
   // drag and drop
   const [{ opacity, isDragging }, drag] = useDrag(() => ({
     type: 'NEW_INGREDIENT',
     item: data,
     collect: (monitor) => ({
-      opacity: monitor.isDragging ? 0.8 : 1,
+      opacity: monitor.isDragging() ? 0.8 : 1,
       isDragging: monitor.isDragging(),
       handlerId: monitor.getHandlerId(),
     }),
@@ -48,9 +53,4 @@ export const Card = ({ data, counter, onClick }) => {
       </article>
     </Link>
   );
-};
-
-Card.propTypes = {
-  data: menuItemPropTypes.isRequired,
-  onClick: PropTypes.func.isRequired,
 };
