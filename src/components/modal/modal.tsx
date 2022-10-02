@@ -7,7 +7,7 @@ import styles from './modal.module.css';
 
 interface IModalProps {
   title?: string;
-  onClose: () => {};
+  onClose: () => void;
 }
 
 const modalsContainer = document.querySelector('#modals') as HTMLElement;
