@@ -1,3 +1,4 @@
+import { FC } from 'react';
 import { NavLink, useRouteMatch } from 'react-router-dom';
 import {
   BurgerIcon,
@@ -7,11 +8,12 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './app-header.module.css';
 
-export const AppHeader = () => {
 
-  const isRoot = !!useRouteMatch({ path: '/', exact: true });
-  const isFeed = !!useRouteMatch('/feed');
-  const isProfile = !!useRouteMatch('/profile');
+export const AppHeader:FC = () => {
+
+  const isRoot: boolean = !!useRouteMatch({ path: '/', exact: true });
+  const isFeed: boolean = !!useRouteMatch('/feed');
+  const isProfile: boolean = !!useRouteMatch('/profile');
 
 
   return (
@@ -44,7 +46,7 @@ export const AppHeader = () => {
           </li>
         </ul>
         <NavLink to='/'>
-          <Logo className={styles.logo} />
+          <Logo/>
         </NavLink>
         <div className={styles.profileContainer}>
           <NavLink

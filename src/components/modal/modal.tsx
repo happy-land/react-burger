@@ -1,25 +1,28 @@
-import PropTypes from 'prop-types';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useEffect } from 'react';
+import { FC, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { ModalOverlay } from '../modal-overlay/modal-overlay';
 
 import styles from './modal.module.css';
 
-const modalsContainer = document.querySelector('#modals');
+interface IModalProps {
+  title?: string;
+  onClose: () => {};
+}
 
-export const Modal = ({ title, onClose, children }) => {
+const modalsContainer = document.querySelector('#modals') as HTMLElement;
+
+export const Modal: FC<IModalProps> = ({ title, onClose, children }) => {
   useEffect(() => {
-
     // Обработка нажатия Esc
-    const handleEscKeydown = (event) => {
+    const handleEscKeydown = (event: KeyboardEvent): void => {
       event.key === 'Escape' && onClose();
     };
 
-    document.addEventListener('keydown', handleEscKeydown);
+    document.addEventListener('keydown', (event) => handleEscKeydown(event));
 
     return () => {
-      document.removeEventListener('keydown', handleEscKeydown);
+      document.removeEventListener('keydown', (event) => handleEscKeydown(event));
     };
   }, []);
 
@@ -37,10 +40,4 @@ export const Modal = ({ title, onClose, children }) => {
     </>,
     modalsContainer
   );
-};
-
-Modal.propTypes = {
-  title: PropTypes.string.isRequired,
-  onClose: PropTypes.func.isRequired,
-  children: PropTypes.element.isRequired,
 };
