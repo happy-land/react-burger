@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { TOrder } from '../../types/types';
+import { TOrder } from '../../services/types/types';
 import { OrderCard } from '../order-card';
 import styles from './feed-order-list.module.css';
 
