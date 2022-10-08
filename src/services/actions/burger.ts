@@ -4,18 +4,17 @@ import { baseUrl } from '../../utils/constants';
 import { checkResponse, checkSuccess } from '../../utils/utils';
 import { openOrderModal } from './order';
 
-export const CONSTRUCTOR_ADD_INGREDIENT: 'CONSTRUCTOR_ADD_INGREDIENT' = 'CONSTRUCTOR_ADD_INGREDIENT';
-export const CONSTRUCTOR_REMOVE_INGREDIENT: 'CONSTRUCTOR_REMOVE_INGREDIENT' = 'CONSTRUCTOR_REMOVE_INGREDIENT';
-
-export const CONSTRUCTOR_ADD_BUN: 'CONSTRUCTOR_ADD_BUN' = 'CONSTRUCTOR_ADD_BUN';
-export const CONSTRUCTOR_REMOVE_BUN: 'CONSTRUCTOR_REMOVE_BUN' = 'CONSTRUCTOR_REMOVE_BUN';
-
-export const CONSTRUCTOR_REORDER: 'CONSTRUCTOR_REORDER' = 'CONSTRUCTOR_REORDER';
-export const CONSTRUCTOR_RESET: 'CONSTRUCTOR_RESET' = 'CONSTRUCTOR_RESET';
-
-export const ORDER_SAVE_REQUEST: 'ORDER_SAVE_REQUEST' = 'ORDER_SAVE_REQUEST';
-export const ORDER_SAVE_SUCCESS: 'ORDER_SAVE_SUCCESS' = 'ORDER_SAVE_SUCCESS';
-export const ORDER_SAVE_FAIL: 'ORDER_SAVE_FAIL' = 'ORDER_SAVE_FAIL';
+import {
+  CONSTRUCTOR_ADD_INGREDIENT,
+  CONSTRUCTOR_REMOVE_INGREDIENT,
+  CONSTRUCTOR_ADD_BUN,
+  CONSTRUCTOR_REMOVE_BUN,
+  CONSTRUCTOR_REORDER,
+  CONSTRUCTOR_RESET,
+  ORDER_SAVE_REQUEST,
+  ORDER_SAVE_SUCCESS,
+  ORDER_SAVE_FAIL,
+} from '../constants';
 
 export const addIngredient = (ingredient) => ({
   type: CONSTRUCTOR_ADD_INGREDIENT,
@@ -46,7 +45,7 @@ export const saveOrder = (data, bun) => (dispatch) => {
   dispatch({
     type: ORDER_SAVE_REQUEST,
   });
-  // складываем ингредиенты: булка + соусы, начинка 
+  // складываем ингредиенты: булка + соусы, начинка
   const ingrIdArray = data.map((ingr) => ingr._id);
   const concatenatedIngredients = [...ingrIdArray, bun._id];
   saveOrderRequest(concatenatedIngredients)

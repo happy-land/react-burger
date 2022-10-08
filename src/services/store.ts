@@ -9,16 +9,31 @@ import {
   FEED_CONNECTION_SUCCESS,
   FEED_GET_MESSAGE,
 } from './actions/feed';
-import { ORDERS_CONNECTION_CLOSE, ORDERS_CONNECTION_CLOSED, ORDERS_CONNECTION_ERROR, ORDERS_CONNECTION_INIT, ORDERS_CONNECTION_SUCCESS, ORDERS_GET_MESSAGE } from './actions/orders';
+import {
+  ORDERS_CONNECTION_CLOSE,
+  ORDERS_CONNECTION_CLOSED,
+  ORDERS_CONNECTION_ERROR,
+  ORDERS_CONNECTION_INIT,
+  ORDERS_CONNECTION_SUCCESS,
+  ORDERS_GET_MESSAGE,
+} from './actions/orders';
 import { socketMiddleware } from './middleware/socket-middleware';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
-const composeEnhancers =
-  typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
-    ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({})
-    : compose;
+// const composeEnhancers =
+//   typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+//     ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({})
+//     : compose;
 
-const enhancer = composeEnhancers(applyMiddleware(thunk));
+declare global {
+  interface Window {
+    __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: typeof compose;
+  }
+}
+
+export const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+// const enhancer = composeEnhancers(applyMiddleware(thunk));
 
 const ordersWsActions = {
   wsInit: ORDERS_CONNECTION_INIT,
@@ -46,7 +61,7 @@ const store = createStore(
     applyMiddleware(
       thunk,
       socketMiddleware(ordersWsActions),
-      socketMiddleware(feedWsActions),
+      socketMiddleware(feedWsActions)
     )
   )
 );
