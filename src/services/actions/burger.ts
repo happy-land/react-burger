@@ -15,6 +15,12 @@ import {
   ORDER_SAVE_SUCCESS,
   ORDER_SAVE_FAIL,
 } from '../constants';
+import { TIngredient } from '../types/data';
+
+export interface IAddIngredientAction {
+  type: typeof CONSTRUCTOR_ADD_INGREDIENT;
+  payload: TIngredient;
+}
 
 export const addIngredient = (ingredient) => ({
   type: CONSTRUCTOR_ADD_INGREDIENT,
