@@ -5,6 +5,7 @@ import {
   FEED_GET_MESSAGE
 } from '../actions/feed';
 
+
 const initialState = {
   orders: [],
   total: 0,
