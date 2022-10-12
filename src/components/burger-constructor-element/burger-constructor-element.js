@@ -6,7 +6,8 @@ import {
   DragIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useDispatch } from 'react-redux';
-import { CONSTRUCTOR_REORDER } from '../../services/actions/burger';
+// import { CONSTRUCTOR_REORDER } from '../../services/actions/burger';
+import { CONSTRUCTOR_REORDER } from '../../services/constants'; 
 
 
 export const BurgerConstructorElement = ({ item, index, handleClose }) => {

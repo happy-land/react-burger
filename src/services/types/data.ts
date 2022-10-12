@@ -9,6 +9,7 @@ export type TOrder = {
 };
 
 export type TIngredient = {
+  id?: string;
   readonly _id: string;
   readonly type: string; // 'sauce', 'bun', 'main'
   readonly name: string;

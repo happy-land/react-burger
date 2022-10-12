@@ -15,12 +15,17 @@ import {
   ORDER_SAVE_SUCCESS,
   ORDER_SAVE_FAIL,
 } from '../constants';
-import { TIngredient } from '../types/data';
+import { TIngredient, TOrder } from '../types/data';
 import { AppDispatch, AppThunk } from '../types';
 
 type TIngredientWithUUID = TIngredient & {
   id: string;
-}
+};
+
+type TConstructorReorderPayload = {
+  to: number;
+  from: number;
+};
 
 export interface IAddIngredientAction {
   type: typeof CONSTRUCTOR_ADD_INGREDIENT;
@@ -42,13 +47,40 @@ export interface IRemoveBunAction {
   payload: TIngredient;
 }
 
-export type TBurgerActions = 
+export interface IConstructorReorderAction {
+  type: typeof CONSTRUCTOR_REORDER;
+  payload: TConstructorReorderPayload;
+}
+
+export interface IConstructorResetAction {
+  type: typeof CONSTRUCTOR_RESET;
+}
+
+export interface IOrderSaveRequestAction {
+  type: typeof ORDER_SAVE_REQUEST;
+}
+
+export interface IOrderSaveSuccessAction {
+  type: typeof ORDER_SAVE_SUCCESS;
+  payload: TOrder;
+}
+
+export interface IOrderSaveFailAction {
+  type: typeof ORDER_SAVE_FAIL;
+}
+
+export type TBurgerActions =
   | IAddIngredientAction
   | IRemoveIngredientAction
   | IAddBunAction
-  | IRemoveBunAction;
+  | IRemoveBunAction
+  | IConstructorReorderAction
+  | IConstructorResetAction
+  | IOrderSaveRequestAction
+  | IOrderSaveSuccessAction
+  | IOrderSaveFailAction;
 
-export const addIngredient = (ingredient: TIngredient):IAddIngredientAction => ({
+export const addIngredient = (ingredient: TIngredient): IAddIngredientAction => ({
   type: CONSTRUCTOR_ADD_INGREDIENT,
   payload: {
     ...ingredient,
@@ -56,7 +88,7 @@ export const addIngredient = (ingredient: TIngredient):IAddIngredientAction => (
   },
 });
 
-export const removeIngredient = (ingredient: TIngredient):IRemoveIngredientAction => ({
+export const removeIngredient = (ingredient: TIngredient): IRemoveIngredientAction => ({
   type: CONSTRUCTOR_REMOVE_INGREDIENT,
   payload: {
     ...ingredient,
@@ -73,29 +105,30 @@ export const removeBun = (bun: TIngredient): IRemoveBunAction => ({
   payload: bun,
 });
 
-export const saveOrder: AppThunk = (data: Array<TIngredient>, bun: TIngredient) => (dispatch: AppDispatch) => {
-  dispatch({
-    type: ORDER_SAVE_REQUEST,
-  });
-  // складываем ингредиенты: булка + соусы, начинка
-  const ingrIdArray = data.map((ingr: TIngredient) => ingr._id);
-  const concatenatedIngredients = [...ingrIdArray, bun._id];
-  saveOrderRequest(concatenatedIngredients)
-    // .then(checkResponse)
-    .then(checkSuccess)
-    .then((data) => {
-      dispatch({
-        type: ORDER_SAVE_SUCCESS,
-        payload: data,
-      });
-      dispatch(openOrderModal(data.order.number));
-      dispatch({
-        type: CONSTRUCTOR_RESET,
-      });
-    })
-    .catch((err) => {
-      dispatch({
-        type: ORDER_SAVE_FAIL,
-      });
+export const saveOrder: AppThunk =
+  (data: Array<TIngredient>, bun: TIngredient) => (dispatch: AppDispatch) => {
+    dispatch({
+      type: ORDER_SAVE_REQUEST,
     });
-};
+    // складываем ингредиенты: булка + соусы, начинка
+    const ingrIdArray = data.map((ingr: TIngredient) => ingr._id);
+    const concatenatedIngredients = [...ingrIdArray, bun._id];
+    saveOrderRequest(concatenatedIngredients)
+      // .then(checkResponse)
+      .then(checkSuccess)
+      .then((data) => {
+        dispatch({
+          type: ORDER_SAVE_SUCCESS,
+          payload: data,
+        });
+        dispatch(openOrderModal(data.order.number));
+        dispatch({
+          type: CONSTRUCTOR_RESET,
+        });
+      })
+      .catch((err) => {
+        dispatch({
+          type: ORDER_SAVE_FAIL,
+        });
+      });
+  };

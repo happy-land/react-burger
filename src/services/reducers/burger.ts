@@ -7,10 +7,22 @@ import {
   ORDER_SAVE_SUCCESS,
   ORDER_SAVE_FAIL,
   ORDER_SAVE_REQUEST,
-} from '../actions/burger';
+} from '../constants';
+import { TIngredient, TOrder } from '../types/data';
+
+import { TBurgerActions } from '../actions/burger';
+
+type TBurgerState = {
+  items: Array<TIngredient>;
+  bun: TIngredient | null;
+  totalPrice: number;
+  orderData: TOrder | null;
+  isLoading: boolean;
+  hasError: boolean;
+}
 
 // список всех ингредиентов в текущем конструкторе бургера,
-const burgerInitialState = {
+const burgerInitialState:TBurgerState = {
   items: [],
   bun: null,
   totalPrice: 0,
@@ -19,7 +31,7 @@ const burgerInitialState = {
   hasError: false,
 };
 
-export const burgerReducer = (state = burgerInitialState, action) => {
+export const burgerReducer = (state = burgerInitialState, action: TBurgerActions): TBurgerState => {
   switch (action.type) {
     case CONSTRUCTOR_ADD_INGREDIENT:
       return {
