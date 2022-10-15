@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { Profile } from '../components/profile';
 import { Orders } from '../components/orders';
-import { logout } from '../services/actions/user';
+import { logoutThunk } from '../services/actions/user';
 import { getFormattedOrderNumber } from '../utils/order-number-format';
 
 import styles from './profile.module.css';
@@ -21,8 +21,7 @@ export const ProfilePage = () => {
   const onLogout = useCallback(
     (evt) => {
       evt.preventDefault();
-      console.log('logout');
-      dispatch(logout()).then(() => {
+      dispatch(logoutThunk()).then(() => {
         history.replace({ pathname: '/login' });
       });
     },

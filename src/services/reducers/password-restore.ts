@@ -6,14 +6,12 @@ import {
 } from '../constants';
 
 type TPasswordRestoreState = {
-  response: string | null;  // unknown?
   isPswdRestoreRequestSent: boolean;
   isLoading: boolean;
   hasError: boolean;
 };
 
 const passwordRestoreInitialState: TPasswordRestoreState = {
-  response: null,
   isPswdRestoreRequestSent: false,
   isLoading: false,
   hasError: false,
@@ -33,7 +31,6 @@ export const passwordRestoreReducer = (
     case PASSWORD_RESTORE_SUCCESS: {
       return {
         ...state,
-        response: action.payload,
         isPswdRestoreRequestSent: true,
         isLoading: false,
         hasError: false,

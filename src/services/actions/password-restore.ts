@@ -15,7 +15,6 @@ export interface IPasswordRestoreRequestAction {
 
 export interface IPasswordRestoreSuccessAction {
   type: typeof PASSWORD_RESTORE_SUCCESS;
-  payload: string;
 }
 
 export interface IPasswordRestoreFailAction {

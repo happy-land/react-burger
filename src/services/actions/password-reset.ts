@@ -15,7 +15,6 @@ export interface IPasswordResetRequestAction {
 
 export interface IPasswordResetSuccessAction {
   type: typeof PASSWORD_RESET_SUCCESS;
-  payload: string;
 }
 
 export interface IPasswordResetFailAction {

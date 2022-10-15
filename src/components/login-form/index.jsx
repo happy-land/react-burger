@@ -6,7 +6,7 @@ import {
   PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useDispatch, useSelector } from 'react-redux';
-import { authUser } from '../../services/actions/user';
+import { authUserThunk } from '../../services/actions/user';
 import { useForm } from '../../hooks/useForm';
 
 import styles from './login-form.module.css';
@@ -25,7 +25,7 @@ export const LoginForm = () => {
   const login = useCallback(
     (e) => {
       e.preventDefault();
-      dispatch(authUser(values));
+      dispatch(authUserThunk(values));
     },
     [values, dispatch]
   );

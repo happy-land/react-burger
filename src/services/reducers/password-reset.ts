@@ -6,13 +6,11 @@ import {
 } from '../constants';
 
 type TPasswordResetState = {
-  response: unknown;
   isLoading: boolean;
   hasError: boolean;
 }
 
 const passwordResetInitialState: TPasswordResetState = {
-  response: null,
   isLoading: false,
   hasError: false,
 };
@@ -28,7 +26,6 @@ export const passwordResetReducer = (state = passwordResetInitialState, action: 
     case PASSWORD_RESET_SUCCESS: {
       return {
         ...state,
-        response: action.payload,
         isLoading: false,
         hasError: false,
       }

@@ -4,7 +4,7 @@ import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-component
 import { useDispatch, useSelector } from 'react-redux';
 
 import styles from './profile.module.css';
-import { getUserData, updateUserData, logout } from '../../services/actions/user';
+import { getUserDataThunk, updateUserDataThunk } from '../../services/actions/user';
 
 export const Profile = () => {
   const history = useHistory();
@@ -18,7 +18,7 @@ export const Profile = () => {
   });
 
   useEffect(() => {
-    dispatch(getUserData());
+    dispatch(getUserDataThunk());
   }, []);
 
   useEffect(() => {
@@ -36,7 +36,7 @@ export const Profile = () => {
   const updateProfile = useCallback(
     (evt) => {
       evt.preventDefault();
-      dispatch(updateUserData(form));
+      dispatch(updateUserDataThunk(form));
     },
     [form]
   );

@@ -28,3 +28,8 @@ export type TUser = {
   password: string;
   name: string;
 }
+
+export type TLoginForm = {
+  email: string;
+  password: string;
+}

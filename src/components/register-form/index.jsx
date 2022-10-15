@@ -8,7 +8,7 @@ import {
 
 import styles from './register-form.module.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { registerUser } from '../../services/actions/user';
+import { registerUserThunk } from '../../services/actions/user';
 import { useForm } from '../../hooks/useForm';
 
 export const RegisterForm = () => {
@@ -24,7 +24,7 @@ export const RegisterForm = () => {
   const register = useCallback(
     (e) => {
       e.preventDefault();
-      dispatch(registerUser(values));
+      dispatch(registerUserThunk(values));
     },
     [values, dispatch]
   );

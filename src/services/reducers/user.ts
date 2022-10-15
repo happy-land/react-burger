@@ -1,4 +1,5 @@
 import { deleteCookie, setCookie } from '../../utils/utils';
+import { TUserActions } from '../actions/user';
 import {
   USER_REGISTER_REQUEST,
   USER_REGISTER_SUCCESS,
@@ -15,10 +16,19 @@ import {
   LOGOUT_USER_REQUEST,
   LOGOUT_USER_SUCCESS,
   LOGOUT_USER_FAIL,
-} from '../actions/user';
+} from '../constants';
+import { TUser } from '../types/data';
 
-const userInitialState = {
-  response: null,
+type TUserState = {
+  isLoading: boolean;
+  hasError: boolean;
+  accessToken: string;
+  refreshToken: string;
+  isAuth: boolean;
+  user: TUser | null;
+}
+
+const userInitialState: TUserState = {
   isLoading: false,
   hasError: false,
   accessToken: '',
@@ -27,10 +37,11 @@ const userInitialState = {
   user: {
     email: '',
     name: '',
+    password: '',
   },
 };
 
-export const userReducer = (state = userInitialState, action) => {
+export const userReducer = (state = userInitialState, action: TUserActions) => {
   switch (action.type) {
     case USER_REGISTER_REQUEST: {
       return {
@@ -59,7 +70,6 @@ export const userReducer = (state = userInitialState, action) => {
         refreshToken: res.refreshToken,
         isAuth: true,
         user: res.user,
-        response: action.payload,
         isLoading: false,
         hasError: false,
       };
@@ -140,11 +150,10 @@ export const userReducer = (state = userInitialState, action) => {
       };
     }
     case UPDATE_USER_SUCCESS: {
-      const res = action.payload;
       return {
         ...state,
         isAuth: true,
-        user: res.user,
+        user: action.payload.user,
         isLoading: false,
         hasError: false,
       };
