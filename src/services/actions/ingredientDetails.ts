@@ -14,13 +14,13 @@ export type TIngredientDetailsModalActions =
   | IOpenIgredientModalAction
   | ICloseIngredientModalAction;
 
-export const openIngredientModal = (ingredient: TIngredient): IOpenIgredientModalAction => ({
+export const openIngredientModalAction = (ingredient: TIngredient): IOpenIgredientModalAction => ({
   type: INGREDIENT_MODAL_OPEN,
   payload: {
     ...ingredient,
   },
 });
 
-export const closeIngredientModal = (): ICloseIngredientModalAction => ({
+export const closeIngredientModalAction = (): ICloseIngredientModalAction => ({
   type: INGREDIENT_MODAL_CLOSE,
 });

@@ -1,16 +1,23 @@
+import { TPasswordResetActions } from '../actions/password-reset';
 import {
   PASSWORD_RESET_REQUEST,
   PASSWORD_RESET_SUCCESS,
   PASSWORD_RESET_FAIL
-} from '../actions/password-reset';
+} from '../constants';
 
-const passwordResetInitialState = {
+type TPasswordResetState = {
+  response: unknown;
+  isLoading: boolean;
+  hasError: boolean;
+}
+
+const passwordResetInitialState: TPasswordResetState = {
   response: null,
   isLoading: false,
   hasError: false,
 };
 
-export const passwordResetReducer = (state = passwordResetInitialState, action) => {
+export const passwordResetReducer = (state = passwordResetInitialState, action: TPasswordResetActions) => {
   switch (action.type) {
     case PASSWORD_RESET_REQUEST: {
       return {

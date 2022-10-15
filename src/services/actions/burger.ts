@@ -80,7 +80,7 @@ export type TBurgerActions =
   | IOrderSaveSuccessAction
   | IOrderSaveFailAction;
 
-export const addIngredient = (ingredient: TIngredient): IAddIngredientAction => ({
+export const addIngredientAction = (ingredient: TIngredient): IAddIngredientAction => ({
   type: CONSTRUCTOR_ADD_INGREDIENT,
   payload: {
     ...ingredient,
@@ -88,19 +88,19 @@ export const addIngredient = (ingredient: TIngredient): IAddIngredientAction => 
   },
 });
 
-export const removeIngredient = (ingredient: TIngredient): IRemoveIngredientAction => ({
+export const removeIngredientAction = (ingredient: TIngredient): IRemoveIngredientAction => ({
   type: CONSTRUCTOR_REMOVE_INGREDIENT,
   payload: {
     ...ingredient,
   },
 });
 
-export const addBun = (bun: TIngredient): IAddBunAction => ({
+export const addBunAction = (bun: TIngredient): IAddBunAction => ({
   type: CONSTRUCTOR_ADD_BUN,
   payload: bun,
 });
 
-export const removeBun = (bun: TIngredient): IRemoveBunAction => ({
+export const removeBunAction = (bun: TIngredient): IRemoveBunAction => ({
   type: CONSTRUCTOR_REMOVE_BUN,
   payload: bun,
 });

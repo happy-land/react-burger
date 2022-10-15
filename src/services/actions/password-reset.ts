@@ -2,11 +2,33 @@
 import { baseUrl } from '../../utils/constants';
 import { checkResponse, checkSuccess } from '../../utils/utils';
 
-export const PASSWORD_RESET_REQUEST = 'PASSWORD_RESET_REQUEST';
-export const PASSWORD_RESET_SUCCESS = 'PASSWORD_RESET_SUCCESS';
-export const PASSWORD_RESET_FAIL = 'PASSWORD_RESET_FAIL';
+import {
+  PASSWORD_RESET_REQUEST,
+  PASSWORD_RESET_SUCCESS,
+  PASSWORD_RESET_FAIL,
+} from '../constants';
+import { AppDispatch, AppThunk } from '../types';
 
-export const resetPassword = (form) => (dispatch) => {
+export interface IPasswordResetRequestAction {
+  type: typeof PASSWORD_RESET_REQUEST;
+}
+
+export interface IPasswordResetSuccessAction {
+  type: typeof PASSWORD_RESET_SUCCESS;
+  payload: string;
+}
+
+export interface IPasswordResetFailAction {
+  type: typeof PASSWORD_RESET_FAIL;
+}
+
+export type TPasswordResetActions = 
+  | IPasswordResetRequestAction
+  | IPasswordResetSuccessAction
+  | IPasswordResetFailAction;
+
+
+export const resetPasswordThunk: AppThunk = (form) => (dispatch: AppDispatch) => {
   dispatch({
     type: PASSWORD_RESET_REQUEST,
   });
