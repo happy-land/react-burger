@@ -1,4 +1,3 @@
-// ? уточнить
 import {
   ORDERS_CONNECTION_INIT,
   ORDERS_CONNECTION_CLOSE,

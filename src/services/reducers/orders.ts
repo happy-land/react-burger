@@ -1,4 +1,3 @@
-import { TOrdersActions } from '../actions/orders';
 import {
   ORDERS_CONNECTION_SUCCESS,
   ORDERS_CONNECTION_ERROR,
@@ -6,14 +5,15 @@ import {
   ORDERS_GET_MESSAGE
 } from '../constants';
 import { TOrder } from '../types/data';
+import { TOrdersActions } from '../actions/orders';
 
 type TOrdersState = {
   orders: Array<TOrder>;
   isOpen: boolean;
-  error: any;
+  error: unknown;
 }
 
-const initialState = {
+const initialState: TOrdersState = {
   orders: [],
   // total: 0,
   // totalToday: 0,
