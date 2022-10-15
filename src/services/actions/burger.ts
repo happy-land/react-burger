@@ -2,7 +2,7 @@ import { v4 as uuid } from 'uuid';
 import { saveOrderRequest } from '../../utils/api';
 import { baseUrl } from '../../utils/constants';
 import { checkResponse, checkSuccess } from '../../utils/utils';
-import { openOrderModal } from './order';
+import { openOrderModalAction } from './order';
 
 import {
   CONSTRUCTOR_ADD_INGREDIENT,
@@ -121,7 +121,7 @@ export const saveOrderThunk: AppThunk =
           type: ORDER_SAVE_SUCCESS,
           payload: data,
         });
-        dispatch(openOrderModal(data.order.number));
+        dispatch(openOrderModalAction(data.order.number));
         dispatch({
           type: CONSTRUCTOR_RESET,
         });

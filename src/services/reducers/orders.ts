@@ -1,9 +1,17 @@
+import { TOrdersActions } from '../actions/orders';
 import {
   ORDERS_CONNECTION_SUCCESS,
   ORDERS_CONNECTION_ERROR,
   ORDERS_CONNECTION_CLOSED,
   ORDERS_GET_MESSAGE
-} from '../actions/orders';
+} from '../constants';
+import { TOrder } from '../types/data';
+
+type TOrdersState = {
+  orders: Array<TOrder>;
+  isOpen: boolean;
+  error: any;
+}
 
 const initialState = {
   orders: [],
@@ -13,7 +21,7 @@ const initialState = {
   error: null,
 };
 
-export const ordersReducer = (state = initialState, action) => {
+export const ordersReducer = (state = initialState, action: TOrdersActions) => {
   switch (action.type) {
     case ORDERS_CONNECTION_SUCCESS: {
       return {
