@@ -12,7 +12,7 @@ import {
   addBun,
   addIngredient,
   removeIngredient,
-  saveOrder,
+  saveOrderThunk,
 } from '../../services/actions/burger';
 import { BurgerConstructorElement } from '../burger-constructor-element/burger-constructor-element';
 
@@ -37,7 +37,7 @@ export const BurgerConstructor = () => {
 
   const handleOrderClick = () => {
     if (isAuth) {
-      dispatch(saveOrder(items, bun));
+      dispatch(saveOrderThunk(items, bun));
     } else {
       history.replace({ pathname: '/login' });
     }

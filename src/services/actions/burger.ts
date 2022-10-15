@@ -105,7 +105,7 @@ export const removeBun = (bun: TIngredient): IRemoveBunAction => ({
   payload: bun,
 });
 
-export const saveOrder: AppThunk =
+export const saveOrderThunk: AppThunk =
   (data: Array<TIngredient>, bun: TIngredient) => (dispatch: AppDispatch) => {
     dispatch({
       type: ORDER_SAVE_REQUEST,
