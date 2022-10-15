@@ -39,6 +39,9 @@ export const DECREASE_COUNTER: 'DECREASE_COUNTER' = 'DECREASE_COUNTER';
 
 // actions/order.ts
 
+export const ORDER_MODAL_OPEN: 'ORDER_MODAL_OPEN' = 'ORDER_MODAL_OPEN';
+export const ORDER_MODAL_CLOSE: 'ORDER_MODAL_CLOSE' = 'ORDER_MODAL_CLOSE';
+
 // actions/orders.ts
 
 // actions/password-reset.ts
