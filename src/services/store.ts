@@ -16,7 +16,7 @@ import {
   ORDERS_CONNECTION_INIT,
   ORDERS_CONNECTION_SUCCESS,
   ORDERS_GET_MESSAGE,
-} from './actions/orders';
+} from './constants';
 import { socketMiddleware } from './middleware/socket-middleware';
 import { composeWithDevTools } from 'redux-devtools-extension';
 

@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { FC, useEffect } from 'react';
+import { useDispatch } from '../../hooks/hooks';
 import { Switch, Route, useLocation, useHistory, useRouteMatch } from 'react-router-dom';
 import {
   HomePage,
@@ -23,7 +23,7 @@ import { getIngredientsThunk } from '../../services/actions/ingredients';
 import styles from './app.module.css';
 import { getFormattedOrderNumber } from '../../utils/order-number-format';
 
-function App() {
+const App: FC = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const location = useLocation<{ background: Location }>();
@@ -44,7 +44,8 @@ function App() {
     history.goBack();
   };
 
-  const background = location.state && location.state.background;
+  let background = location.state && location.state.background;
+  // let background = location.state?.background;
 
   const orderNumber = useRouteMatch<{ id: string }>(['/feed/:id', '/profile/orders/:id'])?.params?.id;
 
