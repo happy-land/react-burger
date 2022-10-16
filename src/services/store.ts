@@ -8,7 +8,7 @@ import {
   FEED_CONNECTION_INIT,
   FEED_CONNECTION_SUCCESS,
   FEED_GET_MESSAGE,
-} from './actions/feed';
+} from './constants';
 import {
   ORDERS_CONNECTION_CLOSE,
   ORDERS_CONNECTION_CLOSED,

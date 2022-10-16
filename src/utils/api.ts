@@ -1,7 +1,8 @@
+import { TUser } from '../services/types/data';
 import { baseUrl } from './constants';
 import { checkResponse, setCookie, getCookie } from './utils';
 
-export const registerRequest = (form) => {
+export const registerRequest = (user: TUser) => {
   return fetch(`${baseUrl}/auth/register`, {
     method: 'POST',
     mode: 'cors',
@@ -10,7 +11,7 @@ export const registerRequest = (form) => {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(form),
+    body: JSON.stringify(user),
   });
 };
 

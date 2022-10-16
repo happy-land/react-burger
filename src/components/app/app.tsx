@@ -12,13 +12,13 @@ import {
   FeedPage,
 } from '../../pages';
 import { Modal } from '../modal/modal';
-import { getUserData } from '../../services/actions/user';
+import { getUserDataThunk } from '../../services/actions/user';
 import { getCookie } from '../../utils/utils';
 import { ProtectedRoute } from '../protected-route';
 import { IngredientDetails } from '../ingredient-details/ingredient-details';
 import { AppHeader } from '../app-header/app-header';
 import { OrderInfo } from '../order-info';
-import { getIngredients } from '../../services/actions/ingredients';
+import { getIngredientsThunk } from '../../services/actions/ingredients';
 
 import styles from './app.module.css';
 import { getFormattedOrderNumber } from '../../utils/order-number-format';
@@ -26,18 +26,18 @@ import { getFormattedOrderNumber } from '../../utils/order-number-format';
 function App() {
   const dispatch = useDispatch();
   const history = useHistory();
-  const location = useLocation();
+  const location = useLocation<{ background: Location }>();
 
   // проверим, есть ли accessToken
-  const init = async () => {
+  const init = /*async*/ () => {
     if (getCookie('accessToken')) {
-      await dispatch(getUserData());
+      /*await*/ dispatch(getUserDataThunk());
     }
   };
 
   useEffect(() => {
     init();
-    dispatch(getIngredients());
+    dispatch(getIngredientsThunk());
   }, [dispatch]);
 
   const closeAllModals = () => {
@@ -46,7 +46,7 @@ function App() {
 
   const background = location.state && location.state.background;
 
-  const orderNumber = useRouteMatch(['/feed/:id', '/profile/orders/:id'])?.params?.id;
+  const orderNumber = useRouteMatch<{ id: string }>(['/feed/:id', '/profile/orders/:id'])?.params?.id;
 
   return (
     <>
