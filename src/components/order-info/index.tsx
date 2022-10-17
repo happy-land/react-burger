@@ -4,20 +4,23 @@
 // orders/:id
 
 import { useEffect, useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from '../../hooks/hooks';
 import { useParams, useHistory, useRouteMatch } from 'react-router-dom';
 
-import { FEED_CONNECTION_CLOSE, FEED_CONNECTION_INIT } from '../../services/actions/feed';
 import {
+  FEED_CONNECTION_CLOSE,
+  FEED_CONNECTION_INIT,
   ORDERS_CONNECTION_CLOSE,
   ORDERS_CONNECTION_INIT,
-} from '../../services/actions/orders';
+} from '../../services/constants';
+
 import { baseWsFeedUrl, baseWsOrdersUrl } from '../../utils/constants';
 import { getCookie } from '../../utils/utils';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import styles from './order-info.module.css';
 import { formatDate } from '../../utils/date-format';
+import { TIngredient, TOrder } from '../../services/types/data';
 
 export const OrderInfo = () => {
   const dispatch = useDispatch();
@@ -36,18 +39,20 @@ export const OrderInfo = () => {
 
   // подключимся к web socket
   useEffect(() => {
-    if (orders.length === 0 && path === '/feed/:id') {
-      dispatch({
-        type: FEED_CONNECTION_INIT,
-        payload: baseWsFeedUrl,
-      });
-    }
-    if (orders.length === 0 && path === '/profile/orders/:id') {
-      const accessToken = getCookie('accessToken');
-      dispatch({
-        type: ORDERS_CONNECTION_INIT,
-        payload: `${baseWsOrdersUrl}?token=${accessToken}`,
-      });
+    if (orders !== undefined) {
+      if (orders.length === 0 && path === '/feed/:id') {
+        dispatch({
+          type: FEED_CONNECTION_INIT,
+          payload: baseWsFeedUrl,
+        });
+      }
+      if (orders.length === 0 && path === '/profile/orders/:id') {
+        const accessToken = getCookie('accessToken');
+        dispatch({
+          type: ORDERS_CONNECTION_INIT,
+          payload: `${baseWsOrdersUrl}?token=${accessToken}`,
+        });
+      }
     }
 
     return () => {
@@ -56,8 +61,8 @@ export const OrderInfo = () => {
   }, [dispatch]);
 
   const { items } = useSelector((store) => store.ingredients);
-  const [orderToShow, setOrderToShow] = useState(null);
-  const params = useParams();
+  const [orderToShow, setOrderToShow] = useState<TOrder>();
+  const params = useParams<{ id: string }>();
 
   useEffect(() => {
     if (orders) {
@@ -69,15 +74,15 @@ export const OrderInfo = () => {
   const orderObject = useMemo(() => {
     if (!items || !orderToShow) return null;
 
-    const ingredientsUniqueObj = orderToShow.ingredients.reduce((acc, el) => {
-      acc[el] = (acc[el] || 0) + 1;
+    const ingredientsUniqueObj: Array<number> = orderToShow.ingredients.reduce((acc: Array<number>, el: string) => {
+      acc[el as unknown as number] = (acc[el as unknown as number] || 0) + 1;
       return acc;
     }, []);
 
-    const ingredientsUniqueIds = Object.keys(ingredientsUniqueObj);
-    const ingredientsUniqueQty = Object.values(ingredientsUniqueObj);
+    const ingredientsUniqueIds: Array<string> = Object.keys(ingredientsUniqueObj);
+    const ingredientsUniqueQty: Array<number> = Object.values(ingredientsUniqueObj);
 
-    const ingredientsInfo = ingredientsUniqueIds.reduce((acc, item, index) => {
+    const ingredientsInfo = ingredientsUniqueIds.reduce((acc: Array<TIngredient>, item: string, index: number) => {
       const ingredient = items.find((ingredient) => ingredient._id === item);
       if (ingredient) {
         acc.push(ingredient);
@@ -86,7 +91,9 @@ export const OrderInfo = () => {
     }, []);
 
     const totalPrice = ingredientsInfo.reduce((acc, item, index) => {
-      return item.type === 'bun' ? acc + item.price * 2 : acc + item.price * ingredientsUniqueQty[index];
+      return item.type === 'bun'
+        ? acc + item.price * 2
+        : acc + item.price * ingredientsUniqueQty[index];
     }, 0);
 
     return {
@@ -105,7 +112,7 @@ export const OrderInfo = () => {
     <>
       {orderObject && (
         <div className={styles.container}>
-          <h1 className={styles.title}>{orderToShow.name}</h1>
+          <h1 className={styles.title}>{(orderToShow as TOrder).name}</h1>
           <p className={styles.status}>
             {orderObject.status === 'done'
               ? 'Выполнен'
@@ -129,7 +136,8 @@ export const OrderInfo = () => {
                 </div>
                 <div className={styles.priceWrapper}>
                   <p className={`${styles.price} text text_type_digits-default`}>
-                    {item.type === 'bun' ? '2' : orderObject.ingredientsUniqueQty[index]} x {item.price}
+                    {item.type === 'bun' ? '2' : orderObject.ingredientsUniqueQty[index]}{' '}
+                    x {item.price}
                   </p>
                   <CurrencyIcon type='primary' />
                 </div>
@@ -137,7 +145,7 @@ export const OrderInfo = () => {
             ))}
           </ul>
           <div className={styles.footer}>
-            <p className={styles.timestamp}>{formatDate(orderToShow.createdAt)}</p>
+            <p className={styles.timestamp}>{formatDate((orderToShow as TOrder).createdAt)}</p>
             <div className={styles.totalPriceWrapper}>
               <p className={`${styles.totalPrice} text text_type_digits-default`}>
                 {orderObject.totalPrice}
