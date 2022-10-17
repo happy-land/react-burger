@@ -44,8 +44,8 @@ const App: FC = () => {
     history.goBack();
   };
 
-  let background = location.state && location.state.background;
-  // let background = location.state?.background;
+  // let background = location.state && location.state.background;
+  let background = location.state?.background;
 
   const orderNumber = useRouteMatch<{ id: string }>(['/feed/:id', '/profile/orders/:id'])?.params?.id;
 

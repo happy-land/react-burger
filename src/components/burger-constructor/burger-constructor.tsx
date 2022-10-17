@@ -1,3 +1,4 @@
+import { FC } from 'react';
 import styles from './burger-constructor.module.css';
 import {
   Button,
@@ -6,17 +7,19 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import { useDrop } from 'react-dnd';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from '../../hooks/hooks';
 import { useHistory } from 'react-router-dom';
 import {
-  addBun,
-  addIngredient,
-  removeIngredient,
+  addBunAction,
+  addIngredientAction,
+  removeIngredientAction,
   saveOrderThunk,
 } from '../../services/actions/burger';
 import { BurgerConstructorElement } from '../burger-constructor-element/burger-constructor-element';
+import { TIngredient } from '../../services/types/data';
 
-export const BurgerConstructor = () => {
+
+export const BurgerConstructor:FC = () => {
   const history = useHistory();
   // Получение списка ингредиентов для конструктора бургера.
   // Используется в компоненте BurgerConstructor.
@@ -27,8 +30,8 @@ export const BurgerConstructor = () => {
   // drop
   const [{ canDrop, isHover }, dropTarget] = useDrop(() => ({
     accept: 'NEW_INGREDIENT',
-    drop: (item) =>
-      item.type === 'bun' ? dispatch(addBun(item)) : dispatch(addIngredient(item)),
+    drop: (item: TIngredient) =>
+      item.type === 'bun' ? dispatch(addBunAction(item)) : dispatch(addIngredientAction(item)),
     collect: (monitor) => ({
       canDrop: monitor.canDrop(),
       isHover: monitor.isOver(),
@@ -43,19 +46,18 @@ export const BurgerConstructor = () => {
     }
   };
 
-  const handleClose = (item) => {
-    dispatch(removeIngredient(item));
+  const handleClose = (item: TIngredient) => {
+    dispatch(removeIngredientAction(item));
   };
 
   const renderButtonState = () => {
     if (bun === null || items.length === 0 || isLoading) return true;
   };
 
-  const renderBun = (bun, type) => {
+  const renderBun = (bun: TIngredient, type: string) => {
     return (
       <div>
         <ConstructorElement
-          className={styles.bunElement}
           type={type === 'верх' ? 'top' : 'bottom'}
           isLocked={true}
           text={`${bun.name} (${type})`}
@@ -96,7 +98,7 @@ export const BurgerConstructor = () => {
           <p className='text text_type_digits-medium mr-2'>{totalPrice}</p>
           <CurrencyIcon type='primary' />
         </div>
-        <Button onClick={() => handleOrderClick()} disabled={renderButtonState()}>
+        <Button onClick={() => handleOrderClick()} disabled={renderButtonState()} htmlType={'button'}>
           {!isLoading && `Оформить заказ`}
           {isLoading && `Подождите...`}
         </Button>
