@@ -1,16 +1,16 @@
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { FeedOrderList } from '../../components/feed-order-list';
-import { ORDERS_CONNECTION_CLOSE, ORDERS_CONNECTION_INIT } from '../../services/actions/orders';
+import { FC, useEffect } from 'react';
+import { useDispatch, useSelector } from '../../hooks/hooks';
+import { FeedOrderList } from '../feed-order-list';
+import { ORDERS_CONNECTION_CLOSE, ORDERS_CONNECTION_INIT } from '../../services/constants';
 import { baseWsOrdersUrl } from '../../utils/constants';
 import { getCookie } from '../../utils/utils';
 
 import styles from './orders.module.css';
 
-export const Orders = () => {
+export const Orders: FC = () => {
   const dispatch = useDispatch();
 
-  const accessToken = getCookie('accessToken');
+  const accessToken: string | undefined = getCookie('accessToken');
 
   // подключимся к web socket
   useEffect(() => {
