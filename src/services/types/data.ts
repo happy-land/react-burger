@@ -21,6 +21,7 @@ export type TIngredient = {
   readonly image: string
   readonly image_large: string;
   readonly image_mobile: string;
+  counter?: number;
 };
 
 export type TUser = {
@@ -32,4 +33,12 @@ export type TUser = {
 export type TLoginForm = {
   email: string;
   password: string;
+}
+
+export interface ICard {
+  // data: { _id: number; image: string; price: number; name: string };
+  data: TIngredient;
+  counter: number;
+  // onClick: (data: { _id: number; image: string; price: number; name: string }) => void;
+  onClick: (data: TIngredient) => void;
 }

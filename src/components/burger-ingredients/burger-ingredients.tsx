@@ -1,16 +1,17 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from '../../hooks/hooks';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-ingredients.module.css';
 import { Card } from '../card/card';
-import { openIngredientModal } from '../../services/actions/ingredientDetails';
+import { openIngredientModalAction } from '../../services/actions/ingredientDetails';
+import { ICard, TIngredient } from '../../services/types/data';
 
 const SECTION_BUN = 'Булки';
 const SECTION_SAUCE = 'Соусы';
 const SECTION_MAIN = 'Начинки';
 
-export const BurgerIngredients = () => {
+export const BurgerIngredients: FC = () => {
   const dispatch = useDispatch();
   const { items } = useSelector((store) => store.ingredients);
 
@@ -20,38 +21,38 @@ export const BurgerIngredients = () => {
   const burgerItems = useSelector((store) => store.burger.items);
   const bun = useSelector((store) => store.burger.bun);
 
-  const [current, setCurrent] = React.useState('bun');
+  const [current, setCurrent] = React.useState<string>('bun');
 
-  const [counters, setCounters] = useState([]);
+  const [counters, setCounters] = useState<Array<number>>([]);
 
-  const getCategory = (itemType) => {
+  const getCategory = (itemType: string) => {
     return items.filter((item) => {
       return item.type === itemType;
     });
   };
 
-  const buns = getCategory('bun');
-  const sauces = getCategory('sauce');
-  const mains = getCategory('main');
+  const buns: Array<TIngredient> = getCategory('bun');
+  const sauces: Array<TIngredient> = getCategory('sauce');
+  const mains: Array<TIngredient> = getCategory('main');
 
-  const bunRef = useRef();
+  const bunRef = useRef(); // какой тип у bunRef?
   const sauceRef = useRef();
   const mainRef = useRef();
 
-  const onCardClick = (item) => {
-    dispatch(openIngredientModal(item));
+  const onCardClick = (item: TIngredient): void => {
+    dispatch(openIngredientModalAction(item));
   };
 
-  const renderSection = (section, name, ref) => {
+  const renderSection = (section: Array<TIngredient>, name: string, ref: any) => {
     return (
       <section ref={ref}>
         <h2 className={styles.sectionTitle}>{name}</h2>
         <div className={`${styles.cardArea} mt-6 mb-10 pl-4`}>
-          {section.map((item, index) => (
+          {section.map((item: TIngredient, index: number) => (
             <Card
               key={item._id}
               data={item}
-              counter={item.counter}
+              counter={(item.counter as number)}
               onClick={() => onCardClick(item)}
             />
           ))}
@@ -61,7 +62,7 @@ export const BurgerIngredients = () => {
   };
 
   const toggleTab = () => {
-    const tabElementPosition = (type, ref) => {
+    const tabElementPosition = (type: string, ref: any) => {
       return {
         type,
         y: Math.abs(ref.current.getBoundingClientRect().y - 400),
@@ -82,7 +83,7 @@ export const BurgerIngredients = () => {
   };
 
   useEffect(() => {
-    const counterArr = [];
+    const counterArr: Array<number> = [];
     items.map((item, index) => {
       if (item.type === 'bun') {
         if (bun) {
