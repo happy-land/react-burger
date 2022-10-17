@@ -23,10 +23,11 @@ import { getIngredientsThunk } from '../../services/actions/ingredients';
 import styles from './app.module.css';
 import { getFormattedOrderNumber } from '../../utils/order-number-format';
 
+
 const App: FC = () => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const location = useLocation<{ background: Location }>();
+
 
   // проверим, есть ли accessToken
   const init = /*async*/ () => {
@@ -44,8 +45,9 @@ const App: FC = () => {
     history.goBack();
   };
 
-  // let background = location.state && location.state.background;
-  let background = location.state?.background;
+  
+  const location = useLocation<{ background: Location }>();
+  const background = location.state && location.state.background;
 
   const orderNumber = useRouteMatch<{ id: string }>(['/feed/:id', '/profile/orders/:id'])?.params?.id;
 
