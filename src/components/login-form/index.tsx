@@ -1,28 +1,30 @@
-import { useCallback } from 'react';
+import { FC, FormEvent, useCallback } from 'react';
 import { Link, Redirect, useLocation } from 'react-router-dom';
 import {
   Button,
   Input,
   PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from '../../hooks/hooks';
 import { authUserThunk } from '../../services/actions/user';
 import { useForm } from '../../hooks/useForm';
 
 import styles from './login-form.module.css';
 
-export const LoginForm = () => {
+type TLoginCallback = (e: FormEvent<HTMLFormElement>) => void;
+
+export const LoginForm: FC = () => {
   const dispatch = useDispatch();
   const { isAuth } = useSelector((store) => store.user);
 
-  const location = useLocation();
+  const location = useLocation<{ from: Location }>();
 
   const { values, handleChange } = useForm({
     email: '',
     password: '',
   });
 
-  const login = useCallback(
+  const login = useCallback<TLoginCallback>(
     (e) => {
       e.preventDefault();
       dispatch(authUserThunk(values));
@@ -64,7 +66,7 @@ export const LoginForm = () => {
         </div>
 
         <div className={styles.button}>
-          <Button className={styles.button}>Войти</Button>
+          <Button className={styles.button} htmlType={'button'}>Войти</Button>
         </div>
       </form>
       <div className={styles.additionalActions}>
