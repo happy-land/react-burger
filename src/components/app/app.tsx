@@ -19,20 +19,18 @@ import { IngredientDetails } from '../ingredient-details/ingredient-details';
 import { AppHeader } from '../app-header/app-header';
 import { OrderInfo } from '../order-info';
 import { getIngredientsThunk } from '../../services/actions/ingredients';
-
+import { Location } from 'history';
 import styles from './app.module.css';
 import { getFormattedOrderNumber } from '../../utils/order-number-format';
-
 
 const App: FC = () => {
   const dispatch = useDispatch();
   const history = useHistory();
 
-
   // проверим, есть ли accessToken
-  const init = /*async*/ () => {
+  const init = () => {
     if (getCookie('accessToken')) {
-      /*await*/ dispatch(getUserDataThunk());
+      dispatch(getUserDataThunk());
     }
   };
 
@@ -45,11 +43,12 @@ const App: FC = () => {
     history.goBack();
   };
 
-  
   const location = useLocation<{ background: Location }>();
+
   const background = location.state && location.state.background;
 
-  const orderNumber = useRouteMatch<{ id: string }>(['/feed/:id', '/profile/orders/:id'])?.params?.id;
+  const orderNumber = useRouteMatch<{ id: string }>(['/feed/:id', '/profile/orders/:id'])
+    ?.params?.id;
 
   return (
     <>
@@ -122,6 +121,6 @@ const App: FC = () => {
       )}
     </>
   );
-}
+};
 
 export default App;

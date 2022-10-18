@@ -1,7 +1,8 @@
-import { Redirect, Route } from 'react-router-dom';
+import { FC } from 'react';
+import { Redirect, Route, RouteProps } from 'react-router-dom';
 import { getCookie } from '../../utils/utils';
 
-export const ProtectedRoute = ({ children, ...rest }) => {
+export const ProtectedRoute: FC<RouteProps> = ({ children, ...rest }) => {
 
   const isAuthorized = getCookie('accessToken');
 
