@@ -1,4 +1,4 @@
-const formatDay = (day, orderDate) => {
+const formatDay = (day: number, orderDate: Date) => {
   if (day === 0) {
     return 'Сегодня';
   }
@@ -11,7 +11,7 @@ const formatDay = (day, orderDate) => {
   return orderDate.toLocaleDateString('ru-RU');
 };
 
-export const formatDate = (date) => {
+export const formatDate = (date: string) => {
   const orderDate = new Date(date);
   const diff = new Date().getDate() - orderDate.getDate();
   const diffInDays = formatDay(diff, orderDate);

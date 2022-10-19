@@ -6,6 +6,8 @@ export type TOrder = {
   readonly number: number;
   readonly createdAt: string;
   readonly updatedAt: string;
+  ingredientsVisible?: Array<TIngredient>;
+  totalPrice?: number;
 };
 
 export type TIngredient = {

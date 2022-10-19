@@ -1,27 +1,32 @@
-import { useMemo } from 'react';
-import { useSelector } from 'react-redux';
+import { FC, useMemo } from 'react';
+import { useSelector } from '../../hooks/hooks';
 import { Link, useLocation, useHistory } from 'react-router-dom';
 import { getFormattedOrderNumber } from '../../utils/order-number-format';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import styles from './order-card.module.css';
 import { formatDate } from '../../utils/date-format';
+import { TIngredient, TOrder } from '../../services/types/data';
 
-export const OrderCard = ({ order }) => {
+interface IOrderCardProps {
+  order: TOrder;
+}
+
+export const OrderCard: FC<IOrderCardProps> = ({ order }) => {
   const history = useHistory();
   const { items } = useSelector((store) => store.ingredients);
-  const location = useLocation();
-  const maxIngredients = 6;
+  const location = useLocation<{ pathname: string }>();
+  const maxIngredients: number = 6;
 
   const orderObject = useMemo(() => {
     if (!items.length) return null;
-    const ingredientsInfo = order.ingredients.reduce((acc, item) => {
+    const ingredientsInfo = order.ingredients.reduce((acc: Array<number>, item: string) => {
       const ingredient = items.find((ingredient) => ingredient._id === item);
-      if (ingredient) acc.push(ingredient);
+      if (ingredient) acc.push(ingredient as unknown as number);
       return acc;
     }, []);
 
-    const totalPrice = ingredientsInfo.reduce((acc, item) => {
+    const totalPrice: number = ingredientsInfo.reduce((acc: number, item: any) => {
       return item.type === 'bun' ? acc + item.price * 2 : acc + item.price;
     }, 0);
 
@@ -43,13 +48,13 @@ export const OrderCard = ({ order }) => {
     };
   }, [order, items]);
 
-  const renderStatus = (status) => {
+  const renderStatus = (status: string): string | null | undefined => {
     if (history.location.pathname !== '/profile/orders') return null;
     if (status === 'created') return 'Создан';
     if (status === 'pending') return 'Готовится';
     if (status === 'done') return 'Выполнен';
+    return;
   };
-
 
   return (
     <Link
@@ -77,7 +82,7 @@ export const OrderCard = ({ order }) => {
         ) : null}
         <div className={styles.components}>
           <ul className={styles.imagesWrapper}>
-            {orderObject.ingredientsVisible.map((item, index) => {
+            {orderObject && orderObject.ingredientsVisible.map((item: any, index: number) => {
               let zInd = maxIngredients - index;
 
               return (
@@ -109,7 +114,7 @@ export const OrderCard = ({ order }) => {
             })}
           </ul>
           <div className={styles.priceWrapper}>
-            <p className='text text_type_digits-default'>{orderObject.totalPrice}</p>
+            <p className='text text_type_digits-default'>{orderObject && orderObject.totalPrice}</p>
             <CurrencyIcon type='primary' />
           </div>
         </div>
