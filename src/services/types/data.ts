@@ -25,15 +25,26 @@ export type TIngredient = {
 };
 
 export type TUser = {
-  email: string;
+  email: string | undefined;
   password: string;
   name: string;
+  token?: string;
 }
 
 export type TLoginForm = {
   email: string;
   password: string;
+  name?: string;
+  token?: string;
 }
+
+export type TResetPasswordForm = {
+  email?: string;
+  password: string;
+  name?: string;
+  token?: string;
+}
+
 
 export interface ICard {
   // data: { _id: number; image: string; price: number; name: string };

@@ -27,37 +27,36 @@ export type TPasswordRestoreActions =
   | IPasswordRestoreFailAction;
 
 
-export const restorePasswordThunk: AppThunk = () => (dispatch: AppDispatch) => {
+export const restorePasswordThunk: AppThunk = () => async (dispatch: AppDispatch) => {
   dispatch({
     type: PASSWORD_RESTORE_REQUEST,
   });
 
-  return fetch(`${baseUrl}/password-reset`, {
-    method: 'POST',
-    mode: 'cors',
-    cache: 'no-cache',
-    credentials: 'same-origin',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      email: '',
-    }),
-  })
-    .then(checkResponse)
-    .then(checkSuccess)
-    .then((response) => {
-      dispatch({
-        type: PASSWORD_RESTORE_SUCCESS,
-        payload: response,
-      });
-    })
-    .catch((err) => {
-      dispatch({
-        type: PASSWORD_RESTORE_FAIL,
-        payload: err,
-        isLoading: false,
-        hasError: true,
-      });
+  try {
+    const res = await fetch(`${baseUrl}/password-reset`, {
+      method: 'POST',
+      mode: 'cors',
+      cache: 'no-cache',
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: '',
+      }),
     });
+    const data = await checkResponse(res);
+    const response = await checkSuccess(data);
+    dispatch({
+      type: PASSWORD_RESTORE_SUCCESS,
+      payload: response,
+    });
+  } catch (err) {
+    dispatch({
+      type: PASSWORD_RESTORE_FAIL,
+      payload: err,
+      isLoading: false,
+      hasError: true,
+    });
+  }
 };

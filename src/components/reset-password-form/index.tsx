@@ -1,19 +1,21 @@
-import { useState } from 'react';
+import { FC, FormEvent, useCallback, useState } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
-import { resetPassword } from '../../services/actions/password-reset';
+import { resetPasswordThunk } from '../../services/actions/password-reset';
 
 import styles from './reset-password-form.module.css';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from '../../hooks/hooks';
 import { useForm } from '../../hooks/useForm';
 
-export const ResetPasswordForm = () => {
+type TResetPasswordCallback = (e: FormEvent<HTMLFormElement>) => void;
+
+export const ResetPasswordForm: FC = () => {
   const dispatch = useDispatch();
   const { isAuth } = useSelector((store) => store.user);
   const { isPswdRestoreRequestSent } = useSelector((store) => store.passwordRestore);
 
-  const [icon, setIcon] = useState('ShowIcon');
-  const [inputType, setInputType] = useState('password');
+  const [icon, setIcon] = useState<'ShowIcon' | 'HideIcon'>('ShowIcon');
+  const [inputType, setInputType] = useState<string>('password');
 
   const { values, handleChange } = useForm({
     password: '',
@@ -29,10 +31,13 @@ export const ResetPasswordForm = () => {
     inputType === 'password' ? setInputType('text') : setInputType('password');
   };
 
-  const onSubmit = (e) => {
-    e.preventDefault();
-    dispatch(resetPassword(values));
-  };
+  const onSubmit = useCallback<TResetPasswordCallback>(
+    (e) => {
+      e.preventDefault();
+      dispatch(resetPasswordThunk(values));
+    },
+    [values, dispatch]
+  );
 
   if (isAuth) {
     return <Redirect to={{ pathname: '/' }} />;
@@ -63,14 +68,14 @@ export const ResetPasswordForm = () => {
             type={'text'}
             placeholder={'Введите код из письма'}
             onChange={handleChange}
-            value={values.token}
+            value={values.token!}
             name={'token'}
             size={'default'}
           />
         </div>
 
         <div className={styles.button}>
-          <Button className={styles.button}>Сохранить</Button>
+          <Button className={styles.button} htmlType={'button'}>Сохранить</Button>
         </div>
       </form>
       <div className={styles.additionalActions}>

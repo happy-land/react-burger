@@ -10,6 +10,7 @@ import { authUserThunk } from '../../services/actions/user';
 import { useForm } from '../../hooks/useForm';
 
 import styles from './login-form.module.css';
+import { TLoginForm, TUser } from '../../services/types/data';
 
 type TLoginCallback = (e: FormEvent<HTMLFormElement>) => void;
 
@@ -50,7 +51,7 @@ export const LoginForm: FC = () => {
             type={'email'}
             placeholder={'E-mail'}
             onChange={handleChange}
-            value={values.email}
+            value={values.email!}
             name={'email'}
             size={'default'}
           />

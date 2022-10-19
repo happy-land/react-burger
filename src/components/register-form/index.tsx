@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { FC, FormEvent, useCallback, useState } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import {
   Button,
@@ -7,11 +7,13 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import styles from './register-form.module.css';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from '../../hooks/hooks';
 import { registerUserThunk } from '../../services/actions/user';
 import { useForm } from '../../hooks/useForm';
 
-export const RegisterForm = () => {
+type TRegisterCalback = (e: FormEvent<HTMLFormElement>) => void;
+
+export const RegisterForm: FC = () => {
   const dispatch = useDispatch();
   const { isAuth } = useSelector((store) => store.user);
 
@@ -42,7 +44,7 @@ export const RegisterForm = () => {
             type={'text'}
             placeholder={'Имя'}
             onChange={handleChange}
-            value={values.name}
+            value={values.name!}
             name={'name'}
             size={'default'}
           />
@@ -52,7 +54,7 @@ export const RegisterForm = () => {
             type={'email'}
             placeholder={'E-mail'}
             onChange={handleChange}
-            value={values.email}
+            value={values.email!}
             name={'email'}
             size={'default'}
           />
@@ -68,7 +70,7 @@ export const RegisterForm = () => {
         </div>
 
         <div className={styles.button}>
-          <Button className={styles.button}>Зарегистрироваться</Button>
+          <Button className={styles.button} htmlType={'button'}>Зарегистрироваться</Button>
         </div>
       </form>
       <div className={styles.additionalActions}>

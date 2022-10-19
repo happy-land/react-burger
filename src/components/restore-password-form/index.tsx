@@ -1,28 +1,28 @@
-import { useCallback, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { FC, useCallback, useState } from 'react';
+import { useDispatch, useSelector } from '../../hooks/hooks';
 import { Link, Redirect, useHistory } from 'react-router-dom';
 import { Button, EmailInput } from '@ya.praktikum/react-developer-burger-ui-components';
 
-import { restorePassword } from '../../services/actions/password-restore';
+import { restorePasswordThunk } from '../../services/actions/password-restore';
 import styles from './restore-password-form.module.css';
 
-export const RestorePasswordForm = () => {
+export const RestorePasswordForm: FC = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const { isAuth } = useSelector((store) => store.user);
   const [email, setEmail] = useState('');
 
-  const onEmailChange = (e) => {
+  const onEmailChange = (e: any) => {
     setEmail(e.target.value);
   };
 
   const onSubmit = useCallback(
     (evt) => {
       evt.preventDefault();
-      dispatch(restorePassword())
-        .then(() => {
-          history.replace({ pathname: '/reset-password' })
-        })
+      dispatch(restorePasswordThunk())
+        // .then(() => {
+        //   history.replace({ pathname: '/reset-password' })
+        // })
     },
     [isAuth, history]
   );
@@ -45,7 +45,7 @@ export const RestorePasswordForm = () => {
         </div>
 
         <div className={styles.button}>
-          <Button className={styles.button}>Восстановить</Button>
+          <Button className={styles.button} htmlType={'button'}>Восстановить</Button>
         </div>
       </form>
       <div className={styles.additionalActions}>

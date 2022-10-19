@@ -8,6 +8,7 @@ import {
   PASSWORD_RESET_FAIL,
 } from '../constants';
 import { AppDispatch, AppThunk } from '../types';
+import { TResetPasswordForm } from '../types/data';
 
 export interface IPasswordResetRequestAction {
   type: typeof PASSWORD_RESET_REQUEST;
@@ -27,7 +28,7 @@ export type TPasswordResetActions =
   | IPasswordResetFailAction;
 
 
-export const resetPasswordThunk: AppThunk = (form) => (dispatch: AppDispatch) => {
+export const resetPasswordThunk: AppThunk = (form: TResetPasswordForm) => (dispatch: AppDispatch) => {
   dispatch({
     type: PASSWORD_RESET_REQUEST,
   });
