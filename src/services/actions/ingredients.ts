@@ -25,10 +25,19 @@ export interface IGetIngredientsFailAction {
   type: typeof GET_INGREDIENTS_FAIL;
 }
 
+export interface IIncreaseCounterAction {
+  type: typeof INCREASE_COUNTER;
+  payload: {
+    id: string;
+    count: number;
+  }
+}
+
 export type TIngredientsActions = 
   | IGetIngredientsAction
   | IGetIngredientsSuccessAction
-  | IGetIngredientsFailAction;
+  | IGetIngredientsFailAction
+  | IIncreaseCounterAction;
 
 export const getIngredientsThunk:AppThunk = () => (dispatch: AppDispatch) => {
   dispatch({

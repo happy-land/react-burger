@@ -21,9 +21,9 @@ export const ProfilePage: FC = () => {
   const onLogout = useCallback(
     (evt) => {
       evt.preventDefault();
-      dispatch(logoutThunk()).then(() => {
+      dispatch(logoutThunk())/*.then(() => {
         history.replace({ pathname: '/login' });
-      });
+      });*/
     },
     [isAuth, history]
   );

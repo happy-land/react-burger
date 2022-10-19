@@ -1,8 +1,8 @@
-import { TUser } from '../services/types/data';
+import { TLoginForm, TOrder, TUser } from '../services/types/data';
 import { baseUrl } from './constants';
 import { checkResponse, setCookie, getCookie } from './utils';
 
-export const registerRequest = (user: TUser) => {
+export const registerRequest = (user: TUser): Promise<any> => {
   return fetch(`${baseUrl}/auth/register`, {
     method: 'POST',
     mode: 'cors',
@@ -15,7 +15,7 @@ export const registerRequest = (user: TUser) => {
   });
 };
 
-export const loginRequest = async (form) => {
+export const loginRequest = async (form: TLoginForm): Promise<any> => {
   return await fetch(`${baseUrl}/auth/login`, {
     method: 'POST',
     mode: 'cors',
@@ -28,7 +28,7 @@ export const loginRequest = async (form) => {
   });
 };
 
-export const logoutRequest = async () => {
+export const logoutRequest = async (): Promise<any> => {
   return await fetch(`${baseUrl}/auth/logout`, {
     method: 'POST',
     mode: 'cors',
@@ -45,7 +45,7 @@ export const logoutRequest = async () => {
   });
 };
 
-export const getUserRequest = async () => {
+export const getUserRequest = async (): Promise<any> => {
   return await fetchWithRefresh(`${baseUrl}/auth/user`, {
     method: 'GET',
     mode: 'cors',
@@ -60,7 +60,7 @@ export const getUserRequest = async () => {
   });
 };
 
-export const updateUserRequest = async (form) => {
+export const updateUserRequest = async (form: TUser): Promise<any> => {
   return await fetchWithRefresh(`${baseUrl}/auth/user`, {
     method: 'PATCH',
     mode: 'cors',
@@ -76,7 +76,7 @@ export const updateUserRequest = async (form) => {
   });
 };
 
-export const saveOrderRequest = async (data) => {
+export const saveOrderRequest = async (data: any): Promise<any> => {
   return await fetchWithRefresh(`${baseUrl}/orders`, {
     method: 'POST',
     headers: {
@@ -89,7 +89,7 @@ export const saveOrderRequest = async (data) => {
   });
 };
 
-export const refreshToken = () => {
+export const refreshToken = (): Promise<any> => {
   return fetch(`${baseUrl}/auth/token`, {
     method: 'POST',
     headers: {
@@ -113,11 +113,11 @@ export const refreshToken = () => {
     });
 };
 
-const fetchWithRefresh = async (url, options) => {
+const fetchWithRefresh = async (url: string, options: any): Promise<any> => {
   try {
     const res = await fetch(url, options);
     return await checkResponse(res);
-  } catch (err) {
+  } catch (err: any) {
     if (err.message === 'jwt expired') {
       const refreshData = await refreshToken();
       options.headers.authorization = refreshData.accessToken;

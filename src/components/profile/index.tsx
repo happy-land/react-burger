@@ -1,17 +1,18 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from '../../hooks/hooks';
 
 import styles from './profile.module.css';
 import { getUserDataThunk, updateUserDataThunk } from '../../services/actions/user';
+import { TUser } from '../../services/types/data';
 
 export const Profile = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const { user, isAuth } = useSelector((store) => store.user);
 
-  const [form, setValue] = useState({
+  const [form, setValue] = useState<TUser>({
     name: '',
     email: '',
     password: '',
@@ -22,14 +23,16 @@ export const Profile = () => {
   }, []);
 
   useEffect(() => {
-    setValue({
-      name: user.name,
-      email: user.email,
-      password: '',
-    });
+    if (user) {
+      setValue({
+        name: user.name,
+        email: user.email,
+        password: '',
+      });
+    }
   }, []);
 
-  const onChange = (evt) => {
+  const onChange = (evt: any) => {
     setValue({ ...form, [evt.target.name]: evt.target.value });
   };
 
@@ -44,18 +47,19 @@ export const Profile = () => {
   const discardChanges = useCallback(
     (evt) => {
       evt.preventDefault();
-      setValue({
-        name: user.name,
-        email: user.email,
-        password: '',
-      });
+      if (user) {
+        setValue({
+          name: user.name,
+          email: user.email,
+          password: '',
+        });
+      }
     },
     [form]
   );
 
   return (
     <div className={styles.container}>
-      
       <div className={styles.formBox}>
         <form className={styles.form}>
           <div className={styles.input}>
@@ -75,7 +79,7 @@ export const Profile = () => {
               placeholder={'Логин'}
               onChange={onChange}
               icon={'EditIcon'}
-              value={form.email}
+              value={form.email!}
               name={'email'}
               size={'default'}
             />
@@ -93,12 +97,12 @@ export const Profile = () => {
           </div>
           <div className={styles.buttonBox}>
             <div className={styles.button}>
-              <Button onClick={discardChanges} type='secondary'>
+              <Button onClick={discardChanges} type='secondary' htmlType={'button'}>
                 Отмена
               </Button>
             </div>
             <div className={styles.button}>
-              <Button onClick={updateProfile}>Сохранить</Button>
+              <Button onClick={updateProfile} htmlType={'button'}>Сохранить</Button>
             </div>
           </div>
         </form>

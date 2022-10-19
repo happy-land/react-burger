@@ -20,13 +20,13 @@ export const BurgerConstructorElement: FC<IBurgerConstructorElement> = ({ item, 
 
   const ref = useRef<HTMLDivElement>(null);
 
-  const [{ handlerId }, drop] = useDrop({
+  const [/*{ handlerId }*/, drop] = useDrop({
     accept: ['SORT_INGREDIENT'],
-    collect(monitor) {
-      return {
-        handlerId: monitor.getHandlerId(),
-      };
-    },
+    // collect(monitor) {
+    //   return {
+    //     handlerId: monitor.getHandlerId(),
+    //   };
+    // },
     hover(item: { index: number }, monitor) {
       const dragIndex = item.index;
       const hoverIndex = index;
@@ -74,7 +74,7 @@ export const BurgerConstructorElement: FC<IBurgerConstructorElement> = ({ item, 
     <div
       className={styles.elementContainer}
       style={{ opacity }}
-      data-handler-id={handlerId}
+      // data-handler-id={handlerId}
       ref={ref}>
         <DragIcon type={'secondary'} />
         <ConstructorElement
