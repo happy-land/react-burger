@@ -1,13 +1,13 @@
 import { FeedOrderStats } from '../components/feed-order-stats';
 import { FeedOrderList } from '../components/feed-order-list';
 import styles from './feed.module.css';
-import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
-import { FEED_CONNECTION_CLOSE, FEED_CONNECTION_INIT } from '../services/actions/feed';
+import { useDispatch, useSelector } from '../hooks/hooks';
+import { FC, useEffect } from 'react';
+import { FEED_CONNECTION_CLOSE, FEED_CONNECTION_INIT } from '../services/constants';
 
 import { baseWsFeedUrl } from '../utils/constants';
 
-export const FeedPage = () => {
+export const FeedPage: FC = () => {
   const dispatch = useDispatch();
 
   // подключимся к web socket

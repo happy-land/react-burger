@@ -1,6 +1,6 @@
-import { useCallback } from 'react';
+import { FC, useCallback } from 'react';
 import { Switch, Route, NavLink, useHistory, useRouteMatch, useParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from '../hooks/hooks';
 
 import { Profile } from '../components/profile';
 import { Orders } from '../components/orders';
@@ -10,7 +10,7 @@ import { getFormattedOrderNumber } from '../utils/order-number-format';
 import styles from './profile.module.css';
 import { OrderInfo } from '../components/order-info';
 
-export const ProfilePage = () => {
+export const ProfilePage: FC = () => {
   const isOrders = !!useRouteMatch({ path: '/profile/orders', exact: true });
   const isProfile = !!useRouteMatch({ path: '/profile', exact: true });
 
@@ -28,7 +28,7 @@ export const ProfilePage = () => {
     [isAuth, history]
   );
   
-  const orderNumber = useParams().id;
+  const orderNumber = useParams<{ id: string }>().id;
 
   return (
     <main className={styles.container}>

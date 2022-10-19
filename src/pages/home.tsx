@@ -3,31 +3,29 @@ import { BurgerConstructor } from '../components/burger-constructor/burger-const
 import { Modal } from '../components/modal/modal';
 import { OrderDetails } from '../components/order-details/order-details';
 
-import { useDispatch, useSelector } from 'react-redux';
-import { closeIngredientModal } from '../services/actions/ingredientDetails';
-import { closeOrderModal } from '../services/actions/order';
+import { useDispatch, useSelector } from '../hooks/hooks';
+import { closeIngredientModalAction } from '../services/actions/ingredientDetails';
+import { closeOrderModalAction } from '../services/actions/order';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
 import styles from './home.module.css';
+import { FC } from 'react';
 
-export const HomePage = () => {
+export const HomePage: FC = () => {
   const dispatch = useDispatch();
-  // const { isIngredientDetailsOpened, item } = useSelector(
-  //   (store) => store.ingredientDetails
-  // );
   const { isOrderDetailsOpened, orderNumber } = useSelector((store) => store.order);
 
-  const closeAllModals = () => {
-    dispatch(closeIngredientModal());
-    dispatch(closeOrderModal());
+  const closeAllModals = (): void => {
+    dispatch(closeIngredientModalAction());
+    dispatch(closeOrderModalAction());
   };
 
   return (
     <>
       {isOrderDetailsOpened && (
         <Modal title='' onClose={closeAllModals}>
-          <OrderDetails orderNumber={orderNumber} />
+          <OrderDetails orderNumber={orderNumber!} />
         </Modal>
       )}
 
