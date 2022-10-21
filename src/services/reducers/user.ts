@@ -1,3 +1,4 @@
+import { useHistory } from 'react-router-dom';
 import { deleteCookie, setCookie } from '../../utils/utils';
 import { TUserActions } from '../actions/user';
 import {
@@ -175,7 +176,7 @@ export const userReducer = (state = userInitialState, action: TUserActions) => {
 
       deleteCookie('accessToken');
       localStorage.removeItem('refreshToken');
-      
+
       return {
         ...state,
         isLoading: false,

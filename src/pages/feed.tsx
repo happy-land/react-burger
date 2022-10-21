@@ -23,7 +23,6 @@ export const FeedPage: FC = () => {
   }, [dispatch]);
 
   const orders = useSelector((store) => store.feed.orders);
-  // console.log(orders);
 
   if (!orders.length) {
     return <p>Загрузка данных...</p>;

@@ -42,6 +42,7 @@ const ordersWsActions = {
   onClose: ORDERS_CONNECTION_CLOSED,
   onError: ORDERS_CONNECTION_ERROR,
   onMessage: ORDERS_GET_MESSAGE,
+ 
 };
 
 const feedWsActions = {

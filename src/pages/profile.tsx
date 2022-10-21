@@ -1,5 +1,12 @@
 import { FC, useCallback } from 'react';
-import { Switch, Route, NavLink, useHistory, useRouteMatch, useParams } from 'react-router-dom';
+import {
+  Switch,
+  Route,
+  NavLink,
+  useHistory,
+  useRouteMatch,
+  useParams,
+} from 'react-router-dom';
 import { useDispatch, useSelector } from '../hooks/hooks';
 
 import { Profile } from '../components/profile';
@@ -21,14 +28,14 @@ export const ProfilePage: FC = () => {
   const onLogout = useCallback(
     (evt) => {
       evt.preventDefault();
-      dispatch(logoutThunk())/*.then(() => {
-        history.replace({ pathname: '/login' });
-      });*/
+      dispatch(logoutThunk());
+
+      history.replace({ pathname: '/login' });
     },
     [isAuth, history]
   );
-  
-  const orderNumber = useParams<{ id: string }>().id;
+
+  const orderNumber: string = useParams<{ id: string }>().id;
 
   return (
     <main className={styles.container}>

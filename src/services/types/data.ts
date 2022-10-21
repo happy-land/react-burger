@@ -47,11 +47,21 @@ export type TResetPasswordForm = {
   token?: string;
 }
 
+export type TWsSocketMiddlewareActions = {
+  wsInit: string;
+  wsClose: string;
+  onOpen: string;
+  onClose: string;
+  onError: string;
+  onMessage: string;
+  wsSendMessage?: string;
+  wsConnect?: string;
+  wsDisconnect?: string;
+  wsConnecting?: string;
+};
 
 export interface ICard {
-  // data: { _id: number; image: string; price: number; name: string };
   data: TIngredient;
   counter: number;
-  // onClick: (data: { _id: number; image: string; price: number; name: string }) => void;
   onClick: (data: TIngredient) => void;
 }

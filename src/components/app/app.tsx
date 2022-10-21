@@ -72,7 +72,7 @@ const App: FC = () => {
         <Route path='/feed/:id' exact>
           <div className={styles.orderInfoContainer}>
             <p className={`text text_type_digits-default`}>{`#${getFormattedOrderNumber(
-              orderNumber
+              orderNumber!
             )}`}</p>
             <OrderInfo />
           </div>
@@ -103,7 +103,7 @@ const App: FC = () => {
           </Route>
           <Route path='/feed/:id' exact>
             <Modal
-              title={`#${getFormattedOrderNumber(orderNumber)}`}
+              title={`#${getFormattedOrderNumber(orderNumber!)}`}
               onClose={closeAllModals}
             >
               <OrderInfo />
@@ -111,7 +111,7 @@ const App: FC = () => {
           </Route>
           <ProtectedRoute path='/profile/orders/:id' exact>
             <Modal
-              title={`#${getFormattedOrderNumber(orderNumber)}`}
+              title={`#${getFormattedOrderNumber(orderNumber!)}`}
               onClose={closeAllModals}
             >
               <OrderInfo />

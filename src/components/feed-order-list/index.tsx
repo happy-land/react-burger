@@ -8,7 +8,6 @@ interface IFeedOrderListProps {
 }
 
 export const FeedOrderList: FC<IFeedOrderListProps> = ({ orders }) => {
-  console.log(orders);
   if (!orders) {
     return <p>no ingredients</p>;
   }

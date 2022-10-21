@@ -67,7 +67,7 @@ export const LoginForm: FC = () => {
         </div>
 
         <div className={styles.button}>
-          <Button className={styles.button} htmlType={'button'}>Войти</Button>
+          <Button htmlType={'submit'}>Войти</Button>
         </div>
       </form>
       <div className={styles.additionalActions}>
