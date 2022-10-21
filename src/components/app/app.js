@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Switch, Route, useLocation, useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { Switch, Route, useLocation, useHistory, useRouteMatch } from 'react-router-dom';
 import {
   HomePage,
   LoginPage,
@@ -9,6 +9,7 @@ import {
   ResetPasswordPage,
   ProfilePage,
   NotFound404Page,
+  FeedPage,
 } from '../../pages';
 import { Modal } from '../modal/modal';
 import { getUserData } from '../../services/actions/user';
@@ -16,18 +17,16 @@ import { getCookie } from '../../utils/utils';
 import { ProtectedRoute } from '../protected-route';
 import { IngredientDetails } from '../ingredient-details/ingredient-details';
 import { AppHeader } from '../app-header/app-header';
+
 import { getIngredients } from '../../services/actions/ingredients';
 
 import styles from './app.module.css';
+import { getFormattedOrderNumber } from '../../utils/order-number-format';
 
 function App() {
   const dispatch = useDispatch();
   const history = useHistory();
   const location = useLocation();
-
-  const { isIngredientDetailsOpened, item } = useSelector(
-    (store) => store.ingredientDetails
-  );
 
   // проверим, есть ли accessToken
   const init = async () => {
@@ -49,6 +48,8 @@ function App() {
 
   const background = location.state && location.state.background;
 
+  const orderNumber = useRouteMatch(['/feed/:id', '/profile/orders/:id'])?.params?.id;
+
   return (
     <>
       <AppHeader />
@@ -65,9 +66,21 @@ function App() {
         <Route path='/reset-password' exact>
           <ResetPasswordPage />
         </Route>
-        <ProtectedRoute path='/profile' exact>
+        <Route path='/feed' exact>
+          <FeedPage />
+        </Route>
+        <Route path='/feed/:id' exact>
+          <div className={styles.orderInfoContainer}>
+            <p className={`text text_type_digits-default`}>{`#${getFormattedOrderNumber(
+              orderNumber
+            )}`}</p>
+            <OrderInfo />
+          </div>
+        </Route>
+        <ProtectedRoute path='/profile/'>
           <ProfilePage />
         </ProtectedRoute>
+
         <Route path='/ingredients/:id' exact>
           <div className={styles.detailsContainer}>
             <p className={`text text_type_main-large`}>Детали ингредиента</p>
@@ -82,11 +95,29 @@ function App() {
         </Route>
       </Switch>
       {background && (
-        <Route path='/ingredients/:id' exact>
-          <Modal title='Детали ингредиента' onClose={closeAllModals}>
-            <IngredientDetails />
-          </Modal>
-        </Route>
+        <>
+          <Route path='/ingredients/:id' exact>
+            <Modal title='Детали ингредиента' onClose={closeAllModals}>
+              <IngredientDetails />
+            </Modal>
+          </Route>
+          <Route path='/feed/:id' exact>
+            <Modal
+              title={`#${getFormattedOrderNumber(orderNumber)}`}
+              onClose={closeAllModals}
+            >
+              <OrderInfo />
+            </Modal>
+          </Route>
+          <ProtectedRoute path='/profile/orders/:id' exact>
+            <Modal
+              title={`#${getFormattedOrderNumber(orderNumber)}`}
+              onClose={closeAllModals}
+            >
+              <OrderInfo />
+            </Modal>
+          </ProtectedRoute>
+        </>
       )}
     </>
   );

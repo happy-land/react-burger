@@ -1,6 +1,9 @@
 import PropTypes from 'prop-types';
 
 export const baseUrl = 'https://norma.nomoreparties.space/api';
+export const baseWsFeedUrl = 'wss://norma.nomoreparties.space/orders/all';
+export const baseWsOrdersUrl = 'wss://norma.nomoreparties.space/orders';
+
 
 export const menuItemPropTypes = PropTypes.shape({
   _id: PropTypes.string.isRequired,

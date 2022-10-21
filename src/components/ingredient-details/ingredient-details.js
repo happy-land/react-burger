@@ -5,17 +5,13 @@ import { useParams } from 'react-router-dom';
 import styles from './ingredient-details.module.css';
 
 export const IngredientDetails = () => {
- 
+
   const { items } = useSelector((store) => store.ingredients);
   const [ingredientToShow, setIngredientToShow] = useState(null);
   const params = useParams();
 
   useEffect(() => {
     if (items.length > 0) {
-      const ingredient = items.find(ingr => ingr._id === params.id);
-      setIngredientToShow(ingredient);
-    }
-  }, [items, params.id]);
 
 
   if (!ingredientToShow) {

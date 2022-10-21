@@ -1,0 +1,16 @@
+.container {
+  width: 100%;
+  padding-right: 16px;
+  max-height: 852px;
+  overflow: hidden;
+  overflow-y: scroll;
+}
+
+.container::-webkit-scrollbar {
+  background-color: #2F2F37;
+  width: 8px;
+}
+
+.container::-webkit-scrollbar-thumb {
+  background-color: #8585AD;
+}

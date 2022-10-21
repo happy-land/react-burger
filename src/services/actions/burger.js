@@ -42,11 +42,14 @@ export const removeBun = (bun) => ({
   payload: bun,
 });
 
-export const saveOrder = (data) => (dispatch) => {
+export const saveOrder = (data, bun) => (dispatch) => {
   dispatch({
     type: ORDER_SAVE_REQUEST,
   });
-  saveOrderRequest(data)
+  // складываем ингредиенты: булка + соусы, начинка 
+  const ingrIdArray = data.map((ingr) => ingr._id);
+  const concatenatedIngredients = [...ingrIdArray, bun._id];
+  saveOrderRequest(concatenatedIngredients)
     // .then(checkResponse)
     .then(checkSuccess)
     .then((data) => {

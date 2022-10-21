@@ -80,10 +80,7 @@ export const BurgerIngredients = () => {
       setCurrent(topType.type);
     }
   };
-  // достаточно 1 раз сделать в App, чтобы все страницы получили ингредиенты при загрузке сайта. 
-  // useEffect(() => {
-  //   dispatch(getIngredients());
-  // }, []); 
+
 
   useEffect(() => {
     const counterArr = [];
