@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-ingredients.module.css';
 import { Card } from '../card/card';
-import { getIngredients } from '../../services/actions/ingredients';
 import { openIngredientModal } from '../../services/actions/ingredientDetails';
 
 const SECTION_BUN = 'Булки';
@@ -80,28 +80,27 @@ export const BurgerIngredients = () => {
       setCurrent(topType.type);
     }
   };
-
-  useEffect(() => {
-    dispatch(getIngredients());
-  }, []);
+  // достаточно 1 раз сделать в App, чтобы все страницы получили ингредиенты при загрузке сайта. 
+  // useEffect(() => {
+  //   dispatch(getIngredients());
+  // }, []); 
 
   useEffect(() => {
     const counterArr = [];
     items.map((item, index) => {
       if (item.type === 'bun') {
         if (bun) {
-          bun._id === item._id ? item.counter = 1 : item.counter = 0;
+          bun._id === item._id ? (item.counter = 1) : (item.counter = 0);
         } else {
           item.counter = 0;
         }
       } else {
-        const res = burgerItems.filter(resItem => resItem._id === item._id);
+        const res = burgerItems.filter((resItem) => resItem._id === item._id);
         item.counter = res.length;
       }
     });
 
     setCounters(counterArr);
-
   }, [items, burgerItems, bun]);
 
   return (

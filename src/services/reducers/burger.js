@@ -6,6 +6,7 @@ import {
   CONSTRUCTOR_RESET,
   ORDER_SAVE_SUCCESS,
   ORDER_SAVE_FAIL,
+  ORDER_SAVE_REQUEST,
 } from '../actions/burger';
 
 // список всех ингредиентов в текущем конструкторе бургера,
@@ -14,6 +15,8 @@ const burgerInitialState = {
   bun: null,
   totalPrice: 0,
   orderData: null,
+  isLoading: false,
+  hasError: false,
 };
 
 export const burgerReducer = (state = burgerInitialState, action) => {
@@ -31,33 +34,47 @@ export const burgerReducer = (state = burgerInitialState, action) => {
         totalPrice: state.totalPrice - action.payload.price,
       };
     case CONSTRUCTOR_ADD_BUN:
-      // console.log(action.payload);
       return {
         ...state,
         bun: action.payload,
-        totalPrice: state.bun 
-        ? state.totalPrice - state.bun.price * 2 + action.payload.price * 2
-        : state.totalPrice + action.payload.price * 2
+        totalPrice: state.bun
+          ? state.totalPrice - state.bun.price * 2 + action.payload.price * 2
+          : state.totalPrice + action.payload.price * 2,
       };
-   
+
     case CONSTRUCTOR_REORDER: {
       const items = [...state.items];
-      items.splice(
-        action.payload.to, 0, items.splice(action.payload.from, 1)[0]
-      )
+      items.splice(action.payload.to, 0, items.splice(action.payload.from, 1)[0]);
       return {
         ...state,
         items,
-      }
+      };
     }
     case CONSTRUCTOR_RESET:
       return burgerInitialState;
-      
-    case ORDER_SAVE_SUCCESS:
+
+    case ORDER_SAVE_REQUEST: {
       return {
         ...state,
-        orderData: action.payload
-      }
+        isLoading: true,
+      };
+    }
+    case ORDER_SAVE_SUCCESS: {
+      return {
+        ...state,
+        orderData: action.payload,
+        isLoading: false,
+        hasError: false,
+      };
+    }
+    case ORDER_SAVE_FAIL: {
+      return {
+        ...state,
+        isLoading: false,
+        hasError: true,
+      };
+    }
+
     default:
       return state;
   }

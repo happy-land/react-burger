@@ -7,16 +7,13 @@
   background-color: #1C1C21;
   display: flex;
   align-items: center;
-
   color: #F2F2F3;
-  /* border: 1px solid red; */
   display: flex;
   max-width: 1920px;
   margin: 0 auto;
 }
 
 .content {
-  /* border: 1px solid green; */
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -26,7 +23,6 @@
 }
 
 .navLinks {
-  /* border: 1px solid pink; */
   display: flex;
   margin: 0;
   padding: 0;
@@ -34,7 +30,6 @@
 }
 
 .listItem {
-  /* border: 1px solid green; */
   display: flex;
   align-items: center;
 }
@@ -43,28 +38,21 @@
   display: flex;
 }
 
-.linkText {
-}
-
 .link {
   display: flex;
-  margin: 0;
+  margin: 0 0 0 8px;
   padding: 0;
   text-decoration: none;
   cursor: pointer;
-  color: #F2F2F3;
+  color: #8585AD;
   font-size: 16px;
   line-height: 24px;
-  /* display: flex; */
-}
-.link_disabled {
-  /* color: #8585AD; */
 }
 
-.logo {
-
+.linkActive {
+  color: #F2F2F3;
 }
 
-.user-actions {
-
+.profileContainer {
+  padding-left: 205px;
 }

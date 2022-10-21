@@ -9,7 +9,7 @@ const ingredientsInitialState = {
   items: [],
   isLoading: false,
   hasError: false,
-  itemsInBurger: []  
+  itemsInBurger: [],
 };
 
 export const ingredientsReducer = (state = ingredientsInitialState, action) => {
@@ -29,14 +29,13 @@ export const ingredientsReducer = (state = ingredientsInitialState, action) => {
       };
     }
     case GET_INGREDIENTS_FAIL: {
-      console.log(GET_INGREDIENTS_FAIL);
-      console.log(action.err);
       return {
         ...state,
         isLoading: false,
         hasError: true,
       };
     }
+
     default: {
       return state;
     }

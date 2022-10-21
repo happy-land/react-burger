@@ -23,3 +23,10 @@
   top: 0;
   right: 0;
 }
+
+.link {
+  text-decoration: none;
+  text-align: center;
+  color: #F2F2F3;
+
+}
