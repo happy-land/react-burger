@@ -1,20 +1,21 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-ingredients.module.css';
 import { Card } from '../card/card';
 import { menuItemPropTypes } from '../../utils/constants';
-// import { data } from '../../utils/data';
+import { DataContext } from '../../services/appContext';
 
 const SECTION_BUN = 'Булки';
 const SECTION_SAUCE = 'Соусы';
 const SECTION_MAIN = 'Начинки';
 
 export const BurgerIngredients = ({
-  data,
   setIsIngredientDetailsOpened,
   setCurrentCardData,
 }) => {
+  const { data } = useContext(DataContext);
+
   const [current, setCurrent] = React.useState('one');
 
   const getCategory = (itemType) => {
