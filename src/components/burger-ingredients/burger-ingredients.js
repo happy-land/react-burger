@@ -81,6 +81,7 @@ export const BurgerIngredients = () => {
     }
   };
 
+
   useEffect(() => {
     const counterArr = [];
     items.map((item, index) => {

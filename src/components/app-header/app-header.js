@@ -8,11 +8,9 @@ import {
 import styles from './app-header.module.css';
 
 export const AppHeader = () => {
-
   const isRoot = !!useRouteMatch({ path: '/', exact: true });
   const isFeed = !!useRouteMatch('/feed');
   const isProfile = !!useRouteMatch('/profile');
-
 
   return (
     <header className={styles.header}>

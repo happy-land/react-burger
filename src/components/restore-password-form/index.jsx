@@ -27,6 +27,7 @@ export const RestorePasswordForm = () => {
     [isAuth, history]
   );
 
+
   if (isAuth) {
     return <Redirect to={{ pathname: '/' }} />;
   }

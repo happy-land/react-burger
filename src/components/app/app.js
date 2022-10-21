@@ -17,7 +17,7 @@ import { getCookie } from '../../utils/utils';
 import { ProtectedRoute } from '../protected-route';
 import { IngredientDetails } from '../ingredient-details/ingredient-details';
 import { AppHeader } from '../app-header/app-header';
-import { OrderInfo } from '../order-info';
+
 import { getIngredients } from '../../services/actions/ingredients';
 
 import styles from './app.module.css';
@@ -39,6 +39,8 @@ function App() {
     init();
     dispatch(getIngredients());
   }, [dispatch]);
+
+  
 
   const closeAllModals = () => {
     history.goBack();
