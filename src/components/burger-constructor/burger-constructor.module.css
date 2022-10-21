@@ -5,6 +5,15 @@
   gap: 10px;
 }
 
+.emptyBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  box-sizing: border-box;
+  overflow-y: hidden;
+}
+
 .innerIngredients {
   display: flex;
   flex-direction: column;
@@ -13,15 +22,6 @@
   overflow: hidden;
   overflow-y: scroll;
 }
-
-.elementContainer {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-/* .bunElement {
-} */
 
 .info {
   display: flex;

@@ -1,13 +1,31 @@
+import { useDrag } from 'react-dnd';
 import PropTypes from 'prop-types';
-import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import {
+  Counter,
+  CurrencyIcon,
+} from '@ya.praktikum/react-developer-burger-ui-components';
 import { menuItemPropTypes } from '../../utils/constants';
 import styles from './card.module.css';
 
-export const Card = ({ data, onClick }) => {
-
+export const Card = ({ data, counter, onClick }) => {
+  // drag and drop
+  const [{ opacity, isDragging }, drag] = useDrag(() => ({
+    type: 'NEW_INGREDIENT',
+    item: data,
+    collect: (monitor) => ({
+      opacity: monitor.isDragging ? 0.8 : 1,
+      isDragging: monitor.isDragging(),
+      handlerId: monitor.getHandlerId(),
+    }),
+  }));
 
   return (
-    <article className={styles.card} onClick={() => onClick(data)}>
+    <article
+      ref={drag}
+      style={{ opacity }}
+      className={styles.card}
+      onClick={() => onClick(data)}
+    >
       <img className={styles.image} src={data.image} />
       <div className={`${styles.priceContainer} mt-1 mb-1`}>
         <p className='text text_type_digits-default mr-2'>{data.price}</p>
@@ -15,7 +33,9 @@ export const Card = ({ data, onClick }) => {
       </div>
       <p className='text text_type_main-small'>{data.name}</p>
       <div className={styles.counter}>
-        <Counter count={1} size='default' />
+        {counter > 0 && 
+          <Counter count={counter} size='default' />
+        }
       </div>
     </article>
   );
@@ -23,5 +43,5 @@ export const Card = ({ data, onClick }) => {
 
 Card.propTypes = {
   data: menuItemPropTypes.isRequired,
-  onClick: PropTypes.func.isRequired
-}
+  onClick: PropTypes.func.isRequired,
+};

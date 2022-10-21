@@ -1,5 +1,4 @@
 import {
-  Button,
   BurgerIcon,
   ListIcon,
   ProfileIcon,
@@ -24,7 +23,6 @@ export const AppHeader = () => {
             <a className={`${headerStyles.link} ${headerStyles.link_disabled}`} href='#'>
               <div className={headerStyles.linkContent}>
                 <ListIcon type='secondary' />
-                {/* <span className={`${headerStyles.linkText} ml-2`}>Лента заказов</span> */}
                 <span className={`text text_type_main-default text_color_inactive ml-2`}>Лента заказов</span>
               </div>
             </a>
