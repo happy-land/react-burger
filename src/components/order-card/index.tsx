@@ -20,8 +20,8 @@ export const OrderCard: FC<IOrderCardProps> = ({ order }) => {
 
   const orderObject = useMemo(() => {
     if (!items.length) return null;
-    const ingredientsInfo = order.ingredients.reduce((acc: Array<number>, item: string) => {
-      const ingredient: TIngredient | undefined = items.find((ingredient) => ingredient._id === item);
+    const ingredientsInfo = order.ingredients.reduce((acc: Array<TIngredient>, item: string) => {
+      const ingredient = items.find((ingredient: TIngredient) => ingredient._id === item);
       if (ingredient) acc.push(ingredient);
       return acc;
     }, []);
