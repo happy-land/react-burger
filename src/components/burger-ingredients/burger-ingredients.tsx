@@ -5,7 +5,7 @@ import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-ingredients.module.css';
 import { Card } from '../card/card';
 import { openIngredientModalAction } from '../../services/actions/ingredientDetails';
-import { ICard, TIngredient } from '../../services/types/data';
+import { TIngredient } from '../../services/types/data';
 
 const SECTION_BUN = 'Булки';
 const SECTION_SAUCE = 'Соусы';
@@ -21,7 +21,7 @@ export const BurgerIngredients: FC = () => {
   const burgerItems = useSelector((store) => store.burger.items);
   const bun = useSelector((store) => store.burger.bun);
 
-  const [current, setCurrent] = React.useState<string>('bun');
+  const [current, setCurrent] = React.useState('bun');
 
   const [counters, setCounters] = useState<Array<number>>([]);
 
@@ -52,7 +52,7 @@ export const BurgerIngredients: FC = () => {
             <Card
               key={item._id}
               data={item}
-              counter={(item.counter as number)}
+              counter={(item.counter || 0)}
               onClick={() => onCardClick(item)}
             />
           ))}

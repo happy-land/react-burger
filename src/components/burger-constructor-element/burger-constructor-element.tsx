@@ -20,13 +20,8 @@ export const BurgerConstructorElement: FC<IBurgerConstructorElement> = ({ item, 
 
   const ref = useRef<HTMLDivElement>(null);
 
-  const [/*{ handlerId }*/, drop] = useDrop({
+  const [, drop] = useDrop({
     accept: ['SORT_INGREDIENT'],
-    // collect(monitor) {
-    //   return {
-    //     handlerId: monitor.getHandlerId(),
-    //   };
-    // },
     hover(item: { index: number }, monitor) {
       const dragIndex = item.index;
       const hoverIndex = index;
@@ -45,7 +40,6 @@ export const BurgerConstructorElement: FC<IBurgerConstructorElement> = ({ item, 
 
       dispatch({
         type: CONSTRUCTOR_REORDER,
-        // type: CONSTRUCTOR_SORT,
         payload: {
           from: dragIndex,
           to: hoverIndex
@@ -61,7 +55,6 @@ export const BurgerConstructorElement: FC<IBurgerConstructorElement> = ({ item, 
     item: () => {
       return { item, index };  // ingredient -> item
     },
-    // item: item,
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
@@ -74,7 +67,6 @@ export const BurgerConstructorElement: FC<IBurgerConstructorElement> = ({ item, 
     <div
       className={styles.elementContainer}
       style={{ opacity }}
-      // data-handler-id={handlerId}
       ref={ref}>
         <DragIcon type={'secondary'} />
         <ConstructorElement

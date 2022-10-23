@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useDispatch, useSelector } from '../../hooks/hooks';
@@ -32,7 +32,7 @@ export const Profile = () => {
     }
   }, []);
 
-  const onChange = (evt: any) => {
+  const onChange = (evt: ChangeEvent<HTMLInputElement>) => {
     setValue({ ...form, [evt.target.name]: evt.target.value });
   };
 

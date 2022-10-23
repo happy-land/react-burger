@@ -50,6 +50,8 @@ const App: FC = () => {
   const orderNumber = useRouteMatch<{ id: string }>(['/feed/:id', '/profile/orders/:id'])
     ?.params?.id;
 
+  const formattedOrderNumber = orderNumber && getFormattedOrderNumber(orderNumber);
+
   return (
     <>
       <AppHeader />
@@ -71,9 +73,7 @@ const App: FC = () => {
         </Route>
         <Route path='/feed/:id' exact>
           <div className={styles.orderInfoContainer}>
-            <p className={`text text_type_digits-default`}>{`#${getFormattedOrderNumber(
-              orderNumber!
-            )}`}</p>
+            <p className={`text text_type_digits-default`}>{`#${formattedOrderNumber}`}</p>
             <OrderInfo />
           </div>
         </Route>
@@ -103,7 +103,7 @@ const App: FC = () => {
           </Route>
           <Route path='/feed/:id' exact>
             <Modal
-              title={`#${getFormattedOrderNumber(orderNumber!)}`}
+              title={`#${formattedOrderNumber}`}
               onClose={closeAllModals}
             >
               <OrderInfo />

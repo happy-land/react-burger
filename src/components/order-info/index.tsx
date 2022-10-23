@@ -61,7 +61,7 @@ export const OrderInfo = () => {
   }, [dispatch]);
 
   const { items } = useSelector((store) => store.ingredients);
-  const [orderToShow, setOrderToShow] = useState<TOrder>();
+  const [orderToShow, setOrderToShow] = useState<TOrder | undefined>();
   const params = useParams<{ id: string }>();
 
   useEffect(() => {
@@ -75,7 +75,7 @@ export const OrderInfo = () => {
     if (!items || !orderToShow) return null;
 
     const ingredientsUniqueObj: Array<number> = orderToShow.ingredients.reduce((acc: Array<number>, el: string) => {
-      acc[el as unknown as number] = (acc[el as unknown as number] || 0) + 1;
+      acc[Number(el)] = (acc[Number(el)] || 0) + 1;
       return acc;
     }, []);
 

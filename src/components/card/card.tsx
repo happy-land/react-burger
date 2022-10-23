@@ -6,10 +6,15 @@ import {
   CurrencyIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './card.module.css';
-import { ICard } from '../../services/types/data';
+import { TIngredient } from '../../services/types/data';
 
+interface ICardProps {
+  data: TIngredient;
+  counter: number;
+  onClick: (data: TIngredient) => void;
+}
 
-export const Card: FC<ICard> = ({ data, counter, onClick }) => {
+export const Card: FC<ICardProps> = ({ data, counter, onClick }) => {
   const location = useLocation<{ background: Location }>();
 
   // drag and drop

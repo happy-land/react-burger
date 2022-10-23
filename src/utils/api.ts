@@ -2,7 +2,31 @@ import { TLoginForm, TOrder, TUser } from '../services/types/data';
 import { baseUrl } from './constants';
 import { checkResponse, setCookie, getCookie } from './utils';
 
-export const registerRequest = (user: TUser): Promise<any> => {
+type TResponseBody<TDataKey extends string = '', TDataType = {}> = {
+  [key in TDataKey]: TDataType;
+} & {
+  success: boolean;
+  message?: string;
+  headers?: Headers;
+}
+
+interface CustomBody<T extends any> extends Body {
+  json(): Promise<T>;
+}
+
+interface CustomResponse<T> extends CustomBody<T> {
+  readonly headers: Headers;
+  readonly ok: boolean;
+  readonly redirected: boolean;
+  readonly status: number;
+  readonly statusText: string;
+  readonly type: ResponseType;
+  readonly url: string;
+  accessToken?: string;
+  clone(): Response;
+}
+
+export const registerRequest = (user: TUser): Promise<CustomResponse<TResponseBody>> => {
   return fetch(`${baseUrl}/auth/register`, {
     method: 'POST',
     mode: 'cors',
@@ -15,7 +39,7 @@ export const registerRequest = (user: TUser): Promise<any> => {
   });
 };
 
-export const loginRequest = async (form: TLoginForm): Promise<any> => {
+export const loginRequest = async (form: TLoginForm): Promise<CustomResponse<TResponseBody>> => {
   return await fetch(`${baseUrl}/auth/login`, {
     method: 'POST',
     mode: 'cors',
@@ -28,7 +52,7 @@ export const loginRequest = async (form: TLoginForm): Promise<any> => {
   });
 };
 
-export const logoutRequest = async (): Promise<any> => {
+export const logoutRequest = async (): Promise<CustomResponse<TResponseBody>> => {
   return await fetch(`${baseUrl}/auth/logout`, {
     method: 'POST',
     mode: 'cors',
@@ -45,7 +69,7 @@ export const logoutRequest = async (): Promise<any> => {
   });
 };
 
-export const getUserRequest = async (): Promise<any> => {
+export const getUserRequest = async (): Promise<CustomResponse<TResponseBody>> => {
   return await fetchWithRefresh(`${baseUrl}/auth/user`, {
     method: 'GET',
     mode: 'cors',
@@ -60,7 +84,7 @@ export const getUserRequest = async (): Promise<any> => {
   });
 };
 
-export const updateUserRequest = async (form: TUser): Promise<any> => {
+export const updateUserRequest = async (form: TUser): Promise<CustomResponse<TResponseBody>> => {
   return await fetchWithRefresh(`${baseUrl}/auth/user`, {
     method: 'PATCH',
     mode: 'cors',
@@ -76,7 +100,7 @@ export const updateUserRequest = async (form: TUser): Promise<any> => {
   });
 };
 
-export const saveOrderRequest = async (data: any): Promise<any> => {
+export const saveOrderRequest = async (data: any): Promise<CustomResponse<TResponseBody>> => {
   return await fetchWithRefresh(`${baseUrl}/orders`, {
     method: 'POST',
     headers: {
@@ -89,7 +113,7 @@ export const saveOrderRequest = async (data: any): Promise<any> => {
   });
 };
 
-export const refreshToken = (): Promise<any> => {
+export const refreshToken = (): Promise<CustomResponse<TResponseBody>> => {
   return fetch(`${baseUrl}/auth/token`, {
     method: 'POST',
     headers: {
@@ -113,14 +137,13 @@ export const refreshToken = (): Promise<any> => {
     });
 };
 
-const fetchWithRefresh = async (url: string, options: any): Promise<any> => {
+const fetchWithRefresh = async (url: string, options: RequestInit = {}): Promise<CustomResponse<TResponseBody>> => {
   try {
     const res = await fetch(url, options);
     return await checkResponse(res);
   } catch (err: any) {
     if (err.message === 'jwt expired') {
       const refreshData = await refreshToken();
-      options.headers.authorization = refreshData.accessToken;
       const res = await fetch(url, options);
       // в заголовках будет новый accessToken
       return await checkResponse(res);

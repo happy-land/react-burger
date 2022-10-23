@@ -21,12 +21,12 @@ export const OrderCard: FC<IOrderCardProps> = ({ order }) => {
   const orderObject = useMemo(() => {
     if (!items.length) return null;
     const ingredientsInfo = order.ingredients.reduce((acc: Array<number>, item: string) => {
-      const ingredient = items.find((ingredient) => ingredient._id === item);
-      if (ingredient) acc.push(ingredient as unknown as number);
+      const ingredient: TIngredient | undefined = items.find((ingredient) => ingredient._id === item);
+      if (ingredient) acc.push(ingredient);
       return acc;
     }, []);
 
-    const totalPrice: number = ingredientsInfo.reduce((acc: number, item: any) => {
+    const totalPrice: number = ingredientsInfo.reduce((acc: number, item: TIngredient ) => {
       return item.type === 'bun' ? acc + item.price * 2 : acc + item.price;
     }, 0);
 

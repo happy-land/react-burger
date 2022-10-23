@@ -23,6 +23,7 @@ export type TIngredient = {
   readonly image: string
   readonly image_large: string;
   readonly image_mobile: string;
+  readonly __v: number;
   counter?: number;
 };
 
@@ -59,9 +60,3 @@ export type TWsSocketMiddlewareActions = {
   wsDisconnect?: string;
   wsConnecting?: string;
 };
-
-export interface ICard {
-  data: TIngredient;
-  counter: number;
-  onClick: (data: TIngredient) => void;
-}
