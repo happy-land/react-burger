@@ -1,17 +1,22 @@
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector } from '../../hooks/hooks';
 import { useParams } from 'react-router-dom';
 
 import styles from './ingredient-details.module.css';
+import { TIngredient } from '../../services/types/data';
 
 export const IngredientDetails = () => {
 
   const { items } = useSelector((store) => store.ingredients);
-  const [ingredientToShow, setIngredientToShow] = useState(null);
-  const params = useParams();
+  const [ingredientToShow, setIngredientToShow] = useState<TIngredient>();
+  const params = useParams<{ id: string }>();
 
   useEffect(() => {
     if (items.length > 0) {
+      const ingredient = items.find((ingr) => ingr._id === params.id);
+      setIngredientToShow(ingredient);
+    }
+  }, [items, params.id]);
 
 
   if (!ingredientToShow) {
