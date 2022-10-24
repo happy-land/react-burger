@@ -2,31 +2,12 @@ import { TLoginForm, TOrder, TUser } from '../services/types/data';
 import { baseUrl } from './constants';
 import { checkResponse, setCookie, getCookie } from './utils';
 
-type TResponseBody<TDataKey extends string = '', TDataType = {}> = {
-  [key in TDataKey]: TDataType;
-} & {
-  success: boolean;
-  message?: string;
-  headers?: Headers;
-}
 
-interface CustomBody<T extends any> extends Body {
-  json(): Promise<T>;
-}
-
-interface CustomResponse<T> extends CustomBody<T> {
-  readonly headers: Headers;
-  readonly ok: boolean;
-  readonly redirected: boolean;
-  readonly status: number;
-  readonly statusText: string;
-  readonly type: ResponseType;
-  readonly url: string;
+interface CustomResponse extends Response {
   accessToken?: string;
-  clone(): Response;
 }
 
-export const registerRequest = (user: TUser): Promise<CustomResponse<TResponseBody>> => {
+export const registerRequest = (user: TUser): Promise<CustomResponse> => {
   return fetch(`${baseUrl}/auth/register`, {
     method: 'POST',
     mode: 'cors',
@@ -39,7 +20,7 @@ export const registerRequest = (user: TUser): Promise<CustomResponse<TResponseBo
   });
 };
 
-export const loginRequest = async (form: TLoginForm): Promise<CustomResponse<TResponseBody>> => {
+export const loginRequest = async (form: TLoginForm): Promise<CustomResponse> => {
   return await fetch(`${baseUrl}/auth/login`, {
     method: 'POST',
     mode: 'cors',
@@ -52,7 +33,7 @@ export const loginRequest = async (form: TLoginForm): Promise<CustomResponse<TRe
   });
 };
 
-export const logoutRequest = async (): Promise<CustomResponse<TResponseBody>> => {
+export const logoutRequest = async (): Promise<CustomResponse> => {
   return await fetch(`${baseUrl}/auth/logout`, {
     method: 'POST',
     mode: 'cors',
@@ -69,7 +50,7 @@ export const logoutRequest = async (): Promise<CustomResponse<TResponseBody>> =>
   });
 };
 
-export const getUserRequest = async (): Promise<CustomResponse<TResponseBody>> => {
+export const getUserRequest = async (): Promise<CustomResponse> => {
   return await fetchWithRefresh(`${baseUrl}/auth/user`, {
     method: 'GET',
     mode: 'cors',
@@ -84,7 +65,7 @@ export const getUserRequest = async (): Promise<CustomResponse<TResponseBody>> =
   });
 };
 
-export const updateUserRequest = async (form: TUser): Promise<CustomResponse<TResponseBody>> => {
+export const updateUserRequest = async (form: TUser): Promise<CustomResponse> => {
   return await fetchWithRefresh(`${baseUrl}/auth/user`, {
     method: 'PATCH',
     mode: 'cors',
@@ -100,7 +81,7 @@ export const updateUserRequest = async (form: TUser): Promise<CustomResponse<TRe
   });
 };
 
-export const saveOrderRequest = async (data: any): Promise<CustomResponse<TResponseBody>> => {
+export const saveOrderRequest = async (data: Array<string>): Promise<CustomResponse> => {
   return await fetchWithRefresh(`${baseUrl}/orders`, {
     method: 'POST',
     headers: {
@@ -113,7 +94,7 @@ export const saveOrderRequest = async (data: any): Promise<CustomResponse<TRespo
   });
 };
 
-export const refreshToken = (): Promise<CustomResponse<TResponseBody>> => {
+export const refreshToken = (): Promise<CustomResponse> => {
   return fetch(`${baseUrl}/auth/token`, {
     method: 'POST',
     headers: {
@@ -137,7 +118,7 @@ export const refreshToken = (): Promise<CustomResponse<TResponseBody>> => {
     });
 };
 
-const fetchWithRefresh = async (url: string, options: RequestInit = {}): Promise<CustomResponse<TResponseBody>> => {
+const fetchWithRefresh = async (url: string, options: RequestInit = {}): Promise<CustomResponse> => {
   try {
     const res = await fetch(url, options);
     return await checkResponse(res);

@@ -1,6 +1,6 @@
 // REGISTER USER
 // AUTH USER
-import { checkResponse, checkSuccess } from '../../utils/utils';
+import { checkResponse, checkSuccess, TResponse } from '../../utils/utils';
 import {
   loginRequest,
   logoutRequest,
@@ -175,7 +175,7 @@ export const getUserDataThunk: AppThunk = () => async (dispatch: AppDispatch) =>
   });
 
   await getUserRequest()
-    // .then(checkResponse)
+    .then(checkResponse)
     .then(checkSuccess)
     .then((res) => {
       dispatch({
@@ -200,7 +200,7 @@ export const updateUserDataThunk: AppThunk = (user: TUser) => async (dispatch: A
     type: UPDATE_USER_REQUEST,
   });
   await updateUserRequest(user)
-    // .then(checkResponse)
+    .then(checkResponse)
     .then(checkSuccess)
     .then((res) => {
       dispatch({

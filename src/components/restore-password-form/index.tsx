@@ -1,4 +1,4 @@
-import { FC, useCallback, useState } from 'react';
+import { ChangeEvent, FC, useCallback, useState } from 'react';
 import { useDispatch, useSelector } from '../../hooks/hooks';
 import { Link, Redirect, useHistory } from 'react-router-dom';
 import { Button, EmailInput } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -12,7 +12,7 @@ export const RestorePasswordForm: FC = () => {
   const { isAuth } = useSelector((store) => store.user);
   const [email, setEmail] = useState('');
 
-  const onEmailChange = (e: any) => {
+  const onEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
   };
 

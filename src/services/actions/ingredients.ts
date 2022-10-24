@@ -48,6 +48,7 @@ export const getIngredientsThunk:AppThunk = () => (dispatch: AppDispatch) => {
     .then(checkResponse)
     .then(checkSuccess)
     .then((ingredients) => {
+      console.log(ingredients);
       dispatch({
         type: GET_INGREDIENTS_SUCCESS,
         payload: ingredients.data,

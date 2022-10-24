@@ -1,7 +1,7 @@
 import { v4 as uuid } from 'uuid';
 import { saveOrderRequest } from '../../utils/api';
 import { baseUrl } from '../../utils/constants';
-import { checkResponse, checkSuccess } from '../../utils/utils';
+import { checkResponse, checkSuccess, TResponse } from '../../utils/utils';
 import { openOrderModalAction } from './order';
 
 import {
@@ -114,7 +114,7 @@ export const saveOrderThunk: AppThunk =
     const ingrIdArray = data.map((ingr: TIngredient) => ingr._id);
     const concatenatedIngredients = [...ingrIdArray, bun._id];
     saveOrderRequest(concatenatedIngredients)
-      // .then(checkResponse)
+      .then(checkResponse)
       .then(checkSuccess)
       .then((data) => {
         dispatch({

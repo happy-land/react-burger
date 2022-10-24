@@ -82,7 +82,7 @@ export const OrderCard: FC<IOrderCardProps> = ({ order }) => {
         ) : null}
         <div className={styles.components}>
           <ul className={styles.imagesWrapper}>
-            {orderObject && orderObject.ingredientsVisible.map((item: any, index: number) => {
+            {orderObject && orderObject.ingredientsVisible.map((item: TIngredient, index: number) => {
               let zInd = maxIngredients - index;
 
               return (

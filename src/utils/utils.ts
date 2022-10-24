@@ -1,8 +1,17 @@
+import { TOrder, TUser } from "../services/types/data";
+
 export const checkResponse = (res: Response) => {
   return res.ok ? res.json() : Promise.reject(res.status);
 };
 
-export const checkSuccess = (data: any) => {
+export type TResponse<T> = {
+  success: boolean;
+  data?: T;
+  order?: TOrder;
+  user?: TUser;
+}
+
+export const checkSuccess = <T>(data: TResponse<T>) => {
   return data.success ? data : Promise.reject('Error data');
 }
 
