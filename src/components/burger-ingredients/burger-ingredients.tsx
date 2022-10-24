@@ -82,6 +82,7 @@ export const BurgerIngredients: FC = () => {
     }
   };
 
+
   useEffect(() => {
     const counterArr: Array<number> = [];
     items.map((item, index) => {

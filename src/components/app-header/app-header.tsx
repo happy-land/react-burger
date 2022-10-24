@@ -15,7 +15,6 @@ export const AppHeader:FC = () => {
   const isFeed: boolean = !!useRouteMatch('/feed');
   const isProfile: boolean = !!useRouteMatch('/profile');
 
-
   return (
     <header className={styles.header}>
       <nav className={`${styles.content} pt-4 pb-4`}>

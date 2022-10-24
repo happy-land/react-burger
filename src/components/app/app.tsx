@@ -39,6 +39,8 @@ const App: FC = () => {
     dispatch(getIngredientsThunk());
   }, [dispatch]);
 
+  
+
   const closeAllModals = () => {
     history.goBack();
   };

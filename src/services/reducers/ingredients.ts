@@ -48,6 +48,7 @@ export const ingredientsReducer = (
         hasError: true,
       };
     }
+
     default: {
       return state;
     }
