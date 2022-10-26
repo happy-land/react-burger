@@ -23,13 +23,12 @@ export const ProfilePage: FC = () => {
 
   const history = useHistory();
   const dispatch = useDispatch();
-  const { user, isAuth } = useSelector((store) => store.user);
+  const { isAuth } = useSelector((store) => store.user);
 
   const onLogout = useCallback(
     (evt) => {
       evt.preventDefault();
       dispatch(logoutThunk());
-
       history.replace({ pathname: '/login' });
     },
     [isAuth, history]

@@ -39,8 +39,10 @@ export type TIngredientsActions =
   | IGetIngredientsFailAction
   | IIncreaseCounterAction;
 
-type TRegisterData = {
-  
+// используется для типизации ответа сервера
+// при получении списка всех ингредиентов
+type TIngredientsData = {
+  data: Array<TIngredient>;
 }
 
 export const getIngredientsThunk: AppThunk = () => (dispatch: AppDispatch) => {
@@ -49,15 +51,13 @@ export const getIngredientsThunk: AppThunk = () => (dispatch: AppDispatch) => {
   });
 
   return fetch(`${baseUrl}/ingredients`)
-    // .then((result) => checkResponse<TIngredient[]>(result))
-    .then((result) => checkResponse<TIngredient[]>(result))
+    .then((result) => checkResponse<TIngredientsData>(result))
     .then(checkSuccess)
-    .then(({ data }) => {
-      console.log(data);
-      if (data) {
+    .then((responseBody) => {
+      if (responseBody) {
         dispatch({
           type: GET_INGREDIENTS_SUCCESS,
-          payload: data,
+          payload: responseBody.data,
           isLoading: false,
           hasError: false,
         });

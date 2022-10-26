@@ -210,7 +210,9 @@ export const getUserDataThunk: AppThunk = () => async (dispatch: AppDispatch) =>
   });
 
   await getUserRequest()
-    .then((result) => checkResponse<TGetUserData>(result))
+    .then((result) =>  {
+      return checkResponse<TGetUserData>(result)
+    })
     .then(checkSuccess)
     .then((responseBody) => {
       dispatch({
@@ -235,7 +237,7 @@ export const updateUserDataThunk: AppThunk =
     dispatch({
       type: UPDATE_USER_REQUEST,
     });
-    await updateUserRequest(user)
+    updateUserRequest(user)
       .then((result) => checkResponse<TGetUserData>(result))
       .then(checkSuccess)
       .then((responseBody) => {
@@ -261,7 +263,7 @@ export const logoutThunk: AppThunk = () => async (dispatch: AppDispatch) => {
     type: LOGOUT_USER_REQUEST,
   });
 
-  await logoutRequest()
+  logoutRequest()
     .then((result) => checkResponse<TUserLogout>(result))
     .then(checkSuccess)
     .then((responseBody) => {

@@ -1,5 +1,4 @@
 import { ChangeEvent, useCallback, useEffect, useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
 import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useDispatch, useSelector } from '../../hooks/hooks';
 
@@ -8,9 +7,8 @@ import { getUserDataThunk, updateUserDataThunk } from '../../services/actions/us
 import { TUser } from '../../services/types/data';
 
 export const Profile = () => {
-  const history = useHistory();
   const dispatch = useDispatch();
-  const { user, isAuth } = useSelector((store) => store.user);
+  const { user } = useSelector((store) => store.user);
 
   const [form, setValue] = useState<TUser>({
     name: '',
@@ -51,7 +49,7 @@ export const Profile = () => {
         setValue({
           name: user.name,
           email: user.email,
-          password: '',
+          password: user.password,
         });
       }
     },
@@ -68,7 +66,7 @@ export const Profile = () => {
               placeholder={'Имя'}
               onChange={onChange}
               icon={'EditIcon'}
-              value={form.name}
+              value={String(form.name)}
               name={'name'}
               size={'default'}
             />
@@ -79,7 +77,7 @@ export const Profile = () => {
               placeholder={'Логин'}
               onChange={onChange}
               icon={'EditIcon'}
-              value={form.email!}
+              value={String(form.email)}
               name={'email'}
               size={'default'}
             />
@@ -90,7 +88,7 @@ export const Profile = () => {
               placeholder={'Пароль'}
               onChange={onChange}
               icon={'EditIcon'}
-              value={form.password}
+              value={String(form.password)}
               name={'password'}
               size={'default'}
             />

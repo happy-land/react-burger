@@ -25,7 +25,6 @@ export const Orders: FC = () => {
   }, [dispatch]);
 
   const orders = useSelector((store) => store.orders.orders);
-  // console.log(orders);
   if (!orders) {
     return <p>Загрузка заказов...</p>;
   }

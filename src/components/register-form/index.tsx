@@ -44,7 +44,7 @@ export const RegisterForm: FC = () => {
             type={'text'}
             placeholder={'Имя'}
             onChange={handleChange}
-            value={values.name!}
+            value={String(values.name)}
             name={'name'}
             size={'default'}
           />
@@ -54,7 +54,7 @@ export const RegisterForm: FC = () => {
             type={'email'}
             placeholder={'E-mail'}
             onChange={handleChange}
-            value={values.email!}
+            value={String(values.email)}
             name={'email'}
             size={'default'}
           />
@@ -62,7 +62,7 @@ export const RegisterForm: FC = () => {
 
         <div className={styles.input}>
           <PasswordInput
-            value={values.password}
+            value={String(values.password)}
             name={'password'}
             size={'default'}
             onChange={handleChange}

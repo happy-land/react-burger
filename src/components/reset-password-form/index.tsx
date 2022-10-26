@@ -58,7 +58,7 @@ export const ResetPasswordForm: FC = () => {
             onChange={handleChange}
             icon={icon}
             onIconClick={onIconClick}
-            value={values.password}
+            value={String(values.password)}
             name={'password'}
             size={'default'}
           />
@@ -68,7 +68,7 @@ export const ResetPasswordForm: FC = () => {
             type={'text'}
             placeholder={'Введите код из письма'}
             onChange={handleChange}
-            value={values.token!}
+            value={String(values.token)}
             name={'token'}
             size={'default'}
           />

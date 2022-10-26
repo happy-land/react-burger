@@ -95,7 +95,12 @@ export const saveOrderRequest = async (data: Array<string>): Promise<CustomRespo
   });
 };
 
-export const refreshToken = (): Promise<CustomResponse> => {
+type TRefreshTokenData = {
+  accessToken: string;
+  refreshToken: string;
+}
+
+export const refreshToken = (): Promise<TRefreshTokenData> => {
   return fetch(`${baseUrl}/auth/token`, {
     method: 'POST',
     headers: {
@@ -105,14 +110,14 @@ export const refreshToken = (): Promise<CustomResponse> => {
       token: localStorage.getItem('refreshToken'),
     }),
   })
-    .then(checkResponse)
+    .then((result) => checkResponse<TRefreshTokenData>(result))
     .then((refreshData) => {
       if (!refreshData.success) {
         return Promise.reject(refreshData);
       }
 
       // Сохранить токены в Cookies и localStorage
-      setCookie('accessToken', refreshData.accessToken);
+      setCookie('accessToken', refreshData.accessToken, { path: '/' });
       localStorage.setItem('refreshToken', refreshData.refreshToken);
 
       return refreshData;
@@ -126,6 +131,7 @@ const fetchWithRefresh = async (url: string, options: RequestInit = {}): Promise
   } catch (err: any) {
     if (err.message === 'jwt expired') {
       const refreshData = await refreshToken();
+      // options.headers.authorization = refreshData.accessToken;
       const res = await fetch(url, options);
       // в заголовках будет новый accessToken
       return await checkResponse(res);

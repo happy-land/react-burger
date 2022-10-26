@@ -27,6 +27,11 @@ export type TPasswordResetActions =
   | IPasswordResetSuccessAction
   | IPasswordResetFailAction;
 
+  // используется для типизации ответа сервера
+  // POST-запрос к эндпоинту https://norma.nomoreparties.space/api/password-reset/reset.
+  type TPasswordResetData = {
+    message: string;
+  }
 
 export const resetPasswordThunk: AppThunk = (form: TResetPasswordForm) => (dispatch: AppDispatch) => {
   dispatch({
@@ -42,12 +47,12 @@ export const resetPasswordThunk: AppThunk = (form: TResetPasswordForm) => (dispa
     },
     body: JSON.stringify(form),
   })
-    .then(checkResponse)
+    .then((result) => checkResponse<TPasswordResetData>(result))
     .then(checkSuccess)
-    .then((response) => {
+    .then((responseBody) => {
       dispatch({
         type: PASSWORD_RESET_SUCCESS,
-        payload: response,
+        payload: responseBody,
       });
     })
     .catch((err) => {
