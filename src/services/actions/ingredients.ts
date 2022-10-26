@@ -30,32 +30,38 @@ export interface IIncreaseCounterAction {
   payload: {
     id: string;
     count: number;
-  }
+  };
 }
 
-export type TIngredientsActions = 
+export type TIngredientsActions =
   | IGetIngredientsAction
   | IGetIngredientsSuccessAction
   | IGetIngredientsFailAction
   | IIncreaseCounterAction;
 
-export const getIngredientsThunk:AppThunk = () => (dispatch: AppDispatch) => {
+type TRegisterData = {
+  
+}
+
+export const getIngredientsThunk: AppThunk = () => (dispatch: AppDispatch) => {
   dispatch({
     type: GET_INGREDIENTS_REQUEST,
   });
 
   return fetch(`${baseUrl}/ingredients`)
-    .then(checkResponse)
+    // .then((result) => checkResponse<TIngredient[]>(result))
+    .then((result) => checkResponse<TIngredient[]>(result))
     .then(checkSuccess)
-    .then((ingredients) => {
-      console.log(ingredients);
-      dispatch({
-        type: GET_INGREDIENTS_SUCCESS,
-        payload: ingredients.data,
-        isLoading: false,
-        hasError: false,
-      });
-      
+    .then(({ data }) => {
+      console.log(data);
+      if (data) {
+        dispatch({
+          type: GET_INGREDIENTS_SUCCESS,
+          payload: data,
+          isLoading: false,
+          hasError: false,
+        });
+      }
     })
     .catch((err) => {
       dispatch({
@@ -67,12 +73,13 @@ export const getIngredientsThunk:AppThunk = () => (dispatch: AppDispatch) => {
     });
 };
 
-export const addToBurgerThunk: AppThunk = (id: string, count: number) => (dispatch: AppDispatch) => {
-  dispatch( {
-    type: INCREASE_COUNTER,
-    payload: {
-      id,
-      count
-    }
-  })
-};
+export const addToBurgerThunk: AppThunk =
+  (id: string, count: number) => (dispatch: AppDispatch) => {
+    dispatch({
+      type: INCREASE_COUNTER,
+      payload: {
+        id,
+        count,
+      },
+    });
+  };

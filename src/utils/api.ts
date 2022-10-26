@@ -82,7 +82,8 @@ export const updateUserRequest = async (form: TUser): Promise<CustomResponse> =>
 };
 
 export const saveOrderRequest = async (data: Array<string>): Promise<CustomResponse> => {
-  return await fetchWithRefresh(`${baseUrl}/orders`, {
+  // return await fetchWithRefresh(`${baseUrl}/orders`, {
+  return await fetch(`${baseUrl}/orders`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

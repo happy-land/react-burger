@@ -28,6 +28,7 @@ import {
 } from '../constants';
 import { AppDispatch, AppThunk } from '../types';
 import { TLoginForm, TUser } from '../types/data';
+import { baseUrl } from '../../utils/constants';
 
 //=
 export interface IUserRegisterRequestAction {
@@ -40,7 +41,7 @@ export interface IUserRegisterSuccessAction {
     accessToken: string;
     refreshToken: string;
     user: TUser;
-  }
+  };
 }
 
 export interface IUserRegisterFailAction {
@@ -57,7 +58,7 @@ export interface IUserAuthSuccessAction {
     accessToken: string;
     refreshToken: string;
     user: TUser;
-  }
+  };
 }
 
 export interface IUserAuthFailAction {
@@ -73,7 +74,7 @@ export interface IGetUserSuccessAction {
   type: typeof GET_USER_SUCCESS;
   payload: {
     user: TUser;
-  }
+  };
 }
 
 export interface IGetUserFailAction {
@@ -88,7 +89,7 @@ export interface IUpdateUserSuccessAction {
   type: typeof UPDATE_USER_SUCCESS;
   payload: {
     user: TUser;
-  }
+  };
 }
 export interface IUpdateUserFailAction {
   type: typeof UPDATE_USER_FAIL;
@@ -104,7 +105,7 @@ export interface ILogoutUserFailAction {
   type: typeof LOGOUT_USER_FAIL;
 }
 
-export type TUserActions = 
+export type TUserActions =
   | IUserRegisterRequestAction
   | IUserRegisterSuccessAction
   | IUserRegisterFailAction
@@ -121,19 +122,49 @@ export type TUserActions =
   | ILogoutUserSuccessAction
   | ILogoutUserFailAction;
 
+// используется для типизации ответа сервера 
+// при регистрации нового пользователя 
+type TRegisterData = {
+  user: TUser;
+  accessToken: string;
+  refreshToken: string;
+};
+
+// при аутентификации пользователя с сервера приходят данные
+// в том же формате, что и при регистрации нового пользователя
+type TAuthUserData = TRegisterData;
+
+// используется для типизации ответа сервера при получении
+// данных пользователя
+type TGetUserData = {
+  user: TUser;
+}
+
+// используется для типизации ответа сервера 
+// при выходе из личного кабинета
+type TUserLogout = {
+  message: string;
+}
+
 export const registerUserThunk: AppThunk = (user: TUser) => (dispatch: AppDispatch) => {
   dispatch({
     type: USER_REGISTER_REQUEST,
   });
 
   registerRequest(user)
-    .then(checkResponse)
+    .then((result) => checkResponse<TRegisterData>(result))
     .then(checkSuccess)
-    .then((res) => {
-      dispatch({
-        type: USER_REGISTER_SUCCESS,
-        payload: res,
-      });
+    .then((responseBody) => {
+      if (user) {
+        dispatch({
+          type: USER_REGISTER_SUCCESS,
+          payload: {
+            accessToken: responseBody.accessToken,
+            refreshToken: responseBody.refreshToken,
+            user: responseBody.user,
+          },
+        });
+      }
     })
     .catch((err) => {
       dispatch({
@@ -151,12 +182,16 @@ export const authUserThunk: AppThunk = (form: TLoginForm) => (dispatch: AppDispa
   });
 
   loginRequest(form)
-    .then(checkResponse)
+    .then((result) => checkResponse<TAuthUserData>(result))
     .then(checkSuccess)
-    .then((res) => {
+    .then((responseBody) => {
       dispatch({
         type: USER_AUTH_SUCCESS,
-        payload: res,
+        payload: {
+          accessToken: responseBody.accessToken,
+          refreshToken: responseBody.refreshToken,
+          user: responseBody.user,
+        },
       });
     })
     .catch((err) => {
@@ -175,12 +210,12 @@ export const getUserDataThunk: AppThunk = () => async (dispatch: AppDispatch) =>
   });
 
   await getUserRequest()
-    .then(checkResponse)
+    .then((result) => checkResponse<TGetUserData>(result))
     .then(checkSuccess)
-    .then((res) => {
+    .then((responseBody) => {
       dispatch({
         type: GET_USER_SUCCESS,
-        payload: res,
+        payload: responseBody,
         isLoading: false,
         hasError: false,
       });
@@ -195,30 +230,31 @@ export const getUserDataThunk: AppThunk = () => async (dispatch: AppDispatch) =>
     });
 };
 
-export const updateUserDataThunk: AppThunk = (user: TUser) => async (dispatch: AppDispatch) => {
-  dispatch({
-    type: UPDATE_USER_REQUEST,
-  });
-  await updateUserRequest(user)
-    .then(checkResponse)
-    .then(checkSuccess)
-    .then((res) => {
-      dispatch({
-        type: UPDATE_USER_SUCCESS,
-        payload: res,
-        isLoading: false,
-        hasError: false,
-      });
-    })
-    .catch((err) => {
-      dispatch({
-        type: UPDATE_USER_FAIL,
-        payload: err,
-        isLoading: false,
-        hasError: true,
-      });
+export const updateUserDataThunk: AppThunk =
+  (user: TUser) => async (dispatch: AppDispatch) => {
+    dispatch({
+      type: UPDATE_USER_REQUEST,
     });
-};
+    await updateUserRequest(user)
+      .then((result) => checkResponse<TGetUserData>(result))
+      .then(checkSuccess)
+      .then((responseBody) => {
+        dispatch({
+          type: UPDATE_USER_SUCCESS,
+          payload: responseBody,
+          isLoading: false,
+          hasError: false,
+        });
+      })
+      .catch((err) => {
+        dispatch({
+          type: UPDATE_USER_FAIL,
+          payload: err,
+          isLoading: false,
+          hasError: true,
+        });
+      });
+  };
 
 export const logoutThunk: AppThunk = () => async (dispatch: AppDispatch) => {
   dispatch({
@@ -226,12 +262,12 @@ export const logoutThunk: AppThunk = () => async (dispatch: AppDispatch) => {
   });
 
   await logoutRequest()
-    .then(checkResponse)
+    .then((result) => checkResponse<TUserLogout>(result))
     .then(checkSuccess)
-    .then((res) => {
+    .then((responseBody) => {
       dispatch({
         type: LOGOUT_USER_SUCCESS,
-        payload: res,
+        payload: responseBody,
         isLoading: false,
         hasError: false,
       });

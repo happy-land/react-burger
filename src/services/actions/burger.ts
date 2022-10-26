@@ -80,6 +80,13 @@ export type TBurgerActions =
   | IOrderSaveSuccessAction
   | IOrderSaveFailAction;
 
+// используется для типизации ответа сервера
+// при получении данных о новом созданном заказе
+type TOrderData = {
+  name: string;
+  order: TOrder;
+}
+
 export const addIngredientAction = (ingredient: TIngredient): IAddIngredientAction => ({
   type: CONSTRUCTOR_ADD_INGREDIENT,
   payload: {
@@ -88,7 +95,9 @@ export const addIngredientAction = (ingredient: TIngredient): IAddIngredientActi
   },
 });
 
-export const removeIngredientAction = (ingredient: TIngredient): IRemoveIngredientAction => ({
+export const removeIngredientAction = (
+  ingredient: TIngredient
+): IRemoveIngredientAction => ({
   type: CONSTRUCTOR_REMOVE_INGREDIENT,
   payload: {
     ...ingredient,
@@ -105,6 +114,7 @@ export const removeBunAction = (bun: TIngredient): IRemoveBunAction => ({
   payload: bun,
 });
 
+
 export const saveOrderThunk: AppThunk =
   (data: Array<TIngredient>, bun: TIngredient) => (dispatch: AppDispatch) => {
     dispatch({
@@ -114,17 +124,19 @@ export const saveOrderThunk: AppThunk =
     const ingrIdArray = data.map((ingr: TIngredient) => ingr._id);
     const concatenatedIngredients = [...ingrIdArray, bun._id];
     saveOrderRequest(concatenatedIngredients)
-      .then(checkResponse)
+      .then((result) => checkResponse<TOrderData>(result))
       .then(checkSuccess)
-      .then((data) => {
-        dispatch({
-          type: ORDER_SAVE_SUCCESS,
-          payload: data,
-        });
-        dispatch(openOrderModalAction(data.order.number));
-        dispatch({
-          type: CONSTRUCTOR_RESET,
-        });
+      .then((responseBody) => {
+        if (responseBody) {
+          dispatch({
+            type: ORDER_SAVE_SUCCESS,
+            payload: responseBody.order,
+          });
+          dispatch(openOrderModalAction(responseBody.order.number));
+          dispatch({
+            type: CONSTRUCTOR_RESET,
+          });
+        }
       })
       .catch((err) => {
         dispatch({
