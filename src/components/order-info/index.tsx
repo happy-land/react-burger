@@ -37,6 +37,33 @@ export const OrderInfo = () => {
     }
   });
 
+  const getUniqueIngredientsWithQuantity = (
+    arr: Array<string>
+  ): Array<{ id: string; qty: number }> => {
+    let arrWithQty: Array<{ id: string; qty: number }> = [];
+
+    arrWithQty.push({
+      id: arr[0],
+      qty: 1,
+    });
+
+    arr.map((id: string, index: number) => {
+      if (index > 0) {
+        const element = arrWithQty.find((el) => {
+          return el.id === id;
+        });
+        if (!element) {
+          arrWithQty.push({ id, qty: 1 });
+        } else {
+          // найти индекс элемента по значению
+          const indexofDuplicate: number = arrWithQty.indexOf(element);
+          arrWithQty[indexofDuplicate].qty += 1;
+        }
+      }
+    });
+    return arrWithQty;
+  };
+
   // подключимся к web socket
   useEffect(() => {
     if (orders !== undefined) {
@@ -61,7 +88,7 @@ export const OrderInfo = () => {
   }, [dispatch]);
 
   const { items } = useSelector((store) => store.ingredients);
-  const [orderToShow, setOrderToShow] = useState<TOrder | undefined>();
+  const [orderToShow, setOrderToShow] = useState<TOrder>();
   const params = useParams<{ id: string }>();
 
   useEffect(() => {
@@ -74,32 +101,32 @@ export const OrderInfo = () => {
   const orderObject = useMemo(() => {
     if (!items || !orderToShow) return null;
 
-    const ingredientsUniqueObj: Array<number> = orderToShow.ingredients.reduce((acc: Array<number>, el: string) => {
-      acc[Number(el)] = (acc[Number(el)] || 0) + 1;
-      return acc;
-    }, []);
+    // Array [ {id: number, qty: string} ]
+    const ingredientsUnique = getUniqueIngredientsWithQuantity(orderToShow.ingredients);
 
-    const ingredientsUniqueIds: Array<string> = Object.keys(ingredientsUniqueObj);
-    const ingredientsUniqueQty: Array<number> = Object.values(ingredientsUniqueObj);
-
-    const ingredientsInfo = ingredientsUniqueIds.reduce((acc: Array<TIngredient>, item: string, index: number) => {
-      const ingredient = items.find((ingredient) => ingredient._id === item);
-      if (ingredient) {
-        acc.push(ingredient);
-      }
-      return acc;
-    }, []);
+    const ingredientsInfo: Array<TIngredient> = ingredientsUnique.reduce(
+      (acc: Array<TIngredient>, item: { id: string; qty: number }) => {
+        const ingredient = items.find((ingredient: TIngredient) => {
+          return ingredient._id === item.id;
+        });
+        if (ingredient) {
+          acc.push(ingredient);
+        }
+        return acc;
+      },
+      []
+    );
 
     const totalPrice = ingredientsInfo.reduce((acc, item, index) => {
       return item.type === 'bun'
         ? acc + item.price * 2
-        : acc + item.price * ingredientsUniqueQty[index];
+        : acc + item.price * ingredientsUnique[index].qty;
     }, 0);
 
     return {
       ...orderToShow,
       ingredientsInfo,
-      ingredientsUniqueQty,
+      ingredientsUnique,
       totalPrice,
     };
   }, [orderToShow, items]);
@@ -136,7 +163,7 @@ export const OrderInfo = () => {
                 </div>
                 <div className={styles.priceWrapper}>
                   <p className={`${styles.price} text text_type_digits-default`}>
-                    {item.type === 'bun' ? '2' : orderObject.ingredientsUniqueQty[index]}{' '}
+                    {item.type === 'bun' ? '2' : orderObject.ingredientsUnique[index].qty}{' '}
                     x {item.price}
                   </p>
                   <CurrencyIcon type='primary' />
@@ -145,7 +172,9 @@ export const OrderInfo = () => {
             ))}
           </ul>
           <div className={styles.footer}>
-            <p className={styles.timestamp}>{formatDate((orderToShow as TOrder).createdAt)}</p>
+            <p className={styles.timestamp}>
+              {formatDate((orderToShow as TOrder).createdAt)}
+            </p>
             <div className={styles.totalPriceWrapper}>
               <p className={`${styles.totalPrice} text text_type_digits-default`}>
                 {orderObject.totalPrice}
