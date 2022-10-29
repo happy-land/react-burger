@@ -28,7 +28,7 @@ const App: FC = () => {
   const history = useHistory();
 
   // проверим, есть ли accessToken
-  const init = () => {
+  const init = async () => {
     if (getCookie('accessToken')) {
       dispatch(getUserDataThunk());
     }

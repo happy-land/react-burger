@@ -22,6 +22,7 @@ export const Profile = () => {
 
   useEffect(() => {
     if (user) {
+      console.log(user);
       setValue({
         name: user.name,
         email: user.email,

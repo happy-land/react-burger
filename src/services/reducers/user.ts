@@ -57,7 +57,7 @@ export const userReducer = (state = userInitialState, action: TUserActions) => {
       authToken = res.accessToken.split('Bearer ')[1];
       // сохраняем accessToken в куке
       if (authToken) {
-        setCookie('accessToken', authToken);
+        setCookie('accessToken', authToken, { path: '/' });
       }
 
       // сохраняем refreshToken в localStorage

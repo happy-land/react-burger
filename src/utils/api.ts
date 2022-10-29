@@ -51,7 +51,7 @@ export const logoutRequest = async (): Promise<CustomResponse> => {
 };
 
 export const getUserRequest = async (): Promise<CustomResponse> => {
-  return await fetchWithRefresh(`${baseUrl}/auth/user`, {
+  return await fetch(`${baseUrl}/auth/user`, {
     method: 'GET',
     mode: 'cors',
     cache: 'no-cache',
@@ -124,14 +124,14 @@ export const refreshToken = (): Promise<TRefreshTokenData> => {
     });
 };
 
-const fetchWithRefresh = async (url: string, options: RequestInit = {}): Promise<CustomResponse> => {
+const fetchWithRefresh = async (url: string, options: any): Promise<CustomResponse> => {
   try {
     const res = await fetch(url, options);
     return await checkResponse(res);
   } catch (err: any) {
     if (err.message === 'jwt expired') {
       const refreshData = await refreshToken();
-      // options.headers.authorization = refreshData.accessToken;
+      options.headers.authorization = refreshData.accessToken;
       const res = await fetch(url, options);
       // в заголовках будет новый accessToken
       return await checkResponse(res);
