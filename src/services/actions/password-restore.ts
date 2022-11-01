@@ -27,7 +27,7 @@ export type TPasswordRestoreActions =
   | IPasswordRestoreFailAction;
 
 
-export const restorePasswordThunk: AppThunk = () => async (dispatch: AppDispatch) => {
+export const restorePasswordThunk: AppThunk = (email: String) => async (dispatch: AppDispatch) => {
   dispatch({
     type: PASSWORD_RESTORE_REQUEST,
   });
@@ -42,7 +42,7 @@ export const restorePasswordThunk: AppThunk = () => async (dispatch: AppDispatch
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        email: '',
+        email: email,
       }),
     });
     const data = await checkResponse(res);

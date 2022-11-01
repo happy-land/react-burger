@@ -36,7 +36,7 @@ export const ResetPasswordForm: FC = () => {
       e.preventDefault();
       dispatch(resetPasswordThunk(values));
     },
-    [values, dispatch]
+    [values, dispatch, values]
   );
 
   if (isAuth) {
@@ -75,7 +75,7 @@ export const ResetPasswordForm: FC = () => {
         </div>
 
         <div className={styles.button}>
-          <Button className={styles.button} htmlType={'button'}>Сохранить</Button>
+          <Button htmlType={'submit'}>Сохранить</Button>
         </div>
       </form>
       <div className={styles.additionalActions}>
